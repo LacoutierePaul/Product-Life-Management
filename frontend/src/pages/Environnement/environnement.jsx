@@ -1,52 +1,45 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './environnement.css';
 
 function Environnement() {
-  const [suivi, setSuivi] = useState({
-    eau: 1200,  // Consommation d'eau en litres
-    energie: 500,  // Consommation d'énergie en kWh
-    dechets: 250,  // Quantité de déchets en kg
-  });
+  const [suiviEnvironnemental, setSuiviEnvironnemental] = useState([]);
 
-  const handleChange = (e) => {
-    setSuivi({ ...suivi, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    // Exemple de fetch pour récupérer les données environnementales
+    fetch('/api/suivi_environnemental')
+      .then((response) => response.json())
+      .then((data) => setSuiviEnvironnemental(data));
+  }, []);
 
   return (
-    <div>
+    <div className="environnement">
       <h2>Suivi Environnemental</h2>
-      <form>
-        <div>
-          <label>Consommation d'eau (litres) :</label>
-          <input 
-            type="number" 
-            name="eau" 
-            value={suivi.eau} 
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Consommation d'énergie (kWh) :</label>
-          <input 
-            type="number" 
-            name="energie" 
-            value={suivi.energie} 
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Déchets produits (kg) :</label>
-          <input 
-            type="number" 
-            name="dechets" 
-            value={suivi.dechets} 
-            onChange={handleChange}
-          />
-        </div>
-      </form>
-      <div>
-        <h3>Graphiques et Objectifs</h3>
-        {/* Tu peux ajouter des graphiques ici si nécessaire */}
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Mois</th>
+            <th>Eau Utilisée (L)</th>
+            <th>Energie Utilisée (kWh)</th>
+            <th>Déchets Produits (kg)</th>
+            <th>Objectifs Eau</th>
+            <th>Objectifs Energie</th>
+            <th>Objectifs Déchets</th>
+          </tr>
+        </thead>
+        <tbody>
+          {suiviEnvironnemental.map((suivi) => (
+            <tr key={suivi.id}>
+              <td>{new Date(suivi.mois).toLocaleDateString()}</td>
+              <td>{suivi.eau_utilisee}</td>
+              <td>{suivi.energie_utilisee}</td>
+              <td>{suivi.dechets_produits}</td>
+              <td>{suivi.objectif_eau}</td>
+              <td>{suivi.objectif_energie}</td>
+              <td>{suivi.objectif_dechets}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

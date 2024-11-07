@@ -1,56 +1,35 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './qualite.css';
 
 function Qualite() {
-  const [controles, setControles] = useState([]);
-  const [lot, setLot] = useState('');
-  const [resultat, setResultat] = useState('');
+  const [controleQualite, setControleQualite] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setControles([...controles, { lot, resultat }]);
-    setLot('');
-    setResultat('');
-  };
+  useEffect(() => {
+    // Exemple de fetch pour récupérer les contrôles qualité
+    fetch('/api/controle_qualite')
+      .then((response) => response.json())
+      .then((data) => setControleQualite(data));
+  }, []);
 
   return (
-    <div>
-      <h2>Suivi de la Qualité des Produits</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Numéro de lot :</label>
-          <input 
-            type="text" 
-            value={lot} 
-            onChange={(e) => setLot(e.target.value)} 
-          />
-        </div>
-        <div>
-          <label>Résultat (Passé/Échoué) :</label>
-          <select 
-            value={resultat} 
-            onChange={(e) => setResultat(e.target.value)}
-          >
-            <option value="">Choisir</option>
-            <option value="Passé">Passé</option>
-            <option value="Échoué">Échoué</option>
-          </select>
-        </div>
-        <button type="submit">Enregistrer le contrôle</button>
-      </form>
-
-      <h3>Historique des Contrôles Qualité</h3>
+    <div className="qualite">
+      <h2>Contrôle Qualité</h2>
       <table>
         <thead>
           <tr>
-            <th>Numéro de lot</th>
+            <th>Produit Fini</th>
+            <th>Date du Contrôle</th>
             <th>Résultat</th>
+            <th>Commentaire</th>
           </tr>
         </thead>
         <tbody>
-          {controles.map((controle, index) => (
-            <tr key={index}>
-              <td>{controle.lot}</td>
+          {controleQualite.map((controle) => (
+            <tr key={controle.id}>
+              <td>{controle.produit_fini}</td>
+              <td>{new Date(controle.date_controle).toLocaleDateString()}</td>
               <td>{controle.resultat}</td>
+              <td>{controle.commentaire}</td>
             </tr>
           ))}
         </tbody>

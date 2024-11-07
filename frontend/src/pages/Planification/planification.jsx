@@ -1,65 +1,35 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './planification.css';
 
 function Planification() {
   const [productions, setProductions] = useState([]);
-  const [produit, setProduit] = useState('');
-  const [quantite, setQuantite] = useState('');
-  const [date, setDate] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setProductions([...productions, { produit, quantite, date }]);
-    setProduit('');
-    setQuantite('');
-    setDate('');
-  };
+  useEffect(() => {
+    // Exemple de fetch pour récupérer la planification de production
+    fetch('/api/production_planifiee')
+      .then((response) => response.json())
+      .then((data) => setProductions(data));
+  }, []);
 
   return (
-    <div>
+    <div className="planification">
       <h2>Planification de la Production</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Produit :</label>
-          <input 
-            type="text" 
-            value={produit} 
-            onChange={(e) => setProduit(e.target.value)} 
-          />
-        </div>
-        <div>
-          <label>Quantité :</label>
-          <input 
-            type="number" 
-            value={quantite} 
-            onChange={(e) => setQuantite(e.target.value)} 
-          />
-        </div>
-        <div>
-          <label>Date de production :</label>
-          <input 
-            type="date" 
-            value={date} 
-            onChange={(e) => setDate(e.target.value)} 
-          />
-        </div>
-        <button type="submit">Planifier</button>
-      </form>
-
-      <h3>Productions Planifiées</h3>
       <table>
         <thead>
           <tr>
-            <th>Produit</th>
-            <th>Quantité</th>
-            <th>Date de production</th>
+            <th>Produit Fini</th>
+            <th>Quantité Planifiée</th>
+            <th>Date de Production</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          {productions.map((prod, index) => (
-            <tr key={index}>
-              <td>{prod.produit}</td>
-              <td>{prod.quantite}</td>
-              <td>{prod.date}</td>
+          {productions.map((production) => (
+            <tr key={production.id}>
+              <td>{production.produit_fini}</td>
+              <td>{production.quantite_planifiee}</td>
+              <td>{new Date(production.date_production).toLocaleDateString()}</td>
+              <td>{production.status}</td>
             </tr>
           ))}
         </tbody>

@@ -1,40 +1,37 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './stocks.css';
 
 function Stocks() {
-  const [stocks, setStocks] = useState([
-    { id: 1, nom: 'Matière A', quantite: 100, seuil: 50 },
-    { id: 2, nom: 'Matière B', quantite: 30, seuil: 40 },
-  ]);
+  const [stocks, setStocks] = useState([]);
 
-  const handleUpdateStock = (id, quantite) => {
-    setStocks(stocks.map(stock => stock.id === id ? { ...stock, quantite } : stock));
-  };
+  useEffect(() => {
+    // Exemple de fetch pour récupérer les stocks depuis l'API
+    fetch('/api/stocks')
+      .then((response) => response.json())
+      .then((data) => setStocks(data));
+  }, []);
 
   return (
-    <div>
-      <h2>Gestion des Stocks</h2>
+    <div className="stocks">
+      <h2>Liste des Stocks</h2>
       <table>
         <thead>
           <tr>
             <th>Nom</th>
+            <th>Type</th>
             <th>Quantité</th>
-            <th>Seuil minimal</th>
-            <th>Mettre à jour</th>
+            <th>Seuil Minimal</th>
+            <th>Unité</th>
           </tr>
         </thead>
         <tbody>
-          {stocks.map(stock => (
+          {stocks.map((stock) => (
             <tr key={stock.id}>
               <td>{stock.nom}</td>
+              <td>{stock.type}</td>
               <td>{stock.quantite}</td>
-              <td>{stock.seuil}</td>
-              <td>
-                <input 
-                  type="number" 
-                  value={stock.quantite} 
-                  onChange={(e) => handleUpdateStock(stock.id, e.target.value)} 
-                />
-              </td>
+              <td>{stock.seuil_minimal}</td>
+              <td>{stock.unite}</td>
             </tr>
           ))}
         </tbody>
