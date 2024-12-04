@@ -3,7 +3,7 @@ CREATE TABLE fournisseurs (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     contact VARCHAR(255),
-    matiere_premiere VARCHAR(255),
+    matiere_premiere VARCHAR(255)  NOT NULL, -- Chaque matière première doit être unique
     date_derniere_livraison DATE,
     evaluation SMALLINT,
     commentaires TEXT
@@ -47,14 +47,19 @@ CREATE TABLE controle_qualite (
     commentaire TEXT
 );
 
--- Table de Suivi Environnemental
-CREATE TABLE suivi_environnemental (
+-- Table des Recettes
+CREATE TABLE recettes (
     id SERIAL PRIMARY KEY,
-    mois DATE NOT NULL,
-    eau_utilisee FLOAT,
-    energie_utilisee FLOAT,
-    dechets_produits FLOAT,
-    objectif_eau FLOAT,
-    objectif_energie FLOAT,
-    objectif_dechets FLOAT
+    nom VARCHAR(255) NOT NULL, -- Nom de la recette
+    description TEXT,          -- Description de la recette
+    date_creation DATE DEFAULT CURRENT_DATE -- Date de création de la recette
+);
+
+-- Table des Ingrédients des Recettes (relation n-n entre recettes et fournisseurs)
+CREATE TABLE ingredients_recette (
+    id SERIAL PRIMARY KEY,
+    id_recette INTEGER REFERENCES recettes(id) ON DELETE CASCADE,
+    id_fournisseur INTEGER REFERENCES fournisseurs(id) ON DELETE CASCADE,
+    quantite FLOAT NOT NULL, -- Quantité utilisée dans la recette
+    unite VARCHAR(50) NOT NULL -- Unité de mesure (kg, litre, etc.)
 );
