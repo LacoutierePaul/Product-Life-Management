@@ -16,10 +16,11 @@ function Header() {
         {/* Navigation Links */}
         <nav>
           <Link to="/fournisseurs">Fournisseurs</Link>
-          <Link to="/environnement">Environnement</Link>
           <Link to="/planification">Planification</Link>
           <Link to="/qualite">Qualité</Link>
           <Link to="/stocks">Stocks</Link>
+          <Link to="/recettes">Recettes</Link>
+
         </nav>
         
         {/* Recherche */}
