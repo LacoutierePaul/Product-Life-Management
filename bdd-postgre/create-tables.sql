@@ -1,9 +1,10 @@
+-- Créer les tables
 -- Table des Fournisseurs
 CREATE TABLE fournisseurs (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     contact VARCHAR(255),
-    matiere_premiere VARCHAR(255)  NOT NULL, -- Chaque matière première doit être unique
+    matiere_premiere VARCHAR(255)  NOT NULL, 
     date_derniere_livraison DATE,
     evaluation SMALLINT,
     commentaires TEXT
@@ -58,8 +59,19 @@ CREATE TABLE recettes (
 -- Table des Ingrédients des Recettes (relation n-n entre recettes et fournisseurs)
 CREATE TABLE ingredients_recette (
     id SERIAL PRIMARY KEY,
+    nom_ingredient VARCHAR(255),
     id_recette INTEGER REFERENCES recettes(id) ON DELETE CASCADE,
     id_fournisseur INTEGER REFERENCES fournisseurs(id) ON DELETE CASCADE,
     quantite FLOAT NOT NULL, -- Quantité utilisée dans la recette
     unite VARCHAR(50) NOT NULL -- Unité de mesure (kg, litre, etc.)
 );
+
+
+-- Charger les données
+COPY fournisseurs FROM '/data/fournisseurs.csv' DELIMITER ',' CSV HEADER;
+COPY stocks FROM '/data/stocks.csv' DELIMITER ',' CSV HEADER;
+COPY mouvements_stock FROM '/data/mouvements_stock.csv' DELIMITER ',' CSV HEADER;
+COPY production_planifiee FROM '/data/production_planifiee.csv' DELIMITER ',' CSV HEADER;
+COPY controle_qualite FROM '/data/controle_qualite.csv' DELIMITER ',' CSV HEADER;
+COPY recettes FROM '/data/recettes.csv' DELIMITER ',' CSV HEADER;
+COPY ingredients_recette FROM '/data/ingredients_recette.csv' DELIMITER ',' CSV HEADER;
