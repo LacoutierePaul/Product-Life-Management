@@ -71,6 +71,7 @@ CREATE TABLE ingredients_recette (
 -- Charger les données
 COPY fournisseurs FROM '/data/fournisseurs.csv' DELIMITER ',' CSV HEADER;
 COPY stocks FROM '/data/stocks.csv' DELIMITER ',' CSV HEADER;
+
 COPY mouvements_stock FROM '/data/mouvements_stock.csv' DELIMITER ',' CSV HEADER;
 COPY production_planifiee FROM '/data/production_planifiee.csv' DELIMITER ',' CSV HEADER;
 COPY controle_qualite FROM '/data/controle_qualite.csv' DELIMITER ',' CSV HEADER;

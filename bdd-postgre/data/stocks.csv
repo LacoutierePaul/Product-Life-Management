@@ -1,0 +1,21 @@
+id,nom,type,quantite,seuil_minimal,unite
+1,Lait Cru,Matiere Premiere,500,100,Litres
+2,Creme Fraeche,Produit Fini,200,50,Litres
+3,Beurre,Produit Fini,150,30,Kg
+4,Fromage Blanc,Produit Fini,180,40,Kg
+5,Ferments,Matiere Premiere,80,20,Kg
+6,Lait d'Amande,Matiere Premiere,300,50,Litres
+7,Lait de Chevre,Matiere Premiere,400,100,Litres
+8,Beurre Clarifie,Produit Fini,100,20,Kg
+9,Lait Cru Bio,Matiere Premiere,250,50,Litres
+10,Creme Allegee,Produit Fini,150,30,Litres
+11,Lait de Coco,Matiere Premiere,200,50,Litres
+12,Lait en Poudre,Matiere Premiere,50,10,Kg
+13,Fromage de Chevre,Produit Fini,120,20,Kg
+14,Beurre Fermier,Produit Fini,130,30,Kg
+15,Yaourt Nature,Produit Fini,300,50,Pots
+16,Lait Cru Entier,Matiere Premiere,400,100,Litres
+17,Ferments Aromatiques,Matiere Premiere,90,20,Kg
+18,Fromage Fermier,Produit Fini,140,20,Kg
+19,Creme Chantilly,Produit Fini,200,40,Litres
+20,Lait Amandier Bio,Matiere Premiere,300,50,Litres

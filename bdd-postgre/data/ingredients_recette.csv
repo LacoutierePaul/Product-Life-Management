@@ -1,0 +1,21 @@
+id,id_recette,id_fournisseur,nom_ingredient,quantite,unite
+1,1,2,Lait de vache entier,3.5,litre
+2,2,5,Bleu d'Auvergne,1.2,kg
+3,3,3,Creme fraeche epaisse,5.0,litre
+4,4,7,Fromage e raclette,2.5,kg
+5,5,1,Lait de chevre,1.0,kg
+6,6,4,Fruits rouges frais,2.3,litre
+7,7,6,Cacao en poudre,1.8,litre
+8,8,2,Mozzarella repee,3.0,kg
+9,9,8,Creme liquide,1.5,litre
+10,10,7,Fromage de chevre,2.0,kg
+11,11,3,Gouda jeune,3.2,kg
+12,12,9,Cheddar vieilli,1.7,kg
+13,13,6,Beurre clarifie,0.8,litre
+14,14,2,Ricotta fraeche,1.3,kg
+15,15,5,Extrait de vanille,1.1,litre
+16,16,8,Creme epaisse,2.4,litre
+17,17,4,Brie fondant,2.2,kg
+18,18,1,Lait fermente,1.6,litre
+19,19,7,Roquefort AOP,0.9,kg
+20,20,9,Miel bio,1.4,litre

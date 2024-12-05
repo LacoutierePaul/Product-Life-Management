@@ -1,0 +1,21 @@
+id,id_stock,type_mouvement,quantite,date_mouvement,raison
+1,1,Entree,50,2024-03-01 10:00:00,Reception fournisseur
+2,2,Sortie,30,2024-03-02 11:30:00,Production
+3,3,Entree,20,2024-03-03 14:00:00,Retour d'inventaire
+4,4,Sortie,40,2024-03-04 09:15:00,Livraison client
+5,5,Entree,10,2024-03-05 08:00:00,Reception fournisseur
+6,6,Sortie,50,2024-03-06 12:45:00,Production
+7,7,Entree,60,2024-03-07 15:20:00,Reception fournisseur
+8,8,Sortie,10,2024-03-08 10:00:00,echantillon envoye
+9,9,Entree,30,2024-03-09 13:30:00,Reception fournisseur
+10,10,Sortie,20,2024-03-10 16:00:00,Livraison client
+11,11,Entree,40,2024-03-11 08:15:00,Reception fournisseur
+12,12,Sortie,10,2024-03-12 09:45:00,Production
+13,13,Entree,20,2024-03-13 11:30:00,Reception fournisseur
+14,14,Sortie,50,2024-03-14 14:00:00,echantillon envoye
+15,15,Entree,70,2024-03-15 15:30:00,Reception fournisseur
+16,16,Sortie,30,2024-03-16 10:00:00,Livraison client
+17,17,Entree,80,2024-03-17 12:45:00,Reception fournisseur
+18,18,Sortie,20,2024-03-18 14:15:00,Production
+19,19,Entree,90,2024-03-19 13:30:00,Reception fournisseur
+20,20,Sortie,60,2024-03-20 11:00:00,Livraison client
