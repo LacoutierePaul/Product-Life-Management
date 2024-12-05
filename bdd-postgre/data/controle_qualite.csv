@@ -1,0 +1,21 @@
+id,id_production,date_controle,resultat,commentaire
+1,5,2024-01-13,Reussi,Texture parfaite.
+2,7,2024-01-17,Reussi,Produit conforme.
+3,1,2024-01-05,echec,Acidite anormale.
+4,6,2024-01-15,Reussi,Bonne maturation.
+5,10,2024-01-21,Reussi,Saveur equilibree.
+6,3,2024-01-09,Reussi,Bon conditionnement.
+7,8,2024-01-18,echec,Couleur non homogene.
+8,14,2024-01-26,Reussi,Stable en conservation.
+9,15,2024-01-28,Reussi,Texture legere.
+10,12,2024-01-24,echec,Odeur trop forte.
+11,9,2024-01-19,Reussi,Contrele satisfaisant.
+12,4,2024-01-10,Reussi,Respect des standards.
+13,2,2024-01-07,echec,Manque de fermete.
+14,13,2024-01-24,Reussi,Bon equilibre des saveurs.
+15,19,2024-02-05,Reussi,Texture agreable.
+16,17,2024-02-01,echec,Trop humide.
+17,11,2024-01-22,Reussi,Produit fermente ideal.
+18,16,2024-01-30,Reussi,Bon conditionnement.
+19,20,2024-02-07,Reussi,Produit bien affine.
+20,18,2024-02-03,Reussi,Bon goet de noisette.

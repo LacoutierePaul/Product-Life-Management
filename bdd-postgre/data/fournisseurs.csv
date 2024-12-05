@@ -1,0 +1,21 @@
+id,nom,contact,matiere_premiere,date_derniere_livraison,evaluation,commentaires
+1,La Ferme des Prés,contact@fermedespres.fr,Lait Cru,2024-04-15,5,Excellent service
+2,Crèmerie Belle Laitière,info@bellelaitiere.fr,Crème Fraîche,2024-04-10,4,Livraison rapide
+3,Beurrier du Terroir,ventes@beurrierduterroir.fr,Beurre Fermier,2024-04-12,5,Qualité exceptionnelle
+4,Les Ferments Bio,support@fermentsbio.fr,Ferments,2024-04-08,4,Produits bio certifiés
+5,Fromagerie Artisanale Dupont,contact@fromagedupont.fr,Fromage de Chèvre,2024-04-14,5,Fromages savoureux
+6,Laiterie Saint-Martin,service@laitiersaintmartin.fr,Lait Entier,2024-04-11,3,Délais parfois longs
+7,Crème d'Or,info@cremedor.fr,Crème Allégée,2024-04-09,4,Produit conforme
+8,Lait Amandier,contact@laitamandier.fr,Lait d'Amande,2024-04-13,5,Fournisseur très réactif
+9,La Ferme de la Plaine,ventes@fermedelaplaine.fr,Lait Cru,2024-04-07,2,Plusieurs retards
+10,Beurre Salé et Co,info@beurresaleetco.fr,Beurre Salé,2024-04-16,5,Bonne communication
+11,Ferments Aromatiques,support@fermentsarom.fr,Ferments Aromatiques,2024-04-05,4,Livraison efficace
+12,Crèmerie Fraîcheur,contact@cremeriefraich.fr,Crème Fraîche,2024-04-06,3,Produit acceptable
+13,Lait de Chèvre des Monts,info@laitchèvremonts.fr,Lait de Chèvre,2024-04-04,5,Très bon service
+14,Laiterie Locale,service@laiterielocale.fr,Lait Cru Local,2024-04-17,4,Relation durable
+15,Beurrier Tradition,ventes@beurriertradition.fr,Beurre Traditionnel,2024-04-03,3,Délais à améliorer
+16,Ferments Naturels,contact@fermentsnaturels.fr,Ferments Naturels,2024-04-02,4,Produit conforme
+17,La Ferme Irréprochable,info@fermeirreprochable.fr,Lait Cru,2024-04-18,5,Service irréprochable
+18,Beurre Clarifié du Val,support@beurreclarifie.fr,Beurre Clarifié,2024-04-01,3,Produit parfois manquant
+19,Crèmerie Bio Santé,contact@cremeriebiosante.fr,Crème Fraîche Bio,2024-04-19,4,Bonne qualité constante
+20,Laiterie Entière,info@laiterieentiere.fr,Lait Cru Entier,2024-04-20,5,Excellent fournisseur

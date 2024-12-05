@@ -1,0 +1,21 @@
+id,produit_fini,quantite_planifiee,date_production,status
+1,Yaourt Nature,200,2024-03-01,Terminé
+2,Beurre Clarifié,100,2024-03-02,En cours
+3,Fromage Blanc,150,2024-03-03,En attente
+4,Crème Chantilly,180,2024-03-04,Terminé
+5,Lait Cru Entier,300,2024-03-05,En attente
+6,Fromage Fermier,120,2024-03-06,En cours
+7,Beurre Fermier,200,2024-03-07,Terminé
+8,Lait d'Amande,250,2024-03-08,En attente
+9,Fromage de Chèvre,100,2024-03-09,Terminé
+10,Crème Allégée,150,2024-03-10,En cours
+11,Lait de Coco,300,2024-03-11,Terminé
+12,Beurre,200,2024-03-12,En cours
+13,Lait Cru Bio,250,2024-03-13,En attente
+14,Ferments Aromatiques,80,2024-03-14,Terminé
+15,Fromage Blanc,150,2024-03-15,En cours
+16,Lait d'Amande Bio,300,2024-03-16,En attente
+17,Beurre Clarifié,100,2024-03-17,Terminé
+18,Lait Cru,400,2024-03-18,En attente
+19,Fromage de Chèvre,120,2024-03-19,En cours
+20,Yaourt Nature,200,2024-03-20,Terminé
