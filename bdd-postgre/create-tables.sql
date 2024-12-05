@@ -59,9 +59,10 @@ CREATE TABLE recettes (
 -- Table des Ingrédients des Recettes (relation n-n entre recettes et fournisseurs)
 CREATE TABLE ingredients_recette (
     id SERIAL PRIMARY KEY,
-    nom_ingredient VARCHAR(255),
     id_recette INTEGER REFERENCES recettes(id) ON DELETE CASCADE,
     id_fournisseur INTEGER REFERENCES fournisseurs(id) ON DELETE CASCADE,
+    nom_ingredient VARCHAR(255),
+
     quantite FLOAT NOT NULL, -- Quantité utilisée dans la recette
     unite VARCHAR(50) NOT NULL -- Unité de mesure (kg, litre, etc.)
 );
