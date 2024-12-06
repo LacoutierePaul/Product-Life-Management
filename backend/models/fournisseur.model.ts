@@ -1,45 +1,46 @@
-import {
-    Table,
-    Column,
-    Model,
-    DataType,
-    PrimaryKey,
-    AutoIncrement,
-    Unique,
-} from 'sequelize-typescript';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../config/database";
 
-@Table({
-    tableName: 'fournisseurs',
-    timestamps: false,
-})
-export class Fournisseur extends Model {
-    @PrimaryKey
-    @AutoIncrement
-    @Column(DataType.INTEGER)
-    id!: number;
+export class Fournisseur extends Model {}
 
-    @Column({
-        type: DataType.STRING(255),
-        allowNull: false,
-    })
-    nom!: string;
-
-    @Column(DataType.STRING(255))
-    contact?: string;
-
-    @Unique
-    @Column({
-        type: DataType.STRING(255),
-        allowNull: false,
-    })
-    matierePremiere!: string;
-
-    @Column(DataType.DATE)
-    dateDerniereLivraison?: Date;
-
-    @Column(DataType.SMALLINT)
-    evaluation?: number;
-
-    @Column(DataType.TEXT)
-    commentaires?: string;
-}
+Fournisseur.init(
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            allowNull: false,
+            autoIncrement: true,
+        },
+        nom: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+        },
+        contact: {
+            type: DataTypes.STRING(255),
+            allowNull: true,
+        },
+        matierePremiere: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+        },
+        dateDerniereLivraison: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+        evaluation: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        commentaires: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
+    },
+    {
+        sequelize,
+        modelName: "Fournisseur",
+        tableName: "fournisseurs",
+        schema: "plm",
+        timestamps: false,
+    }
+);

@@ -1,59 +1,9 @@
-import {
-    Table,
-    Column,
-    Model,
-    DataType,
-    PrimaryKey,
-    AutoIncrement,
-    ForeignKey,
-    BelongsTo,
-} from 'sequelize-typescript';
-import { Stock } from './stocks.model';
-
-@Table({
-    tableName: 'mouvements_stock',
-    timestamps: false,
-})
-export class MouvementStock extends Model {
-    @PrimaryKey
-    @AutoIncrement
-    @Column(DataType.INTEGER)
-    id!: number;
-
-    @ForeignKey(() => Stock)
-    @Column(DataType.INTEGER)
-    idStock!: number;
-
-    @BelongsTo(() => Stock)
-    stock!: Stock;
-
-    @Column({
-        type: DataType.STRING(50),
-        allowNull: false,
-    })
-    typeMouvement!: string;
-
-    @Column({
-        type: DataType.INTEGER,
-        allowNull: false,
-    })
-    quantite!: number;
-
-    @Column({
-        type: DataType.DATE,
-        defaultValue: DataType.NOW,
-    })
-    dateMouvement!: Date;
-
-    @Column(DataType.STRING(255))
-    raison?: string;
-}
-
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-export class MouvementsStock extends Model {}
-MouvementsStock.init(
+export class MouvementStock extends Model {}
+
+MouvementStock.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -62,36 +12,36 @@ MouvementsStock.init(
             autoIncrement: true,
         },
         idStock: {
-            type: DataTypes.STRING(255),
-        },
-        stock: {
             type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "stocks",
+                key: "id",
+            },
         },
         typeMouvement: {
             type: DataTypes.STRING(50),
+            allowNull: false,
         },
         quantite: {
             type: DataTypes.INTEGER,
+            allowNull: false,
         },
         dateMouvement: {
             type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
         },
         raison: {
-            type: DataTypes.STRING(50),
-        }
+            type: DataTypes.STRING(255),
+            allowNull: true,
+        },
     },
     {
         sequelize,
-        modelName: 'MouvementsStock',
-        tableName: 'mouvementsstock',
-        schema: 'plm',
-        timestamps: true,
+        modelName: "MouvementStock",
+        tableName: "mouvements_stock",
+        schema: "plm",
+        timestamps: false,
     }
 );
-
-MouvementsStock.belongsTo(LearningPackage, {
-    foreignKey: 'id_package',
-    targetKey: 'id_package',
-    onDelete: 'CASCADE',
-});
-LearningPackage.hasMany(LearningFact, { foreignKey: 'id_package' });

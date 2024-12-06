@@ -29,7 +29,7 @@ Stock.init(
     {
         sequelize,
         modelName: 'Stock',
-        tableName: 'stock',
+        tableName: 'stocks',
         schema: 'plm',
         timestamps: true,
     }
