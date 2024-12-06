@@ -1,15 +1,19 @@
-import { Sequelize } from 'sequelize';
-import { Fournisseur } from '../models/fournisseur.model';
-import { Stock } from '../models/stocks.model';
-import { MouvementStock } from '../models/mouvementstocks.model';
-import { ProductionPlanifiee } from '../models/productionplanifiee.model';
-import { ControleQualite } from '../models/controlequalite.model';
-import { Recette } from '../models/recettes.model';
-import { IngredientRecette } from '../models/ingredientsrecettes.model';
+import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
 
-const sequelize = new Sequelize({
-    dialect: 'postgres',
-    host: process.env.DB_HOST,
-});
+dotenv.config();
+
+const { DB_HOST, DB_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD } = process.env;
+
+const sequelize = new Sequelize(
+    POSTGRES_DB,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD,
+    {
+        host: DB_HOST,
+        port: Number(DB_PORT),
+        dialect: "postgres",
+    }
+);
 
 export default sequelize;

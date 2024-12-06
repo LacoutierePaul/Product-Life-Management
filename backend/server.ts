@@ -1,0 +1,31 @@
+import express, { Request, Response, json } from "express";
+import sequelize from "./config/database";
+import stockRoutes from "./routes/stocks.routes";
+
+const app = express();
+const PORT = 3000;
+
+app.use(json());
+
+app.use("/api/stocks", stockRoutes);
+
+// Test API de base
+app.get("/", (req: Request, res: Response) => {
+    res.send("Server is running!");
+});
+
+// Synchroniser avec la base de données et démarrer le serveur
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log("Database connected successfully.");
+        return sequelize.sync(); // Synchronise les modèles avec la base
+    })
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error("Unable to connect to the database:", err);
+    });
