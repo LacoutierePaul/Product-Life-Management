@@ -41,6 +41,6 @@ ProductionPlanifiee.init(
         modelName: 'ProductionPlanifiee',
         tableName: 'production_planifiee',
         schema: 'public',
-        timestamps: true,
+        timestamps: false,
     }
 );
