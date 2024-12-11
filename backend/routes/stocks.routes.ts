@@ -56,4 +56,22 @@ router.delete("/:id", async (req: Request, res: Response) => {
     }
 });
 
+// Obtenir un stock par ID
+router.get("/:id", async (req: Request, res: Response) => {  
+    try {
+        const { id } = req.params;
+        const stock = await Stock.findByPk(id);
+        if (stock) {
+            res.json(stock);
+        } else {
+            res.status(404).json({ error: "Stock not found" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Unable to fetch stock" });
+    }
+}
+);
+
+
+
 export default router;
