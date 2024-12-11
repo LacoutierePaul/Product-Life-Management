@@ -27,7 +27,7 @@ ProductionPlanifiee.init(
         sequelize,
         modelName: 'ProductionPlanifiee',
         tableName: 'production_planifiee',
-        schema: 'plm',
+        schema: 'public',
         timestamps: true,
     }
 );

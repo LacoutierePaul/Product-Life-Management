@@ -30,7 +30,7 @@ Recette.init(
         sequelize,
         modelName: 'Recette',
         tableName: 'recettes',
-        schema: 'plm',
+        schema: 'public',
         timestamps: true,
     }
 );

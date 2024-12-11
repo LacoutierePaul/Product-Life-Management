@@ -17,6 +17,9 @@ const sequelize = new Sequelize(
         host: DB_HOST,
         port: Number(DB_PORT),
         dialect: "postgres",
+        define: {
+            schema: "public", // Explicitly set the schema
+        },
     }
 );
 

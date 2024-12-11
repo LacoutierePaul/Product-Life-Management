@@ -40,7 +40,7 @@ Fournisseur.init(
         sequelize,
         modelName: "Fournisseur",
         tableName: "fournisseurs",
-        schema: "plm",
+        schema: "public",
         timestamps: false,
     }
 );

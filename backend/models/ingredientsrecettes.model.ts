@@ -29,6 +29,10 @@ IngredientRecette.init(
             },
             onDelete: "CASCADE",
         },
+        nom_ingredient: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+        },
         quantite: {
             type: DataTypes.FLOAT,
             allowNull: false,
@@ -42,7 +46,7 @@ IngredientRecette.init(
         sequelize,
         modelName: "IngredientRecette",
         tableName: "ingredients_recette",
-        schema: "plm",
+        schema: "public",
         timestamps: false,
     }
 );

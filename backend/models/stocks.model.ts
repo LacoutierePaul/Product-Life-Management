@@ -30,7 +30,7 @@ Stock.init(
         sequelize,
         modelName: 'Stock',
         tableName: 'stocks',
-        schema: 'plm',
+        schema: 'public',
         timestamps: true,
     }
 );

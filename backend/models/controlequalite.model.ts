@@ -36,7 +36,7 @@ ControleQualite.init(
         sequelize,
         modelName: "ControleQualite",
         tableName: "controle_qualite",
-        schema: "plm",
+        schema: "public",
         timestamps: false,
     }
 );

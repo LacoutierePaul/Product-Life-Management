@@ -41,7 +41,7 @@ MouvementStock.init(
         sequelize,
         modelName: "MouvementStock",
         tableName: "mouvements_stock",
-        schema: "plm",
+        schema: "public",
         timestamps: false,
     }
 );
