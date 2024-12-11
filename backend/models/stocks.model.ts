@@ -1,7 +1,25 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-export class Stock extends Model {}
+interface StockInterface {
+    id: number;
+    nom: string;
+    type: string;
+    quantite: number;
+    seuil_minimal: number;
+    unite: string;
+}
+
+export class Stock extends Model<StockInterface> {
+    public id!: number;
+    public nom!: string;
+    public type!: string;
+    public quantite!: number;
+    public seuil_minimal!: number;
+    public unite!: string;
+}
+
+
 Stock.init(
     {
         id: {
@@ -34,3 +52,6 @@ Stock.init(
         timestamps: false,
     }
 );
+
+
+
