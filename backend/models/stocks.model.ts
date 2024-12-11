@@ -19,7 +19,7 @@ Stock.init(
         quantite: {
             type: DataTypes.INTEGER,
         },
-        seuilMinimal: {
+        seuil_minimal: {
             type: DataTypes.INTEGER,
         },
         unite: {
@@ -31,6 +31,6 @@ Stock.init(
         modelName: 'Stock',
         tableName: 'stocks',
         schema: 'public',
-        timestamps: true,
+        timestamps: false,
     }
 );
