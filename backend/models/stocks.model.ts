@@ -49,7 +49,7 @@ Stock.init(
         modelName: 'Stock',
         tableName: 'stocks',
         schema: 'public',
-        timestamps: false,
+        timestamps: true,
     }
 );
 
