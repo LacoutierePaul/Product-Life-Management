@@ -55,7 +55,8 @@ CREATE TABLE recettes (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(255) NOT NULL, -- Nom de la recette
     description TEXT,          -- Description de la recette
-    date_creation DATE DEFAULT CURRENT_DATE -- Date de création de la recette
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table des Ingrédients des Recettes (relation n-n entre recettes et fournisseurs)
