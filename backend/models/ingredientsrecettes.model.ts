@@ -1,49 +1,48 @@
-import {
-    Table,
-    Column,
-    Model,
-    DataType,
-    PrimaryKey,
-    AutoIncrement,
-    ForeignKey,
-    BelongsTo,
-} from 'sequelize-typescript';
-import { Recette } from './recettes.model';
-import { Fournisseur } from './fournisseur.model';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../config/database";
 
-@Table({
-    tableName: 'ingredients_recette',
-    timestamps: false,
-})
-export class IngredientRecette extends Model {
-    @PrimaryKey
-    @AutoIncrement
-    @Column(DataType.INTEGER)
-    id!: number;
+export class IngredientRecette extends Model {}
 
-    @ForeignKey(() => Recette)
-    @Column(DataType.INTEGER)
-    idRecette!: number;
-
-    @BelongsTo(() => Recette)
-    recette!: Recette;
-
-    @ForeignKey(() => Fournisseur)
-    @Column(DataType.INTEGER)
-    idFournisseur!: number;
-
-    @BelongsTo(() => Fournisseur)
-    fournisseur!: Fournisseur;
-
-    @Column({
-        type: DataType.FLOAT,
-        allowNull: false,
-    })
-    quantite!: number;
-
-    @Column({
-        type: DataType.STRING(50),
-        allowNull: false,
-    })
-    unite!: string;
-}
+IngredientRecette.init(
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            allowNull: false,
+            autoIncrement: true,
+        },
+        idRecette: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "recettes",
+                key: "id",
+            },
+            onDelete: "CASCADE",
+        },
+        idFournisseur: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "fournisseurs",
+                key: "id",
+            },
+            onDelete: "CASCADE",
+        },
+        quantite: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        unite: {
+            type: DataTypes.STRING(50),
+            allowNull: false,
+        },
+    },
+    {
+        sequelize,
+        modelName: "IngredientRecette",
+        tableName: "ingredients_recette",
+        schema: "plm",
+        timestamps: false,
+    }
+);

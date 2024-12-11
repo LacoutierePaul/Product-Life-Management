@@ -29,7 +29,7 @@ Recette.init(
     {
         sequelize,
         modelName: 'Recette',
-        tableName: 'recette',
+        tableName: 'recettes',
         schema: 'plm',
         timestamps: true,
     }
