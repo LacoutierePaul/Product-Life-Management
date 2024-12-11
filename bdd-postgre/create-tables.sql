@@ -17,7 +17,9 @@ CREATE TABLE stocks (
     type VARCHAR(50) NOT NULL,
     quantite INTEGER DEFAULT 0,
     seuil_minimal INTEGER DEFAULT 0,
-    unite VARCHAR(50)
+    unite VARCHAR(50),
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table des Mouvements de Stock
@@ -77,3 +79,11 @@ COPY production_planifiee FROM '/data/production_planifiee.csv' DELIMITER ',' CS
 COPY controle_qualite FROM '/data/controle_qualite.csv' DELIMITER ',' CSV HEADER;
 COPY recettes FROM '/data/recettes.csv' DELIMITER ',' CSV HEADER;
 COPY ingredients_recette FROM '/data/ingredients_recette.csv' DELIMITER ',' CSV HEADER;
+
+SELECT setval('stocks_id_seq', 20, true);
+SELECT setval('fournisseurs_id_seq', 20, true);
+SELECT setval('mouvements_stock_id_seq', 20, true);
+SELECT setval('production_planifiee_id_seq', 20, true);
+SELECT setval('controle_qualite_id_seq', 20, true);
+SELECT setval('recettes_id_seq', 20, true);
+SELECT setval('ingredients_recette_id_seq', 20, true);
