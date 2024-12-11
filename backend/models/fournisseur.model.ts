@@ -1,7 +1,25 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-export class Fournisseur extends Model {}
+
+interface FournisseurInterface {
+    id: number;
+    nom: string;
+    contact: string;
+    matierePremiere: string;
+    dateDerniereLivraison: Date;
+    evaluation: number;
+    commentaires: string;
+}
+export class Fournisseur extends Model <FournisseurInterface>{
+    public id!: number;
+    public nom!: string;
+    public contact!: string;
+    public matierePremiere!: string;
+    public dateDerniereLivraison!: Date;
+    public evaluation!: number;
+    public commentaires!: string;
+}
 
 Fournisseur.init(
     {

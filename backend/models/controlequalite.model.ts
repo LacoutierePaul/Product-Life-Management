@@ -1,7 +1,22 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-export class ControleQualite extends Model {}
+
+interface ControleQualiteInterface {
+    id: number;
+    idProduction: number;
+    dateControle: Date;
+    resultat: string;
+    commentaire: string;
+}
+
+export class ControleQualite extends Model <ControleQualiteInterface> {
+    public id!: number;
+    public idProduction!: number;
+    public dateControle!: Date;
+    public resultat!: string;
+    public commentaire!: string;
+}
 
 ControleQualite.init(
     {

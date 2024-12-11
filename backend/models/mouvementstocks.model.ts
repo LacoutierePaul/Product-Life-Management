@@ -1,7 +1,22 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-export class MouvementStock extends Model {}
+interface MouvementStockInterface {
+    id: number;
+    idStock: number;
+    typeMouvement: string;
+    quantite: number;
+    dateMouvement: Date;
+    raison: string;
+}
+export class MouvementStock extends Model<MouvementStockInterface> {
+    public id!: number;
+    public idStock!: number;
+    public typeMouvement!: string;
+    public quantite!: number;
+    public dateMouvement!: Date;
+    public raison!: string;
+}
 
 MouvementStock.init(
     {

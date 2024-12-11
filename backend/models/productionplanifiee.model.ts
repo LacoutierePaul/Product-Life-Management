@@ -1,7 +1,20 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-export class ProductionPlanifiee extends Model {}
+interface ProductionPlanifieeInterface {
+    id: number;
+    produitFini: string;
+    quantitePlanifiee: number;
+    dateProduction: Date;
+    status: string;
+}
+export class ProductionPlanifiee extends Model <ProductionPlanifieeInterface> {
+    public id!: number;
+    public produitFini!: string;
+    public quantitePlanifiee!: number;
+    public dateProduction!: Date;
+    public status!: string;
+}
 ProductionPlanifiee.init(
     {
         id: {

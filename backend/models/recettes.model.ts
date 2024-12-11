@@ -1,7 +1,22 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-export class Recette extends Model {}
+interface RecetteInterface {
+    id: number;
+    nom: string;
+    description: string;
+    dateCreation: Date;
+    seuilMinimal: number;
+    unite: string;
+}
+export class Recette extends Model <RecetteInterface> {
+    public id!: number;
+    public nom!: string;
+    public description!: string;
+    public dateCreation!: Date;
+    public seuilMinimal!: number;
+    public unite!: string;
+}
 Recette.init(
     {
         id: {
