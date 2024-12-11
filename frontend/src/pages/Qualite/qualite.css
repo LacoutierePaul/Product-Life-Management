@@ -7,22 +7,107 @@
     text-align: center;
   }
   
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  table, th, td {
-    border: 1px solid #ddd;
-  }
-  
-  th, td {
-    padding: 8px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
-  
+
+/* Formulaire d'ajout */
+
+.ajout-controle-form {
+
+  margin-bottom: 20px;
+
+  padding: 20px;
+
+  background-color: #e0e0e0;
+
+  border-radius: 5px;
+
+}
+
+
+
+.ajout-controle-form div {
+
+  margin-bottom: 10px;
+
+}
+
+
+
+.ajout-controle-form label {
+
+  margin-right: 10px;
+
+}
+
+
+
+.ajout-controle-form input, .ajout-controle-form select, .ajout-controle-form textarea {
+
+  width: 100%;
+
+  padding: 8px;
+
+  margin-top: 5px;
+
+}
+
+
+
+.ajout-controle-form button {
+
+  background-color: #4CAF50;
+
+  color: white;
+
+  border: none;
+
+  padding: 10px 20px;
+
+  margin-top: 10px;
+
+  cursor: pointer;
+
+}
+
+
+
+.ajout-controle-form button:hover {
+
+  background-color: #45a049;
+
+}
+
+
+
+/* Tableau des contrôles qualité */
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+  margin-top: 20px;
+
+}
+
+
+
+table, th, td {
+  border: 1px solid #ddd;
+
+}
+
+
+
+th, td {
+  padding: 8px;
+  text-align: left;
+
+}
+
+
+
+th {
+  background-color: #f2f2f2;
+
+}
+
