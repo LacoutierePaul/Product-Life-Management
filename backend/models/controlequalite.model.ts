@@ -1,25 +1,32 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-export class ControleQualite extends Model {}
+
+interface ControleQualiteInterface {
+    idcontrole: number;
+    date_controle: Date;
+    resultat: string;
+    commentaire_controle: string;
+    idproductionplanifiee: number;
+}
+
+export class ControleQualite extends Model <ControleQualiteInterface> {
+    public idcontrole!: number;
+    public date_controle!: Date;
+    public resultat!: string;
+    public commentaire_controle!: string;
+    public idproductionplanifiee!: number;
+}
 
 ControleQualite.init(
     {
-        id: {
+        idcontrole: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        idProduction: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "production_planifiee",
-                key: "id",
-            },
-        },
-        dateControle: {
+        date_controle: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -27,16 +34,24 @@ ControleQualite.init(
             type: DataTypes.STRING(50),
             allowNull: false,
         },
-        commentaire: {
+        commentaire_controle: {
             type: DataTypes.TEXT,
             allowNull: true,
         },
+        idproductionplanifiee: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "production_planifiee",
+                key: "id",
+            },
+        }
     },
     {
         sequelize,
         modelName: "ControleQualite",
         tableName: "controle_qualite",
-        schema: "plm",
-        timestamps: false,
+        schema: "public",
+        timestamps: true,
     }
 );

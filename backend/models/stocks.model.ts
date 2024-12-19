@@ -1,25 +1,38 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-export class Stock extends Model {}
+interface StockInterface {
+    idstock: number;
+    nom_ingredient: string;
+    quantite: number;
+    seuil_minimal: number;
+    unite: string;
+}
+
+export class Stock extends Model<StockInterface> {
+    public idstock!: number;
+    public nom_ingredient!: string;
+    public quantite!: number;
+    public seuil_minimal!: number;
+    public unite!: string;
+}
+
+
 Stock.init(
     {
-        id: {
+        idstock: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        nom: {
+        nom_ingredient: {
             type: DataTypes.STRING(255),
-        },
-        type: {
-            type: DataTypes.STRING(50),
         },
         quantite: {
             type: DataTypes.INTEGER,
         },
-        seuilMinimal: {
+        seuil_minimal: {
             type: DataTypes.INTEGER,
         },
         unite: {
@@ -30,7 +43,10 @@ Stock.init(
         sequelize,
         modelName: 'Stock',
         tableName: 'stocks',
-        schema: 'plm',
+        schema: 'public',
         timestamps: true,
     }
 );
+
+
+
