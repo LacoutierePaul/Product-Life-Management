@@ -39,6 +39,6 @@ RecetteToStocks.init(
         modelName: "RecetteToStocks",
         tableName: "recette_to_stocks",
         schema: "public",
-        timestamps: false,
+        timestamps: true,
     }
 );
