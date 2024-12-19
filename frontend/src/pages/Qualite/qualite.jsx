@@ -75,73 +75,46 @@ function Qualite() {
       commentaire: "Odeur trop forte."
     }
   ];
+
   const [controleQualite, setControleQualite] = useState(controleQualiteFictif);
   const [newControle, setNewControle] = useState({
-
     id_production: '',
-
     date_controle: '',
-
     resultat: '',
-
     commentaire: ''
-
   });
 
-
+  const [showForm, setShowForm] = useState(false); // Nouvel état pour afficher/masquer le formulaire
 
   const handleInputChange = (event) => {
-
     const { name, value } = event.target;
-
     setNewControle((prevState) => ({
-
       ...prevState,
-
       [name]: value
-
     }));
-
   };
 
-
-
   const handleSubmit = (event) => {
-
     event.preventDefault();
 
-
-
     // Ajouter le nouveau contrôle qualité à la liste
-
     const newControleWithId = {
-
       ...newControle,
-
       id: controleQualite.length + 1, // Générer un ID unique
-
     };
-
-
 
     setControleQualite((prevState) => [...prevState, newControleWithId]);
 
-
-
     // Réinitialiser le formulaire
-
     setNewControle({
-
       id_production: '',
-
       date_controle: '',
-
       resultat: '',
-
       commentaire: ''
-
     });
 
+    // Fermer le formulaire après soumission
+    setShowForm(false);
   };
 
   useEffect(() => {
@@ -154,107 +127,68 @@ function Qualite() {
   return (
     <div className="qualite">
       <h2>Contrôle Qualité</h2>
-      {/* Formulaire d'ajout d'un contrôle qualité */}
+      
+      {/* Bouton pour afficher/masquer le formulaire */}
+      <button onClick={() => setShowForm(!showForm)}>
+        {showForm ? 'Annuler' : 'Ajouter un contrôle qualité'}
+      </button>
 
-      <form onSubmit={handleSubmit} className="ajout-controle-form">
+      {/* Formulaire d'ajout de contrôle qualité */}
+      {showForm && (
+        <form onSubmit={handleSubmit} className="ajout-controle-form">
+          <div>
+            <label htmlFor="id_production">ID de Production:</label>
+            <input
+              type="number"
+              id="id_production"
+              name="id_production"
+              value={newControle.id_production}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
 
-        <div>
+          <div>
+            <label htmlFor="date_controle">Date du Contrôle:</label>
+            <input
+              type="date"
+              id="date_controle"
+              name="date_controle"
+              value={newControle.date_controle}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
 
-          <label htmlFor="id_production">ID de Production:</label>
+          <div>
+            <label htmlFor="resultat">Résultat:</label>
+            <select
+              id="resultat"
+              name="resultat"
+              value={newControle.resultat}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Sélectionner</option>
+              <option value="Réussi">Réussi</option>
+              <option value="Échec">Échec</option>
+            </select>
+          </div>
 
-          <input
+          <div>
+            <label htmlFor="commentaire">Commentaire:</label>
+            <textarea
+              id="commentaire"
+              name="commentaire"
+              value={newControle.commentaire}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
 
-            type="number"
-
-            id="id_production"
-
-            name="id_production"
-
-            value={newControle.id_production}
-
-            onChange={handleInputChange}
-
-            required
-
-          />
-
-        </div>
-
-        <div>
-
-          <label htmlFor="date_controle">Date du Contrôle:</label>
-
-          <input
-
-            type="date"
-
-            id="date_controle"
-
-            name="date_controle"
-
-            value={newControle.date_controle}
-
-            onChange={handleInputChange}
-
-            required
-
-          />
-
-        </div>
-
-        <div>
-
-          <label htmlFor="resultat">Résultat:</label>
-
-          <select
-
-            id="resultat"
-
-            name="resultat"
-
-            value={newControle.resultat}
-
-            onChange={handleInputChange}
-
-            required
-
-          >
-
-            <option value="">Sélectionner</option>
-
-            <option value="Réussi">Réussi</option>
-
-            <option value="Échec">Échec</option>
-
-          </select>
-
-        </div>
-
-        <div>
-
-          <label htmlFor="commentaire">Commentaire:</label>
-
-          <textarea
-
-            id="commentaire"
-
-            name="commentaire"
-
-            value={newControle.commentaire}
-
-            onChange={handleInputChange}
-
-            required
-
-          />
-
-        </div>
-
-        <button type="submit">Ajouter le contrôle qualité</button>
-
-      </form>
-
-
+          <button type="submit">Ajouter le contrôle qualité</button>
+        </form>
+      )}
 
       {/* Tableau des contrôles qualité */}
       <table>
