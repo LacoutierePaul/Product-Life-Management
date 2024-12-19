@@ -26,11 +26,11 @@ router.post("/", async (req: Request, res: Response) => {
 // Mettre à jour un stock
 router.put("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const [updated] = await Stock.update(req.body, { where: { id } });
+        const { idstock } = req.params;
+        const [updated] = await Stock.update(req.body, { where: { idstock } });
 
         if (updated) {
-            const updatedStock = await Stock.findByPk(id);
+            const updatedStock = await Stock.findByPk(idstock);
             res.json(updatedStock);
         } else {
             res.status(404).json({ error: "Stock not found" });
@@ -43,8 +43,8 @@ router.put("/:id", async (req: Request, res: Response) => {
 // Supprimer un stock
 router.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const deleted = await Stock.destroy({ where: { id } });
+        const { idstock } = req.params;
+        const deleted = await Stock.destroy({ where: { idstock } });
 
         if (deleted) {
             res.status(204).send();
@@ -55,5 +55,56 @@ router.delete("/:id", async (req: Request, res: Response) => {
         res.status(500).json({ error: "Unable to delete stock" });
     }
 });
+
+// Obtenir un stock par ID
+router.get("/:id", async (req: Request, res: Response) => {  
+    try {
+        const { id } = req.params;
+        const stock = await Stock.findByPk(id);
+        if (stock) {
+            res.json(stock);
+        } else {
+            res.status(404).json({ error: "Stock not found" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Unable to fetch stock" });
+    }
+}
+);
+
+//Ajouter une quantité à un stock
+router.get("/add/:id/:quantity", async (req: Request, res: Response) => {
+    try {
+        const { id, quantity } = req.params;
+        const stock = await Stock.findByPk(id);
+        if (stock) {
+            stock.quantite += parseInt(quantity);
+            await stock.save();
+            res.json(stock);
+        } else {
+            res.status(404).json({ error: "Stock not found" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Unable to fetch stock" });
+    }
+});
+
+//Retirer une quantité à un stock
+router.get("/remove/:id/:quantity", async (req: Request, res: Response) => {
+    try {
+        const { id, quantity } = req.params;
+        const stock = await Stock.findByPk(id);
+        if (stock) {
+            stock.quantite -= parseInt(quantity);
+            await stock.save();
+            res.json(stock);
+        } else {
+            res.status(404).json({ error: "Stock not found" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Unable to fetch stock" });
+    }
+});
+
 
 export default router;

@@ -7,7 +7,7 @@ const PORT = 3000;
 
 app.use(json());
 
-app.use("/api/stocks", stockRoutes);
+app.use("/stocks", stockRoutes);
 
 // Test API de base
 app.get("/", (req: Request, res: Response) => {
