@@ -1,19 +1,135 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './planification.css';
 
 function Planification() {
-  const [productions, setProductions] = useState([]);
+  // Données fictives de planification
+  const planificationData = [
+    { id: 1, produit_fini: 'Yaourt Nature', quantite_planifiee: 200, date_production: '2024-03-01', status: 'Terminé' },
+    { id: 2, produit_fini: 'Beurre Clarifié', quantite_planifiee: 100, date_production: '2024-03-02', status: 'En cours' },
+    { id: 3, produit_fini: 'Fromage Blanc', quantite_planifiee: 150, date_production: '2024-03-03', status: 'En attente' },
+    { id: 4, produit_fini: 'Crème Chantilly', quantite_planifiee: 180, date_production: '2024-03-04', status: 'Terminé' },
+    { id: 5, produit_fini: 'Lait Cru Entier', quantite_planifiee: 300, date_production: '2024-03-05', status: 'En attente' },
+    { id: 6, produit_fini: 'Fromage Fermier', quantite_planifiee: 120, date_production: '2024-03-06', status: 'En cours' },
+    { id: 7, produit_fini: 'Beurre Fermier', quantite_planifiee: 200, date_production: '2024-03-07', status: 'Terminé' },
+  ];
 
-  useEffect(() => {
-    // Exemple de fetch pour récupérer la planification de production
-    fetch('/api/production_planifiee')
-      .then((response) => response.json())
-      .then((data) => setProductions(data));
-  }, []);
+  // Utilisation de useState pour gérer l'état des données et du formulaire
+  const [productions, setProductions] = useState(planificationData);
+  const [showForm, setShowForm] = useState(false); // Etat pour afficher ou masquer le formulaire
+  const [newProduction, setNewProduction] = useState({
+    id: null,
+    produit_fini: '',
+    quantite_planifiee: '',
+    date_production: '',
+    status: 'En attente',
+  });
+
+  // Fonction pour gérer les changements dans le formulaire
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewProduction({
+      ...newProduction,
+      [name]: value,
+    });
+  };
+
+  // Fonction pour ajouter une nouvelle planification
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (newProduction.id) {
+      // Modifier une production existante
+      setProductions(productions.map((prod) =>
+        prod.id === newProduction.id ? newProduction : prod
+      ));
+    } else {
+      // Ajouter une nouvelle production
+      const newId = productions.length + 1;
+      const updatedProductions = [
+        ...productions,
+        { id: newId, ...newProduction },
+      ];
+      setProductions(updatedProductions);
+    }
+    setShowForm(false); // Fermer le formulaire après soumission
+    setNewProduction({
+      id: null,
+      produit_fini: '',
+      quantite_planifiee: '',
+      date_production: '',
+      status: 'En attente',
+    });
+  };
+
+  // Fonction pour supprimer une planification
+  const handleDelete = (id) => {
+    setProductions(productions.filter((prod) => prod.id !== id));
+  };
+
+  // Fonction pour remplir le formulaire avec les données d'une production à modifier
+  const handleEdit = (production) => {
+    setNewProduction(production);
+    setShowForm(true);
+  };
 
   return (
     <div className="planification">
       <h2>Planification de la Production</h2>
+
+      {/* Bouton pour afficher ou masquer le formulaire d'ajout */}
+      <button onClick={() => setShowForm(!showForm)}>
+        {showForm ? 'Annuler' : 'Ajouter une Planification'}
+      </button>
+
+      {/* Formulaire d'ajout ou de modification de planification */}
+      {showForm && (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Produit Fini:</label>
+            <input
+              type="text"
+              name="produit_fini"
+              value={newProduction.produit_fini}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Quantité Planifiée:</label>
+            <input
+              type="number"
+              name="quantite_planifiee"
+              value={newProduction.quantite_planifiee}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Date de Production:</label>
+            <input
+              type="date"
+              name="date_production"
+              value={newProduction.date_production}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Status:</label>
+            <select
+              name="status"
+              value={newProduction.status}
+              onChange={handleInputChange}
+            >
+              <option value="Terminé">Terminé</option>
+              <option value="En cours">En cours</option>
+              <option value="En attente">En attente</option>
+            </select>
+          </div>
+          <button type="submit">{newProduction.id ? 'Modifier' : 'Ajouter'}</button>
+        </form>
+      )}
+
+      {/* Tableau de la planification */}
       <table>
         <thead>
           <tr>
@@ -21,6 +137,7 @@ function Planification() {
             <th>Quantité Planifiée</th>
             <th>Date de Production</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -30,6 +147,14 @@ function Planification() {
               <td>{production.quantite_planifiee}</td>
               <td>{new Date(production.date_production).toLocaleDateString()}</td>
               <td>{production.status}</td>
+              <td>
+                <button className="modifier" onClick={() => handleEdit(production)}>
+                  Modifier
+                </button>
+                <button className="supprimer" onClick={() => handleDelete(production.id)}>
+                  Supprimer
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
