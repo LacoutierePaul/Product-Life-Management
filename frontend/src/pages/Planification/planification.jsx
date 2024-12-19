@@ -13,21 +13,101 @@ function Planification() {
     { id: 7, produit_fini: 'Beurre Fermier', quantite_planifiee: 200, date_production: '2024-03-07', status: 'Terminé' },
   ];
 
-  // Utilisation de useState pour gérer l'état des données
+  // Utilisation de useState pour gérer l'état des données et du formulaire
   const [productions, setProductions] = useState(planificationData);
+  const [showForm, setShowForm] = useState(false); // Etat pour afficher ou masquer le formulaire
+  const [newProduction, setNewProduction] = useState({
+    produit_fini: '',
+    quantite_planifiee: '',
+    date_production: '',
+    status: 'En attente',
+  });
 
-  useEffect(() => {
-    // Exemple de fetch pour récupérer la planification de production, ici on utilise les données fictives
-    // Vous pouvez remplacer ce fetch par un appel API réel si nécessaire
-    // fetch('/api/production_planifiee')
-    //   .then((response) => response.json())
-    //   .then((data) => setProductions(data));
-  }, []); // Le tableau vide [] signifie que cet effet ne se déclenche qu'une seule fois, à l'initialisation du composant
+  // Fonction pour gérer les changements dans le formulaire
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewProduction({
+      ...newProduction,
+      [name]: value,
+    });
+  };
+
+  // Fonction pour ajouter une nouvelle planification
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newId = productions.length + 1; // On génère un nouvel ID basé sur la taille actuelle du tableau
+    const updatedProductions = [
+      ...productions,
+      { id: newId, ...newProduction },
+    ];
+    setProductions(updatedProductions);
+    setShowForm(false); // Fermer le formulaire après soumission
+    setNewProduction({
+      produit_fini: '',
+      quantite_planifiee: '',
+      date_production: '',
+      status: 'En attente',
+    });
+  };
 
   return (
     <div className="planification">
       <h2>Planification de la Production</h2>
-      
+
+      {/* Bouton pour afficher ou masquer le formulaire d'ajout */}
+      <button onClick={() => setShowForm(!showForm)}>
+        {showForm ? 'Annuler' : 'Ajouter une Planification'}
+      </button>
+
+      {/* Formulaire d'ajout de planification */}
+      {showForm && (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Produit Fini:</label>
+            <input
+              type="text"
+              name="produit_fini"
+              value={newProduction.produit_fini}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Quantité Planifiée:</label>
+            <input
+              type="number"
+              name="quantite_planifiee"
+              value={newProduction.quantite_planifiee}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Date de Production:</label>
+            <input
+              type="date"
+              name="date_production"
+              value={newProduction.date_production}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Status:</label>
+            <select
+              name="status"
+              value={newProduction.status}
+              onChange={handleInputChange}
+            >
+              <option value="Terminé">Terminé</option>
+              <option value="En cours">En cours</option>
+              <option value="En attente">En attente</option>
+            </select>
+          </div>
+          <button type="submit">Ajouter</button>
+        </form>
+      )}
+
       {/* Tableau de la planification */}
       <table>
         <thead>
