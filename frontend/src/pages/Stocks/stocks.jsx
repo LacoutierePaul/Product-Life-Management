@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './stocks.css';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
 // Enregistrer les composants nécessaires dans Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
@@ -60,7 +59,7 @@ function Stocks() {
       id: 6,
       nom: "Lait d'Amande",
       type: "Matière Première",
-      quantite: 100,
+      quantite: 300,
       seuil_minimal: 50,
       unite: "Litres"
     },
@@ -83,19 +82,39 @@ function Stocks() {
       .then((data) => setStocks(data));
   }, []);
 
-  // Préparer les données pour le graphique
+  // Préparer les données pour le graphique (diagramme à barres)
   const chartData = {
-    labels: stocks.map((stock) => stock.nom), // Liste des noms de produits
+    labels: stocks.map((stock) => stock.nom), // Liste des noms des produits
     datasets: [
       {
         label: 'Quantité de Stock',
         data: stocks.map((stock) => stock.quantite), // Liste des quantités
-        borderColor: 'rgba(75, 192, 192, 1)', // Couleur de la ligne
-        backgroundColor: 'rgba(75, 192, 192, 0.2)', // Couleur de fond de la ligne
-        fill: true, // Remplir sous la ligne
-        tension: 0.4, // Courbe lissée
+        backgroundColor: 'rgba(75, 192, 192, 0.6)', // Couleur de fond des barres
+        borderColor: 'rgba(75, 192, 192, 1)', // Couleur de bordure des barres
+        borderWidth: 1,
       },
     ],
+  };
+
+  // Options du graphique
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top', // Position de la légende
+      },
+      tooltip: {
+        enabled: true, // Activer les info-bulles
+      },
+    },
+    scales: {
+      x: {
+        beginAtZero: true, // Commencer l'axe X à zéro
+      },
+      y: {
+        beginAtZero: true, // Commencer l'axe Y à zéro
+      },
+    },
   };
 
   return (
@@ -126,11 +145,11 @@ function Stocks() {
           ))}
         </tbody>
       </table>
-
-      {/* Afficher le graphique */}
+      {/* Afficher le graphique à barres */}
       <div className="chart-container">
-        <Line data={chartData} />
+        <Bar data={chartData} options={chartOptions} />
       </div>
+
     </div>
   );
 }
