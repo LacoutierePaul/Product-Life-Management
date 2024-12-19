@@ -7,7 +7,6 @@ interface ProductionPlanifieeInterface {
     quantite_planifiee: number;
     status: string;
     idrecette: number;
-    idcontrole: number;
 }
 export class ProductionPlanifiee extends Model <ProductionPlanifieeInterface> {
     public idproductionplanifiee!: number;
@@ -15,7 +14,6 @@ export class ProductionPlanifiee extends Model <ProductionPlanifieeInterface> {
     public quantite_planifiee!: number;
     public status!: string;
     public idrecette!: number;
-    public idcontrole!: number;
 }
 ProductionPlanifiee.init(
     {
@@ -39,14 +37,6 @@ ProductionPlanifiee.init(
             allowNull: false,
             references: {
                 model: "recettes",
-                key: "id",
-            },
-        },
-        idcontrole: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "controle_qualite",
                 key: "id",
             },
         }

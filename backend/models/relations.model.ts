@@ -16,12 +16,12 @@ Recette.hasMany(ProductionPlanifiee, {
     foreignKey: "idrecette",
 });
 
-ProductionPlanifiee.belongsTo(ControleQualite, {
-    foreignKey: "idcontrole",
+ControleQualite.belongsTo(ProductionPlanifiee, {
+    foreignKey: "idproductionplanifiee",
     onDelete: "CASCADE",
 });
-ControleQualite.hasMany(ProductionPlanifiee, {
-    foreignKey: "idcontrole",
+ProductionPlanifiee.hasMany(ControleQualite, {
+    foreignKey: "idproductionplanifiee",
 });
 
 // **2. RecetteToStocks**

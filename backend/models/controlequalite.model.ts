@@ -7,6 +7,7 @@ interface ControleQualiteInterface {
     date_controle: Date;
     resultat: string;
     commentaire_controle: string;
+    idproductionplanifiee: number;
 }
 
 export class ControleQualite extends Model <ControleQualiteInterface> {
@@ -14,6 +15,7 @@ export class ControleQualite extends Model <ControleQualiteInterface> {
     public date_controle!: Date;
     public resultat!: string;
     public commentaire_controle!: string;
+    public idproductionplanifiee!: number;
 }
 
 ControleQualite.init(
@@ -36,6 +38,14 @@ ControleQualite.init(
             type: DataTypes.TEXT,
             allowNull: true,
         },
+        idproductionplanifiee: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "production_planifiee",
+                key: "id",
+            },
+        }
     },
     {
         sequelize,

@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
-import { IngredientRecette } from "../models/recettetostock.model";
+import { RecetteToStocks } from "../models/recettetostock.model";
 
 const router = express.Router();
 
 // Obtenir tous les Ingredients de Recettes
 router.get("/", async (req: Request, res: Response) => {
     try {
-        const IngredientsRecette = await IngredientRecette.findAll();
+        const IngredientsRecette = await RecetteToStocks.findAll();
         res.json(IngredientsRecette);
     } catch (err) {
         res.status(500).json({ error: "Unable to fetch IngredientsRecette" });
