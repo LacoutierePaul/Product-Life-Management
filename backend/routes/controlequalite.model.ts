@@ -26,11 +26,11 @@ router.post("/", async (req: Request, res: Response) => {
 // Mettre à jour un controle qualite
 router.put("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const [updated] = await ControleQualite.update(req.body, { where: { id } });
+        const { idcontrole } = req.params;
+        const [updated] = await ControleQualite.update(req.body, { where: { idcontrole } });
 
         if (updated) {
-            const updatedControle = await ControleQualite.findByPk(id);
+            const updatedControle = await ControleQualite.findByPk(idcontrole);
             res.json(updatedControle);
         } else {
             res.status(404).json({ error: "Controle Qualite not found" });
@@ -43,8 +43,8 @@ router.put("/:id", async (req: Request, res: Response) => {
 // Supprimer un controle qualite
 router.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const deleted = await ControleQualite.destroy({ where: { id } });
+        const { idcontrole } = req.params;
+        const deleted = await ControleQualite.destroy({ where: { idcontrole } });
 
         if (deleted) {
             res.status(204).send();

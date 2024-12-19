@@ -26,11 +26,11 @@ router.post("/", async (req: Request, res: Response) => {
 // Mettre à jour une production planifiée
 router.put("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const [updated] = await ProductionPlanifiee.update(req.body, { where: { id } });
+        const { idproductionplanifiee } = req.params;
+        const [updated] = await ProductionPlanifiee.update(req.body, { where: { idproductionplanifiee } });
 
         if (updated) {
-            const updatedProd = await ProductionPlanifiee.findByPk(id);
+            const updatedProd = await ProductionPlanifiee.findByPk(idproductionplanifiee);
             res.json(updatedProd);
         } else {
             res.status(404).json({ error: "ProductionPlanifiee not found" });
@@ -43,8 +43,8 @@ router.put("/:id", async (req: Request, res: Response) => {
 // Supprimer une production planifiée
 router.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const deleted = await ProductionPlanifiee.destroy({ where: { id } });
+        const { idproductionplanifiee } = req.params;
+        const deleted = await ProductionPlanifiee.destroy({ where: { idproductionplanifiee } });
 
         if (deleted) {
             res.status(204).send();

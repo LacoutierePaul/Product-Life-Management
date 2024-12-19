@@ -26,11 +26,11 @@ router.post("/", async (req: Request, res: Response) => {
 // Mettre à jour un fournisseur
 router.put("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const [updated] = await Fournisseur.update(req.body, { where: { id } });
+        const { idfournisseur } = req.params;
+        const [updated] = await Fournisseur.update(req.body, { where: { idfournisseur } });
 
         if (updated) {
-            const updatedFournisseur = await Fournisseur.findByPk(id);
+            const updatedFournisseur = await Fournisseur.findByPk(idfournisseur);
             res.json(updatedFournisseur);
         } else {
             res.status(404).json({ error: "Fournisseur not found" });
@@ -43,8 +43,8 @@ router.put("/:id", async (req: Request, res: Response) => {
 // Supprimer un fournisseur
 router.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const deleted = await Fournisseur.destroy({ where: { id } });
+        const { idfournisseur } = req.params;
+        const deleted = await Fournisseur.destroy({ where: { idfournisseur } });
 
         if (deleted) {
             res.status(204).send();

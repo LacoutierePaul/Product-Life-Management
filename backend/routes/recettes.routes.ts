@@ -26,11 +26,11 @@ router.post("/", async (req: Request, res: Response) => {
 // Mettre à jour une recette
 router.put("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const [updated] = await Recette.update(req.body, { where: { id } });
+        const { idrecette } = req.params;
+        const [updated] = await Recette.update(req.body, { where: { idrecette } });
 
         if (updated) {
-            const updatedRecette = await Recette.findByPk(id);
+            const updatedRecette = await Recette.findByPk(idrecette);
             res.json(updatedRecette);
         } else {
             res.status(404).json({ error: "Recipy not found" });
@@ -43,8 +43,8 @@ router.put("/:id", async (req: Request, res: Response) => {
 // Supprimer une recette
 router.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const deleted = await Recette.destroy({ where: { id } });
+        const { idrecette } = req.params;
+        const deleted = await Recette.destroy({ where: { idrecette } });
 
         if (deleted) {
             res.status(204).send();
