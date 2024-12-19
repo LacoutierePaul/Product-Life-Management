@@ -3,38 +3,28 @@ import sequelize from "../config/database";
 
 
 interface ControleQualiteInterface {
-    id: number;
-    idProduction: number;
-    dateControle: Date;
+    idcontrole: number;
+    date_controle: Date;
     resultat: string;
-    commentaire: string;
+    commentaire_controle: string;
 }
 
 export class ControleQualite extends Model <ControleQualiteInterface> {
-    public id!: number;
-    public idProduction!: number;
-    public dateControle!: Date;
+    public idcontrole!: number;
+    public date_controle!: Date;
     public resultat!: string;
-    public commentaire!: string;
+    public commentaire_controle!: string;
 }
 
 ControleQualite.init(
     {
-        id: {
+        idcontrole: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        idProduction: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "production_planifiee",
-                key: "id",
-            },
-        },
-        dateControle: {
+        date_controle: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -42,7 +32,7 @@ ControleQualite.init(
             type: DataTypes.STRING(50),
             allowNull: false,
         },
-        commentaire: {
+        commentaire_controle: {
             type: DataTypes.TEXT,
             allowNull: true,
         },
@@ -52,6 +42,6 @@ ControleQualite.init(
         modelName: "ControleQualite",
         tableName: "controle_qualite",
         schema: "public",
-        timestamps: false,
+        timestamps: true,
     }
 );
