@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './planification.css';
 
 function Planification() {
@@ -17,6 +17,7 @@ function Planification() {
   const [productions, setProductions] = useState(planificationData);
   const [showForm, setShowForm] = useState(false); // Etat pour afficher ou masquer le formulaire
   const [newProduction, setNewProduction] = useState({
+    id: null,
     produit_fini: '',
     quantite_planifiee: '',
     date_production: '',
@@ -35,19 +36,39 @@ function Planification() {
   // Fonction pour ajouter une nouvelle planification
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newId = productions.length + 1; // On génère un nouvel ID basé sur la taille actuelle du tableau
-    const updatedProductions = [
-      ...productions,
-      { id: newId, ...newProduction },
-    ];
-    setProductions(updatedProductions);
+    if (newProduction.id) {
+      // Modifier une production existante
+      setProductions(productions.map((prod) =>
+        prod.id === newProduction.id ? newProduction : prod
+      ));
+    } else {
+      // Ajouter une nouvelle production
+      const newId = productions.length + 1;
+      const updatedProductions = [
+        ...productions,
+        { id: newId, ...newProduction },
+      ];
+      setProductions(updatedProductions);
+    }
     setShowForm(false); // Fermer le formulaire après soumission
     setNewProduction({
+      id: null,
       produit_fini: '',
       quantite_planifiee: '',
       date_production: '',
       status: 'En attente',
     });
+  };
+
+  // Fonction pour supprimer une planification
+  const handleDelete = (id) => {
+    setProductions(productions.filter((prod) => prod.id !== id));
+  };
+
+  // Fonction pour remplir le formulaire avec les données d'une production à modifier
+  const handleEdit = (production) => {
+    setNewProduction(production);
+    setShowForm(true);
   };
 
   return (
@@ -59,7 +80,7 @@ function Planification() {
         {showForm ? 'Annuler' : 'Ajouter une Planification'}
       </button>
 
-      {/* Formulaire d'ajout de planification */}
+      {/* Formulaire d'ajout ou de modification de planification */}
       {showForm && (
         <form onSubmit={handleSubmit}>
           <div>
@@ -104,7 +125,7 @@ function Planification() {
               <option value="En attente">En attente</option>
             </select>
           </div>
-          <button type="submit">Ajouter</button>
+          <button type="submit">{newProduction.id ? 'Modifier' : 'Ajouter'}</button>
         </form>
       )}
 
@@ -116,6 +137,7 @@ function Planification() {
             <th>Quantité Planifiée</th>
             <th>Date de Production</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -125,6 +147,14 @@ function Planification() {
               <td>{production.quantite_planifiee}</td>
               <td>{new Date(production.date_production).toLocaleDateString()}</td>
               <td>{production.status}</td>
+              <td>
+                <button className="modifier" onClick={() => handleEdit(production)}>
+                  Modifier
+                </button>
+                <button className="supprimer" onClick={() => handleDelete(production.id)}>
+                  Supprimer
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
