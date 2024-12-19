@@ -1,21 +1,21 @@
-id,nom,type,quantite,seuil_minimal,unite,created_at,updated_at
-1,Lait Cru,Matiere Premiere,500,100,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
-2,Creme Fraeche,Produit Fini,200,50,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
-3,Beurre,Produit Fini,150,30,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
-4,Fromage Blanc,Produit Fini,180,40,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
-5,Ferments,Matiere Premiere,80,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
-6,Lait d'Amande,Matiere Premiere,300,50,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
-7,Lait de Chevre,Matiere Premiere,400,100,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
-8,Beurre Clarifie,Produit Fini,100,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
-9,Lait Cru Bio,Matiere Premiere,250,50,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
-10,Creme Allegee,Produit Fini,150,30,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
-11,Lait de Coco,Matiere Premiere,200,50,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
-12,Lait en Poudre,Matiere Premiere,50,10,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
-13,Fromage de Chevre,Produit Fini,120,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
-14,Beurre Fermier,Produit Fini,130,30,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
-15,Yaourt Nature,Produit Fini,300,50,Pots,2024-12-11 10:00:00,2024-12-11 10:00:00
-16,Lait Cru Entier,Matiere Premiere,400,100,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
-17,Ferments Aromatiques,Matiere Premiere,90,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
-18,Fromage Fermier,Produit Fini,140,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
-19,Creme Chantilly,Produit Fini,200,40,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
-20,Lait Amandier Bio,Matiere Premiere,300,50,Litres,2024-12-11 10:00:00,2024-12-11 10:00:00
+idstock,nom_ingredient,quantite,seuil_minimal,unite,createdAt,updatedAt
+1,Lait Cru,500,100,L,2024-12-11 10:00:00,2024-12-11 10:00:00
+2,Ferments Lactiques,80,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+3,Lait d'Amande,300,50,L,2024-12-11 10:00:00,2024-12-11 10:00:00
+4,Lait de Chevre,400,100,L,2024-12-11 10:00:00,2024-12-11 10:00:00
+5,Lait Cru Bio,250,50,L,2024-12-11 10:00:00,2024-12-11 10:00:00
+6,Lait de Coco,200,50,L,2024-12-11 10:00:00,2024-12-11 10:00:00
+7,Lait en Poudre,50,10,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+8,Lait Cru Entier,400,100,L,2024-12-11 10:00:00,2024-12-11 10:00:00
+9,Ferments Aromatiques,90,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+10,Lait Amandier Bio,300,50,L,2024-12-11 10:00:00,2024-12-11 10:00:00
+11,Sucre,150,30,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+12,Chocolat Noir,100,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+13,Chocolat au Lait,200,30,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+14,Miel,50,10,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+15,Chocolat Blanc,150,30,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+16,Fruits Secs Mélangés,100,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+17,Sucre Vanillé,75,15,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+18,Arômes Naturels,50,10,L,2024-12-11 10:00:00,2024-12-11 10:00:00
+19,Vanille,100,20,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00
+20,Caramel,150,30,Kg,2024-12-11 10:00:00,2024-12-11 10:00:00

@@ -1,90 +1,106 @@
--- Créer les tables
--- Table des Fournisseurs
-CREATE TABLE fournisseurs (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(255) NOT NULL,
-    contact VARCHAR(255),
-    matiere_premiere VARCHAR(255)  NOT NULL, 
-    date_derniere_livraison DATE,
-    evaluation SMALLINT,
-    commentaires TEXT
-);
+-- Création des tables
 
--- Table des Stocks
 CREATE TABLE stocks (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL,
-    quantite INTEGER DEFAULT 0,
-    seuil_minimal INTEGER DEFAULT 0,
-    unite VARCHAR(50),
+    idstock SERIAL NOT NULL,
+    nom_ingredient VARCHAR(50),
+    quantite INT,
+    seuil_minimal INT,
+    unite VARCHAR(5),
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_stocks PRIMARY KEY (idstock)
 );
 
--- Table des Mouvements de Stock
-CREATE TABLE mouvements_stock (
-    id SERIAL PRIMARY KEY,
-    id_stock INTEGER REFERENCES stocks(id),
-    type_mouvement VARCHAR(50) NOT NULL,
-    quantite INTEGER NOT NULL,
-    date_mouvement TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    raison VARCHAR(255)
-);
-
--- Table de Planification de Production
-CREATE TABLE production_planifiee (
-    id SERIAL PRIMARY KEY,
-    produit_fini VARCHAR(255) NOT NULL,
-    quantite_planifiee INTEGER NOT NULL,
-    date_production DATE,
-    status VARCHAR(50) DEFAULT 'En attente'
-);
-
--- Table de Contrôle Qualité
-CREATE TABLE controle_qualite (
-    id SERIAL PRIMARY KEY,
-    id_production INTEGER REFERENCES production_planifiee(id),
-    date_controle DATE NOT NULL,
-    resultat VARCHAR(50) NOT NULL,
-    commentaire TEXT
-);
-
--- Table des Recettes
 CREATE TABLE recettes (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(255) NOT NULL, -- Nom de la recette
-    description TEXT,          -- Description de la recette
+    idrecette SERIAL NOT NULL,
+    nom_recette VARCHAR(50),
+    description VARCHAR(500),
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_recette PRIMARY KEY (idrecette)
 );
 
--- Table des Ingrédients des Recettes (relation n-n entre recettes et fournisseurs)
-CREATE TABLE ingredients_recette (
-    id SERIAL PRIMARY KEY,
-    id_recette INTEGER REFERENCES recettes(id) ON DELETE CASCADE,
-    id_fournisseur INTEGER REFERENCES fournisseurs(id) ON DELETE CASCADE,
-    nom_ingredient VARCHAR(255),
+CREATE TABLE fournisseurs (
+    idfournisseur SERIAL NOT NULL,
+    nom_fournisseur VARCHAR(30),
+    contact VARCHAR(100),
+    evaluation INT,
+    commentaire VARCHAR(500),
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_fournisseurs PRIMARY KEY (idfournisseur)
+);
 
-    quantite FLOAT NOT NULL, -- Quantité utilisée dans la recette
-    unite VARCHAR(50) NOT NULL -- Unité de mesure (kg, litre, etc.)
+CREATE TABLE mouvements_stocks (
+    idmouvement SERIAL NOT NULL,
+    type_mouvement VARCHAR(500),
+    quantite_moved INT,
+    raison VARCHAR(500),
+    idstock SERIAL,
+     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_mouvements_stocks PRIMARY KEY (idmouvement),
+    CONSTRAINT FK_mouvements_stocks_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock)
+);
+
+CREATE TABLE production_planifiee (
+    idproductionplanifiee SERIAL NOT NULL,
+    quantite_planifiee INT,
+    status VARCHAR(50),
+   "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    idrecette SERIAL,
+    CONSTRAINT PK_production_planifiee PRIMARY KEY (idproductionplanifiee),
+    CONSTRAINT FK_production_planifiee_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette)
 );
 
 
--- Charger les données
-COPY fournisseurs FROM '/data/fournisseurs.csv' DELIMITER ',' CSV HEADER;
+CREATE TABLE controle_qualite (
+    idcontrole SERIAL NOT NULL,
+    resultat VARCHAR(50),
+    commentaire_controle TEXT,
+    idproductionplanifiee SERIAL,
+      "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_controle_qualite PRIMARY KEY (idcontrole),
+    CONSTRAINT FK_controle_qualite_idproductionplanifiee FOREIGN KEY (idproductionplanifiee) REFERENCES production_planifiee (idproductionplanifiee)
+);
+
+
+CREATE TABLE fournisseurs_to_stocks (
+    idfournisseur SERIAL NOT NULL,
+    idstock SERIAL NOT NULL,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_fournit PRIMARY KEY (idfournisseur, idstock),
+    CONSTRAINT FK_fournit_idfournisseur FOREIGN KEY (idfournisseur) REFERENCES fournisseurs (idfournisseur),
+    CONSTRAINT FK_fournit_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock)
+);
+
+CREATE TABLE recettes_to_stocks (
+    idstock SERIAL NOT NULL,
+    idrecette SERIAL NOT NULL,
+     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_utilise PRIMARY KEY (idstock, idrecette),
+    CONSTRAINT FK_utilise_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock),
+    CONSTRAINT FK_utilise_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette)
+);
+
+COPY recettes FROM '/data/recettes.csv' DELIMITER ',' CSV HEADER;
 COPY stocks FROM '/data/stocks.csv' DELIMITER ',' CSV HEADER;
-
-COPY mouvements_stock FROM '/data/mouvements_stock.csv' DELIMITER ',' CSV HEADER;
+COPY fournisseurs FROM '/data/fournisseurs.csv' DELIMITER ',' CSV HEADER;
+COPY mouvements_stocks FROM '/data/mouvements_stock.csv' DELIMITER ',' CSV HEADER;
 COPY production_planifiee FROM '/data/production_planifiee.csv' DELIMITER ',' CSV HEADER;
 COPY controle_qualite FROM '/data/controle_qualite.csv' DELIMITER ',' CSV HEADER;
-COPY recettes FROM '/data/recettes.csv' DELIMITER ',' CSV HEADER;
-COPY ingredients_recette FROM '/data/ingredients_recette.csv' DELIMITER ',' CSV HEADER;
+COPY fournisseurs_to_stocks FROM '/data/fournisseurs_to_stocks.csv' DELIMITER ',' CSV HEADER;
+COPY recettes_to_stocks FROM '/data/recettes_to_stocks.csv' DELIMITER ',' CSV HEADER;
 
-SELECT setval('stocks_id_seq', 20, true);
-SELECT setval('fournisseurs_id_seq', 20, true);
-SELECT setval('mouvements_stock_id_seq', 20, true);
-SELECT setval('production_planifiee_id_seq', 20, true);
-SELECT setval('controle_qualite_id_seq', 20, true);
-SELECT setval('recettes_id_seq', 20, true);
-SELECT setval('ingredients_recette_id_seq', 20, true);
+-- Création des séquences
+
+CREATE SEQUENCE seq_stocks START WITH 20 INCREMENT BY 1;
+CREATE SEQUENCE seq_recettes START WITH 20 INCREMENT BY 1;
+CREATE SEQUENCE seq_fournisseurs START WITH 10 INCREMENT BY 1;
+CREATE SEQUENCE seq_mouvements_stocks START WITH 40 INCREMENT BY 1;
+CREATE SEQUENCE seq_controle_qualite START WITH 24 INCREMENT BY 1;
+CREATE SEQUENCE seq_production_planifiee START WITH 40 INCREMENT BY 1;

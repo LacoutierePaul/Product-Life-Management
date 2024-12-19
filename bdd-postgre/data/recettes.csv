@@ -1,21 +1,21 @@
-id,nom,description,date_creation,update_date
-1,Yaourt Nature Maison,Recette simple de yaourt nature,2023-12-01,2023-12-01
-2,Creme de Fromage Bleu,Recette raffinee pour des sauces cremeuses,2023-12-02,2023-12-02
-3,"Beurre Fermier,Beurre doux", recette traditionnelle,2023-12-03,2023-12-03
-4,Fromage à Raclette,Preparation pour une raclette savoureuse,2023-12-04,2023-12-04
-5,Fromage Feta Maison,Methode artisanale pour feta douce,2023-12-05,2023-12-05
-6,Yaourt aux Fruits Rouges,Saveurs fruitees et legeres,2023-12-06,2023-12-06
-7,Lait Chocolate,Boisson reconfortante et gourmande,2023-12-07,2023-12-07
-8,Fromage Mozzarella,Preparation pour une pizza parfaite,2023-12-08,2023-12-08
-9,Creme Chantilly Maison,Simple et delicieuse pour desserts,2023-12-09,2023-12-09
-10,Fromage Chevre Fermier,Goet puissant et authentique,2023-12-10,2023-12-10
-11,Fromage Gouda,Goet subtil et doux pour collations,2023-12-11,2023-12-11
-12,Fromage Cheddar Vieilli,Pour plats gratines et savoureux,2023-12-12,2023-12-12
-13,Beurre Clarifie,Indispensable pour cuisson sans breler,2023-12-13,2023-12-13
-14,Fromage Ricotta,Parfait pour desserts italiens,2023-12-14,2023-12-14
-15,Yaourt Vanille,Douceur parfumee ç la vanille,2023-12-15,2023-12-15
-16,Creme Fraeche Maison,Accompagnement polyvalent pour plats,2023-12-16,2023-12-16
-17,Fromage Brie Fondant,Saveur douce et onctueuse,2023-12-17,2023-12-17
-18,Lait Fermente,Pour des boissons probiotiques,2023-12-18,2023-12-18
-19,Fromage Bleu Maison,Goet puissant et riche,2023-12-19,2023-12-19
-20,Yaourt Miel Maison,Douceur naturelle et saine,2023-12-20,2023-12-20
+idrecette,nom_recette,description,createdAt,updatedAt
+1,Yaourt Nature Maison,Préparation simple avec du lait entier,2023-12-01,2023-12-01
+2,Danette Chocolat,Délicieux dessert au chocolat,2023-12-02,2023-12-02
+3,Fromage Blanc,Recette légère à base de lait,2023-12-03,2023-12-03
+4,Crème au Caramel,Crème onctueuse avec une touche de caramel,2023-12-04,2023-12-04
+5,Panna Cotta à la Vanille,Dessert italien à base de crème et vanille,2023-12-05,2023-12-05
+6,Yaourt Fraise Maison,Yaourt onctueux aux fruits rouges,2023-12-06,2023-12-06
+7,Milkshake Chocolat,Boisson gourmande et rafraîchissante,2023-12-07,2023-12-07
+8,Flan au Lait,Classique dessert au lait et sucre,2023-12-08,2023-12-08
+9,Mousse au Chocolat,Délice aérien au chocolat,2023-12-09,2023-12-09
+10,Fromage Mozzarella Maison,Idéal pour les pizzas ou salades,2023-12-10,2023-12-10
+11,Coupe Chantilly,Fraîcheur de crème fouettée sucrée,2023-12-11,2023-12-11
+12,Riz au Lait,Recette traditionnelle et douce,2023-12-12,2023-12-12
+13,Tarte au Fromage Blanc,Légèreté et gourmandise,2023-12-13,2023-12-13
+14,Yaourt Miel Maison,Délice sucré et naturel,2023-12-14,2023-12-14
+15,Glace Vanille Maison,Simple et rafraîchissant,2023-12-15,2023-12-15
+16,Smoothie Fraise,Légèreté et goût fruité,2023-12-16,2023-12-16
+17,Crème Glacée Chocolat,Crème glacée onctueuse et chocolatée,2023-12-17,2023-12-17
+18,Yaourt Banane,Mélange de douceur et de fruit,2023-12-18,2023-12-18
+19,Beurre Salé Maison,Idéal pour les tartines,2023-12-19,2023-12-19
+20,Lassi Vanille,Boisson indienne rafraîchissante,2023-12-20,2023-12-20

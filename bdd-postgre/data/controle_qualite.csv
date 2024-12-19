@@ -1,21 +1,31 @@
-id,id_production,date_controle,resultat,commentaire
-1,5,2024-01-13,Reussi,Texture parfaite.
-2,7,2024-01-17,Reussi,Produit conforme.
-3,1,2024-01-05,echec,Acidite anormale.
-4,6,2024-01-15,Reussi,Bonne maturation.
-5,10,2024-01-21,Reussi,Saveur equilibree.
-6,3,2024-01-09,Reussi,Bon conditionnement.
-7,8,2024-01-18,echec,Couleur non homogene.
-8,14,2024-01-26,Reussi,Stable en conservation.
-9,15,2024-01-28,Reussi,Texture legere.
-10,12,2024-01-24,echec,Odeur trop forte.
-11,9,2024-01-19,Reussi,Contrele satisfaisant.
-12,4,2024-01-10,Reussi,Respect des standards.
-13,2,2024-01-07,echec,Manque de fermete.
-14,13,2024-01-24,Reussi,Bon equilibre des saveurs.
-15,19,2024-02-05,Reussi,Texture agreable.
-16,17,2024-02-01,echec,Trop humide.
-17,11,2024-01-22,Reussi,Produit fermente ideal.
-18,16,2024-01-30,Reussi,Bon conditionnement.
-19,20,2024-02-07,Reussi,Produit bien affine.
-20,18,2024-02-03,Reussi,Bon goet de noisette.
+idcontrole,resultat,commentaire_controle,idproductionplanifiee,createdAt,updatedAt
+1,Pass,Contrôle de qualité réussi,1,2024-12-11 10:10:00,2024-12-11 10:10:00
+2,Pass,Pas de défaut détecté,2,2024-12-11 10:20:00,2024-12-11 10:20:00
+3,Fail,Problème de texture,3,2024-12-11 10:30:00,2024-12-11 10:30:00
+4,Pass,Contrôle ok,4,2024-12-11 10:40:00,2024-12-11 10:40:00
+5,Pass,Go,5,2024-12-11 10:50:00,2024-12-11 10:50:00
+6,Fail,Goût trop sucré,6,2024-12-11 11:00:00,2024-12-11 11:00:00
+7,Pass,Contrôle qualité validé,7,2024-12-11 11:10:00,2024-12-11 11:10:00
+8,Pass,Produit conforme,8,2024-12-11 11:20:00,2024-12-11 11:20:00
+9,Fail,Incohérence avec la recette,9,2024-12-11 11:30:00,2024-12-11 11:30:00
+10,Pass,Aucun problème,10,2024-12-11 11:40:00,2024-12-11 11:40:00
+11,Pass,Conforme aux attentes,11,2024-12-11 11:50:00,2024-12-11 11:50:00
+12,Fail,Problème d'aspect,12,2024-12-11 12:00:00,2024-12-11 12:00:00
+13,Pass,Produit validé,13,2024-12-11 12:10:00,2024-12-11 12:10:00
+14,Pass,OK,14,2024-12-11 12:20:00,2024-12-11 12:20:00
+15,Fail,Problème de consistance,15,2024-12-11 12:30:00,2024-12-11 12:30:00
+16,Pass,Produit conforme aux normes,16,2024-12-11 12:40:00,2024-12-11 12:40:00
+17,Pass,Contrôle réussi,17,2024-12-11 12:50:00,2024-12-11 12:50:00
+18,Fail,Goût trop acide,18,2024-12-11 13:00:00,2024-12-11 13:00:00
+19,Pass,Parfait,19,2024-12-11 13:10:00,2024-12-11 13:10:00
+20,Pass,Produit validé sans soucis,20,2024-12-11 13:20:00,2024-12-11 13:20:00
+21,Pass,Le produit est parfait,21,2024-12-11 13:30:00,2024-12-11 13:30:00
+22,Fail,Problème de température,22,2024-12-11 13:40:00,2024-12-11 13:40:00
+23,Pass,OK,23,2024-12-11 13:50:00,2024-12-11 13:50:00
+24,Pass,Test réussi,24,2024-12-11 14:00:00,2024-12-11 14:00:00
+25,Fail,Texture irrégulière,25,2024-12-11 14:10:00,2024-12-11 14:10:00
+26,Pass,Produit validé,26,2024-12-11 14:20:00,2024-12-11 14:20:00
+27,Pass,Goût conforme à la recette,27,2024-12-11 14:30:00,2024-12-11 14:30:00
+28,Fail,Problème d'odeur,28,2024-12-11 14:40:00,2024-12-11 14:40:00
+29,Pass,Produit validé,29,2024-12-11 14:50:00,2024-12-11 14:50:00
+30,Pass,OK,30,2024-12-11 15:00:00,2024-12-11 15:00:00
