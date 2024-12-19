@@ -2,38 +2,43 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
 interface ProductionPlanifieeInterface {
-    id: number;
-    produitFini: string;
-    quantitePlanifiee: number;
-    dateProduction: Date;
+    idproductionplanifiee: number;
+    produit_fini: string;
+    quantite_planifiee: number;
     status: string;
+    idrecette: number;
 }
 export class ProductionPlanifiee extends Model <ProductionPlanifieeInterface> {
-    public id!: number;
-    public produitFini!: string;
-    public quantitePlanifiee!: number;
-    public dateProduction!: Date;
+    public idproductionplanifiee!: number;
+    public produit_fini!: string;
+    public quantite_planifiee!: number;
     public status!: string;
+    public idrecette!: number;
 }
 ProductionPlanifiee.init(
     {
-        id: {
+        idproductionplanifiee: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        produitFini: {
+        produit_fini: {
             type: DataTypes.STRING(255),
         },
-        quantitePlanifiee: {
+        quantite_planifiee: {
             type: DataTypes.INTEGER,
-        },
-        dateProduction: {
-            type: DataTypes.DATE,
         },
         status: {
             type: DataTypes.STRING(50),
+        },
+        idrecette: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "recettes",
+                key: "id",
+            },
         }
     },
     {
@@ -41,6 +46,6 @@ ProductionPlanifiee.init(
         modelName: 'ProductionPlanifiee',
         tableName: 'production_planifiee',
         schema: 'public',
-        timestamps: false,
+        timestamps: true,
     }
 );

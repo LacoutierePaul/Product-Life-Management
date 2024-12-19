@@ -1,11 +1,54 @@
-import { Fournisseur } from "./fournisseur.model";
+import { Recette } from "./recettes.model";
 import { Stock } from "./stocks.model";
-import { MouvementStock } from "./mouvementstocks.model";
 import { ControleQualite } from "./controlequalite.model";
-import { IngredientRecette } from "./ingredientsrecettes.model";
+import { ProductionPlanifiee } from "./productionplanifiee.model";
+import { RecetteToStocks } from "./recettetostock.model";
+import { MouvementStock } from "./mouvementstocks.model";
+import { Fournisseur } from "./fournisseur.model";
+import { FournisseursToStocks } from "./fournisseurstostocks.model";
 
-// Relations
-MouvementStock.belongsTo(Stock, { foreignKey: "idStock" });
-ControleQualite.belongsTo(Fournisseur, { foreignKey: "idProduction" });
-IngredientRecette.belongsTo(Fournisseur, { foreignKey: "idFournisseur" });
-IngredientRecette.belongsTo(Fournisseur, { foreignKey: "idRecette" });
+// Définition des relations
+ProductionPlanifiee.belongsTo(Recette, {
+    foreignKey: "idrecette",
+    onDelete: "CASCADE",
+});
+Recette.hasMany(ProductionPlanifiee, {
+    foreignKey: "idrecette",
+});
+
+ControleQualite.belongsTo(ProductionPlanifiee, {
+    foreignKey: "idproductionplanifiee",
+    onDelete: "CASCADE",
+});
+ProductionPlanifiee.hasMany(ControleQualite, {
+    foreignKey: "idproductionplanifiee",
+});
+
+// **2. RecetteToStocks**
+Recette.belongsToMany(Stock, {
+    through: RecetteToStocks,
+    foreignKey: "idrecette",
+});
+Stock.belongsToMany(Recette, {
+    through: RecetteToStocks,
+    foreignKey: "idstock",
+});
+
+// **3. MouvementStocks**
+MouvementStock.belongsTo(Stock, {
+    foreignKey: "idstock",
+    onDelete: "CASCADE",
+});
+Stock.hasMany(MouvementStock, {
+    foreignKey: "idstock",
+});
+
+// **4. FournisseurToStocks**
+Fournisseur.belongsToMany(Stock, {
+    through: FournisseursToStocks,
+    foreignKey: "idfournisseur",
+});
+Stock.belongsToMany(Fournisseur, {
+    through: FournisseursToStocks,
+    foreignKey: "idstock",
+});

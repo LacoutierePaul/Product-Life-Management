@@ -2,31 +2,29 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
 interface MouvementStockInterface {
-    id: number;
-    idStock: number;
-    typeMouvement: string;
-    quantite: number;
-    dateMouvement: Date;
+    idmouvement: number;
+    idstock: number;
+    type_mouvement: string;
+    quantite_moved: number;
     raison: string;
 }
 export class MouvementStock extends Model<MouvementStockInterface> {
-    public id!: number;
-    public idStock!: number;
-    public typeMouvement!: string;
-    public quantite!: number;
-    public dateMouvement!: Date;
+    public idmouvement!: number;
+    public idstock!: number;
+    public type_mouvement!: string;
+    public quantite_moved!: number;
     public raison!: string;
 }
 
 MouvementStock.init(
     {
-        id: {
+        idmouvement: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        idStock: {
+        idstock: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -34,18 +32,13 @@ MouvementStock.init(
                 key: "id",
             },
         },
-        typeMouvement: {
+        type_mouvement: {
             type: DataTypes.STRING(50),
             allowNull: false,
         },
-        quantite: {
+        quantite_moved: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        },
-        dateMouvement: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
         },
         raison: {
             type: DataTypes.STRING(255),
@@ -57,6 +50,6 @@ MouvementStock.init(
         modelName: "MouvementStock",
         tableName: "mouvements_stock",
         schema: "public",
-        timestamps: false,
+        timestamps: true,
     }
 );

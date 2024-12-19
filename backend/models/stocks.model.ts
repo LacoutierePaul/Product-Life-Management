@@ -2,18 +2,16 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
 interface StockInterface {
-    id: number;
-    nom: string;
-    type: string;
+    idstock: number;
+    nom_ingredient: string;
     quantite: number;
     seuil_minimal: number;
     unite: string;
 }
 
 export class Stock extends Model<StockInterface> {
-    public id!: number;
-    public nom!: string;
-    public type!: string;
+    public idstock!: number;
+    public nom_ingredient!: string;
     public quantite!: number;
     public seuil_minimal!: number;
     public unite!: string;
@@ -22,17 +20,14 @@ export class Stock extends Model<StockInterface> {
 
 Stock.init(
     {
-        id: {
+        idstock: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        nom: {
+        nom_ingredient: {
             type: DataTypes.STRING(255),
-        },
-        type: {
-            type: DataTypes.STRING(50),
         },
         quantite: {
             type: DataTypes.INTEGER,

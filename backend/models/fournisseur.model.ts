@@ -3,33 +3,31 @@ import sequelize from "../config/database";
 
 
 interface FournisseurInterface {
-    id: number;
-    nom: string;
+    idfournisseur: number;
+    nom_fournisseur: string;
     contact: string;
-    matierePremiere: string;
-    dateDerniereLivraison: Date;
+    date_derniere_livraison: Date;
     evaluation: number;
-    commentaires: string;
+    commentaire: string;
 }
 export class Fournisseur extends Model <FournisseurInterface>{
-    public id!: number;
-    public nom!: string;
+    public idfournisseur!: number;
+    public nom_fournisseur!: string;
     public contact!: string;
-    public matierePremiere!: string;
-    public dateDerniereLivraison!: Date;
+    public date_derniere_livraison!: Date;
     public evaluation!: number;
-    public commentaires!: string;
+    public commentaire!: string;
 }
 
 Fournisseur.init(
     {
-        id: {
+        idfournisseur: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        nom: {
+        nom_fournisseur: {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
@@ -37,11 +35,7 @@ Fournisseur.init(
             type: DataTypes.STRING(255),
             allowNull: true,
         },
-        matierePremiere: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-        },
-        dateDerniereLivraison: {
+        date_derniere_livraison: {
             type: DataTypes.DATE,
             allowNull: true,
         },
@@ -49,7 +43,7 @@ Fournisseur.init(
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        commentaires: {
+        commentaire: {
             type: DataTypes.TEXT,
             allowNull: true,
         },
@@ -59,6 +53,6 @@ Fournisseur.init(
         modelName: "Fournisseur",
         tableName: "fournisseurs",
         schema: "public",
-        timestamps: false,
+        timestamps: true,
     }
 );

@@ -56,20 +56,4 @@ router.delete("/:id", async (req: Request, res: Response) => {
     }
 });
 
-// Obtenir une recette par ID
-router.get("/:id", async (req: Request, res: Response) => {
-        try {
-            const { id } = req.params;
-            const recette = await Recette.findByPk(id);
-            if (recette) {
-                res.json(recette);
-            } else {
-                res.status(404).json({ error: "Recipy not found" });
-            }
-        } catch (err) {
-            res.status(500).json({ error: "Unable to fetch recipy" });
-        }
-    }
-);
-
 export default router;
