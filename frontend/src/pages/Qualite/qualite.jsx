@@ -85,6 +85,7 @@ function Qualite() {
   });
 
   const [showForm, setShowForm] = useState(false); // Nouvel état pour afficher/masquer le formulaire
+  const [editingId, setEditingId] = useState(null); // ID du contrôle qualité en cours d'édition
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -97,13 +98,21 @@ function Qualite() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Ajouter le nouveau contrôle qualité à la liste
-    const newControleWithId = {
-      ...newControle,
-      id: controleQualite.length + 1, // Générer un ID unique
-    };
-
-    setControleQualite((prevState) => [...prevState, newControleWithId]);
+    if (editingId !== null) {
+      // Modifier le contrôle qualité existant
+      setControleQualite((prevState) =>
+        prevState.map((controle) =>
+          controle.id === editingId ? { ...controle, ...newControle } : controle
+        )
+      );
+    } else {
+      // Ajouter un nouveau contrôle qualité
+      const newControleWithId = {
+        ...newControle,
+        id: controleQualite.length + 1, // Générer un ID unique
+      };
+      setControleQualite((prevState) => [...prevState, newControleWithId]);
+    }
 
     // Réinitialiser le formulaire
     setNewControle({
@@ -115,6 +124,21 @@ function Qualite() {
 
     // Fermer le formulaire après soumission
     setShowForm(false);
+    setEditingId(null); // Réinitialiser l'ID d'édition
+  };
+
+  const handleDelete = (id) => {
+    // Supprimer l'élément avec l'ID spécifié
+    setControleQualite((prevState) =>
+      prevState.filter((controle) => controle.id !== id)
+    );
+  };
+
+  const handleEdit = (controle) => {
+    // Charger les données du contrôle à modifier dans le formulaire
+    setNewControle(controle);
+    setEditingId(controle.id); // Définir l'ID de l'élément en cours d'édition
+    setShowForm(true); // Afficher le formulaire
   };
 
   useEffect(() => {
@@ -133,7 +157,7 @@ function Qualite() {
         {showForm ? 'Annuler' : 'Ajouter un contrôle qualité'}
       </button>
 
-      {/* Formulaire d'ajout de contrôle qualité */}
+      {/* Formulaire d'ajout ou de modification de contrôle qualité */}
       {showForm && (
         <form onSubmit={handleSubmit} className="ajout-controle-form">
           <div>
@@ -186,7 +210,9 @@ function Qualite() {
             />
           </div>
 
-          <button type="submit">Ajouter le contrôle qualité</button>
+          <button type="submit">
+            {editingId !== null ? 'Modifier le contrôle qualité' : 'Ajouter le contrôle qualité'}
+          </button>
         </form>
       )}
 
@@ -198,6 +224,7 @@ function Qualite() {
             <th>Date du Contrôle</th>
             <th>Résultat</th>
             <th>Commentaire</th>
+            <th>Action</th> {/* Nouvelle colonne pour les actions */}
           </tr>
         </thead>
         <tbody>
@@ -207,6 +234,16 @@ function Qualite() {
               <td>{new Date(controle.date_controle).toLocaleDateString()}</td>
               <td>{controle.resultat}</td>
               <td>{controle.commentaire}</td>
+              <td>
+                {/* Bouton pour modifier la ligne */}
+                <button onClick={() => handleEdit(controle)}>
+                  Modifier
+                </button>
+                {/* Bouton pour supprimer la ligne */}
+                <button onClick={() => handleDelete(controle.id)}>
+                  Supprimer
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
