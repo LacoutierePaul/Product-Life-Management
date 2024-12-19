@@ -51,7 +51,7 @@ function Stocks() {
       id: 5,
       nom: "Ferments",
       type: "Matière Première",
-      quantite: 80,
+      quantite: 30,
       seuil_minimal: 20,
       unite: "Kg"
     },
@@ -117,10 +117,26 @@ function Stocks() {
     },
   };
 
+  // Vérification des stocks en dessous du seuil minimal
+  const stocksEnSousSeuil = stocks.filter((stock) => stock.quantite < stock.seuil_minimal);
+
   return (
     <div className="stocks">
       <h2>Liste des Stocks</h2>
 
+      {/* Alerte si un stock est en dessous du seuil minimal */}
+      {stocksEnSousSeuil.length > 0 && (
+        <div className="alert">
+          <h3>Attention : Certains stocks sont en dessous du seuil minimal !</h3>
+          <ul>
+            {stocksEnSousSeuil.map((stock) => (
+              <li key={stock.id}>
+                <strong>{stock.nom}</strong> : Quantité actuelle ({stock.quantite} {stock.unite}) en dessous du seuil minimal ({stock.seuil_minimal} {stock.unite}).
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Tableau des stocks */}
       <table>
@@ -145,11 +161,11 @@ function Stocks() {
           ))}
         </tbody>
       </table>
+
       {/* Afficher le graphique à barres */}
       <div className="chart-container">
         <Bar data={chartData} options={chartOptions} />
       </div>
-
     </div>
   );
 }
