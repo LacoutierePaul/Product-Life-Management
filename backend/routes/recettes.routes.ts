@@ -24,7 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 // Mettre à jour une recette
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:idrecette", async (req: Request, res: Response) => {
     try {
         const { idrecette } = req.params;
         const [updated] = await Recette.update(req.body, { where: { idrecette } });
@@ -41,7 +41,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 });
 
 // Supprimer une recette
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:idrecette", async (req: Request, res: Response) => {
     try {
         const { idrecette } = req.params;
         const deleted = await Recette.destroy({ where: { idrecette } });
