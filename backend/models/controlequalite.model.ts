@@ -43,7 +43,7 @@ ControleQualite.init(
             allowNull: false,
             references: {
                 model: "production_planifiee",
-                key: "id",
+                key: "idproductionplanifiee",
             },
         }
     },

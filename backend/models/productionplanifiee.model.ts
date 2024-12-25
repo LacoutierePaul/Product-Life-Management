@@ -37,7 +37,7 @@ ProductionPlanifiee.init(
             allowNull: false,
             references: {
                 model: "recettes",
-                key: "id",
+                key: "idrecette",
             },
         }
     },
