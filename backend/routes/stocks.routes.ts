@@ -24,7 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 // Mettre à jour un stock
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:idstock", async (req: Request, res: Response) => {
     try {
         const { idstock } = req.params;
         const [updated] = await Stock.update(req.body, { where: { idstock } });
@@ -41,7 +41,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 });
 
 // Supprimer un stock
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:idstock", async (req: Request, res: Response) => {
     try {
         const { idstock } = req.params;
         const deleted = await Stock.destroy({ where: { idstock } });
@@ -55,6 +55,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
         res.status(500).json({ error: "Unable to delete stock" });
     }
 });
+
 
 // Obtenir un stock par ID
 router.get("/:id", async (req: Request, res: Response) => {  

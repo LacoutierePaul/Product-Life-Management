@@ -1,11 +1,13 @@
 import express, { Request, Response, json } from "express";
 import sequelize from "./config/database";
 import stockRoutes from "./routes/stocks.routes";
+import cors from "cors";
 
 const app = express();
 const PORT = 3000;
 
 app.use(json());
+app.use(cors());
 
 app.use("/stocks", stockRoutes);
 

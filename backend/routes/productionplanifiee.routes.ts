@@ -24,7 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 // Mettre à jour une production planifiée
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:idproductionplanifiee", async (req: Request, res: Response) => {
     try {
         const { idproductionplanifiee } = req.params;
         const [updated] = await ProductionPlanifiee.update(req.body, { where: { idproductionplanifiee } });
@@ -41,7 +41,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 });
 
 // Supprimer une production planifiée
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:idproductionplanifiee", async (req: Request, res: Response) => {
     try {
         const { idproductionplanifiee } = req.params;
         const deleted = await ProductionPlanifiee.destroy({ where: { idproductionplanifiee } });

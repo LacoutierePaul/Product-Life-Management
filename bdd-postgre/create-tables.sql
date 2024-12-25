@@ -40,7 +40,7 @@ CREATE TABLE mouvements_stocks (
      "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_mouvements_stocks PRIMARY KEY (idmouvement),
-    CONSTRAINT FK_mouvements_stocks_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock)
+    CONSTRAINT FK_mouvements_stocks_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock) ON DELETE CASCADE
 );
 
 CREATE TABLE production_planifiee (
@@ -51,7 +51,7 @@ CREATE TABLE production_planifiee (
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     idrecette SERIAL,
     CONSTRAINT PK_production_planifiee PRIMARY KEY (idproductionplanifiee),
-    CONSTRAINT FK_production_planifiee_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette)
+    CONSTRAINT FK_production_planifiee_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette) ON DELETE CASCADE
 );
 
 
@@ -63,7 +63,7 @@ CREATE TABLE controle_qualite (
       "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_controle_qualite PRIMARY KEY (idcontrole),
-    CONSTRAINT FK_controle_qualite_idproductionplanifiee FOREIGN KEY (idproductionplanifiee) REFERENCES production_planifiee (idproductionplanifiee)
+    CONSTRAINT FK_controle_qualite_idproductionplanifiee FOREIGN KEY (idproductionplanifiee) REFERENCES production_planifiee (idproductionplanifiee) ON DELETE CASCADE
 );
 
 
@@ -73,8 +73,8 @@ CREATE TABLE fournisseurs_to_stocks (
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_fournit PRIMARY KEY (idfournisseur, idstock),
-    CONSTRAINT FK_fournit_idfournisseur FOREIGN KEY (idfournisseur) REFERENCES fournisseurs (idfournisseur),
-    CONSTRAINT FK_fournit_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock)
+    CONSTRAINT FK_fournit_idfournisseur FOREIGN KEY (idfournisseur) REFERENCES fournisseurs (idfournisseur) ON DELETE CASCADE,
+    CONSTRAINT FK_fournit_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock) ON DELETE CASCADE
 );
 
 CREATE TABLE recettes_to_stocks (
@@ -83,8 +83,8 @@ CREATE TABLE recettes_to_stocks (
      "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_utilise PRIMARY KEY (idstock, idrecette),
-    CONSTRAINT FK_utilise_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock),
-    CONSTRAINT FK_utilise_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette)
+    CONSTRAINT FK_utilise_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock) ON DELETE CASCADE,
+    CONSTRAINT FK_utilise_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette) ON DELETE CASCADE
 );
 
 COPY recettes FROM '/data/recettes.csv' DELIMITER ',' CSV HEADER;
