@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './stocks.css';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-
+import { getStocks } from '../../api/stocks';
 // Enregistrer les composants nécessaires dans Chart.js
 ChartJS.register(
   CategoryScale,
@@ -13,78 +13,27 @@ ChartJS.register(
   Legend
 );
 
-function Stocks() {
-  const stocksFictifs = [
-    {
-      id: 1,
-      nom: "Lait Cru",
-      type: "Matière Première",
-      quantite: 500,
-      seuil_minimal: 100,
-      unite: "Litres"
-    },
-    {
-      id: 2,
-      nom: "Crème Fraîche",
-      type: "Produit Fini",
-      quantite: 200,
-      seuil_minimal: 50,
-      unite: "Litres"
-    },
-    {
-      id: 3,
-      nom: "Beurre",
-      type: "Produit Fini",
-      quantite: 150,
-      seuil_minimal: 30,
-      unite: "Kg"
-    },
-    {
-      id: 4,
-      nom: "Fromage Blanc",
-      type: "Produit Fini",
-      quantite: 180,
-      seuil_minimal: 40,
-      unite: "Kg"
-    },
-    {
-      id: 5,
-      nom: "Ferments",
-      type: "Matière Première",
-      quantite: 30,
-      seuil_minimal: 20,
-      unite: "Kg"
-    },
-    {
-      id: 6,
-      nom: "Lait d'Amande",
-      type: "Matière Première",
-      quantite: 300,
-      seuil_minimal: 50,
-      unite: "Litres"
-    },
-    {
-      id: 7,
-      nom: "Lait de Chèvre",
-      type: "Matière Première",
-      quantite: 400,
-      seuil_minimal: 100,
-      unite: "Litres"
-    }
-  ];
 
-  const [stocks, setStocks] = useState(stocksFictifs);
+// Initialise les stocks avec la valeur de l'api getStocks
+function Stocks() {
+  const [stocks, setStocks] = useState([]);
 
   useEffect(() => {
-    // Exemple de fetch pour récupérer les stocks depuis l'API
-    fetch('/api/stocks')
-      .then((response) => response.json())
-      .then((data) => setStocks(data));
+    getStocks()
+      .then((data) => {
+        console.log('Stocks récupérés :', data);
+        setStocks(data);
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la récupération des stocks :', error);
+      });
   }, []);
+
+
 
   // Préparer les données pour le graphique (diagramme à barres)
   const chartData = {
-    labels: stocks.map((stock) => stock.nom), // Liste des noms des produits
+    labels: stocks.map((stock) => stock.nom_ingredient), // Liste des noms des produits
     datasets: [
       {
         label: 'Quantité de Stock',
@@ -130,8 +79,8 @@ function Stocks() {
           <h3>Attention : Certains stocks sont en dessous du seuil minimal !</h3>
           <ul>
             {stocksEnSousSeuil.map((stock) => (
-              <li key={stock.id}>
-                <strong>{stock.nom}</strong> : Quantité actuelle ({stock.quantite} {stock.unite}) en dessous du seuil minimal ({stock.seuil_minimal} {stock.unite}).
+              <li key={stock.idstock}>
+                <strong>{stock.nom_ingredient}</strong> : Quantité actuelle ({stock.quantite} {stock.unite}) en dessous du seuil minimal ({stock.seuil_minimal} {stock.unite}).
               </li>
             ))}
           </ul>
@@ -143,7 +92,6 @@ function Stocks() {
         <thead>
           <tr>
             <th>Nom</th>
-            <th>Type</th>
             <th>Quantité</th>
             <th>Seuil Minimal</th>
             <th>Unité</th>
@@ -151,9 +99,8 @@ function Stocks() {
         </thead>
         <tbody>
           {stocks.map((stock) => (
-            <tr key={stock.id}>
-              <td>{stock.nom}</td>
-              <td>{stock.type}</td>
+            <tr key={stock.idstock}>
+              <td>{stock.nom_ingredient}</td>
               <td>{stock.quantite}</td>
               <td>{stock.seuil_minimal}</td>
               <td>{stock.unite}</td>
