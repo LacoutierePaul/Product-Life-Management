@@ -98,9 +98,16 @@ COPY recettes_to_stocks FROM '/data/recettes_to_stocks.csv' DELIMITER ',' CSV HE
 
 -- Création des séquences
 
-CREATE SEQUENCE seq_stocks START WITH 20 INCREMENT BY 1;
-CREATE SEQUENCE seq_recettes START WITH 20 INCREMENT BY 1;
-CREATE SEQUENCE seq_fournisseurs START WITH 10 INCREMENT BY 1;
-CREATE SEQUENCE seq_mouvements_stocks START WITH 40 INCREMENT BY 1;
-CREATE SEQUENCE seq_controle_qualite START WITH 24 INCREMENT BY 1;
-CREATE SEQUENCE seq_production_planifiee START WITH 40 INCREMENT BY 1;
+CREATE SEQUENCE seq_idstock START WITH 21 INCREMENT BY 1;
+ALTER TABLE stocks ALTER COLUMN idstock SET DEFAULT nextval('seq_idstock');
+
+CREATE SEQUENCE seq_idrecette START WITH 21 INCREMENT BY 1;
+ALTER TABLE recettes ALTER COLUMN idrecette SET DEFAULT nextval('seq_idrecette');
+CREATE SEQUENCE seq_idfournisseur START WITH 11 INCREMENT BY 1;
+ALTER TABLE fournisseurs ALTER COLUMN idfournisseur SET DEFAULT nextval('seq_idfournisseur');
+CREATE SEQUENCE seq_idmouvement START WITH 41 INCREMENT BY 1;
+ALTER TABLE mouvements_stocks ALTER COLUMN idmouvement SET DEFAULT nextval('seq_idmouvement');
+CREATE SEQUENCE seq_idcontrolae START WITH 31 INCREMENT BY 1;
+ALTER TABLE controle_qualite ALTER COLUMN idcontrole SET DEFAULT nextval('seq_idcontrolae');
+CREATE SEQUENCE seq_idproductionplanifiee START WITH 41 INCREMENT BY 1;
+ALTER TABLE production_planifiee ALTER COLUMN idproductionplanifiee SET DEFAULT nextval('seq_idproductionplanifiee');
