@@ -6,10 +6,9 @@ function Fournisseurs() {
   const [fournisseurs, setFournisseurs] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [newFournisseur, setNewFournisseur] = useState({
-    idfournisseur: null,
     nom_fournisseur: '',
     contact: '',
-    updatedAt: '',
+    updatedAt: new Date().toISOString(),
     evaluation: 0,
     commentaire: ''
   });
@@ -31,30 +30,37 @@ function Fournisseurs() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    // Convertir la date "updatedAt" en format ISO 8601 avec l'heure actuelle
+    const isoDate = new Date(newFournisseur.updatedAt).toISOString();
+  
+    // Mettre à jour "updatedAt" avec la date au format ISO
+    const fournisseurToSubmit = { ...newFournisseur, updatedAt: isoDate };
+  
     if (newFournisseur.idfournisseur) {
       // Mise à jour d'un fournisseur existant
-      updateFournisseur(newFournisseur.idfournisseur, newFournisseur)
+      updateFournisseur(newFournisseur.idfournisseur, fournisseurToSubmit)
         .then((updatedFournisseur) => {
           setFournisseurs(fournisseurs.map(f => f.idfournisseur === updatedFournisseur.idfournisseur ? updatedFournisseur : f));
         })
         .catch((error) => console.error('Erreur lors de la mise à jour du fournisseur:', error));
     } else {
       // Ajouter un nouveau fournisseur
-      addFournisseur(newFournisseur)
+      addFournisseur(fournisseurToSubmit)
         .then((addedFournisseur) => {
           setFournisseurs([...fournisseurs, addedFournisseur]);
         })
         .catch((error) => console.error('Erreur lors de l\'ajout du fournisseur:', error));
     }
+  
 
     setShowForm(false); // Fermer le formulaire
     setNewFournisseur({
-      idfournisseur: null,
       nom_fournisseur: '',
       contact: '',
-      updatedAt: '',
       evaluation: 0,
-      commentaire: ''
+      commentaire: '',
+      updatedAt: new Date().toISOString(),
     });
   };
 
@@ -66,7 +72,7 @@ function Fournisseurs() {
       .catch((error) => console.error('Erreur lors de la suppression du fournisseur:', error));
   };
 
-  
+
   
 
   const handleEdit = (fournisseur) => {
@@ -108,7 +114,7 @@ function Fournisseurs() {
             <label>Date Dernière Livraison:</label>
             <input
               type="date"
-              name="date_derniere_livraison"
+              name="updatedAt"
               value={newFournisseur.updatedAt}
               onChange={handleInputChange}
               required
