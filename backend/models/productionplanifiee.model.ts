@@ -3,14 +3,12 @@ import sequelize from "../config/database";
 
 interface ProductionPlanifieeInterface {
     idproductionplanifiee: number;
-    produit_fini: string;
     quantite_planifiee: number;
     status: string;
     idrecette: number;
 }
 export class ProductionPlanifiee extends Model <ProductionPlanifieeInterface> {
     public idproductionplanifiee!: number;
-    public produit_fini!: string;
     public quantite_planifiee!: number;
     public status!: string;
     public idrecette!: number;
@@ -22,9 +20,6 @@ ProductionPlanifiee.init(
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
-        },
-        produit_fini: {
-            type: DataTypes.STRING(255),
         },
         quantite_planifiee: {
             type: DataTypes.INTEGER,
