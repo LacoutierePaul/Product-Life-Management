@@ -43,6 +43,10 @@ export const DeleteRecette = async(idrecette) =>{
     if (!response.ok){
         throw new Error('Erreur HTTP ! status : ${response.status}');
     }
-    return response.json();
+    if (response.status === 204 || response.status === 200 && response.headers.get("Content-Length") === "0") {
+        // Retournez simplement un succès si la réponse est vide
+        return;
+      }
+    return await response.json();
 }
 

@@ -36,15 +36,23 @@ export const updateFournisseur = async(idfournisseur, data) =>{
     return response.json();
 }
 
-export const deleteFournisseur = async(idfournisseur) =>{
-    const response = await fetch(`${BASE_URL}/fournisseurs/${idfournisseur}`,{
-        method: "DELETE",
+export const deleteFournisseur = async (idfournisseur) => {
+    const response = await fetch(`${BASE_URL}/fournisseurs/${idfournisseur}`, {
+      method: 'DELETE',
     });
-    if (!response.ok){
-        throw new Error('Erreur HTTP ! status : ${response.status}');
+  
+    // Vérifiez si la réponse est vide avant d'appeler `.json()`
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP: ${response.status}`);
     }
-    return response.json();
-}
+    if (response.status === 204 || response.status === 200 && response.headers.get("Content-Length") === "0") {
+      // Retournez simplement un succès si la réponse est vide
+      return;
+    }
+    
+    return await response.json();
+  };
+  
 
 export const getFournisseur = async(idfournisseur) =>{
     const response = await fetch(`${BASE_URL}/fournisseurs/${idfournisseur}`);
