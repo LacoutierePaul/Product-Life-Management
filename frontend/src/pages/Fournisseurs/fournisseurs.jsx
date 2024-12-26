@@ -1,53 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './fournisseurs.css';
+import { getFournisseurs, updateFournisseur, deleteFournisseur, addFournisseur } from '../../api/fournisseurs';
 
 function Fournisseurs() {
-  const fournisseursFictifs = [
-    {
-      id: 1,
-      nom: "La Ferme des Prés",
-      contact: "contact@fermedespres.fr",
-      matiere_premiere: "Lait Cru",
-      date_derniere_livraison: "2024-04-15",
-      evaluation: 5,
-      commentaires: "Excellent service"
-    },
-    {
-      id: 2,
-      nom: "Crèmerie Belle Laitière",
-      contact: "info@bellelaitiere.fr",
-      matiere_premiere: "Crème Fraîche",
-      date_derniere_livraison: "2024-04-10",
-      evaluation: 4,
-      commentaires: "Livraison rapide"
-    },
-    {
-      id: 3,
-      nom: "Beurrier du Terroir",
-      contact: "ventes@beurrierduterroir.fr",
-      matiere_premiere: "Beurre Fermier",
-      date_derniere_livraison: "2024-04-12",
-      evaluation: 5,
-      commentaires: "Qualité exceptionnelle"
-    }
-  ];
-
+  const [fournisseurs, setFournisseurs] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [newFournisseur, setNewFournisseur] = useState({
-    nom: '',
+    idfournisseur: null,
+    nom_fournisseur: '',
     contact: '',
-    matiere_premiere: '',
-    date_derniere_livraison: '',
+    updatedAt: '',
     evaluation: 0,
-    commentaires: ''
+    commentaire: ''
   });
-  const [fournisseurs, setFournisseurs] = useState(fournisseursFictifs);
 
+  // Charger les fournisseurs depuis l'API
   useEffect(() => {
-    // Exemple de fetch pour récupérer les fournisseurs depuis l'API
-    fetch('/api/fournisseurs')
-      .then((response) => response.json())
-      .then((data) => setFournisseurs(data));
+    getFournisseurs()
+      .then((response) => setFournisseurs(response))
+      .catch((error) => console.error('Erreur lors du chargement des fournisseurs:', error));
   }, []);
 
   const handleInputChange = (e) => {
@@ -60,36 +31,41 @@ function Fournisseurs() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newFournisseur.id) {
-      // Modifier un fournisseur existant
-      setFournisseurs(fournisseurs.map(f => 
-        f.id === newFournisseur.id ? newFournisseur : f
-      ));
+    if (newFournisseur.idfournisseur) {
+      // Mise à jour d'un fournisseur existant
+      updateFournisseur(newFournisseur.idfournisseur, newFournisseur)
+        .then((updatedFournisseur) => {
+          setFournisseurs(fournisseurs.map(f => f.idfournisseur === updatedFournisseur.idfournisseur ? updatedFournisseur : f));
+        })
+        .catch((error) => console.error('Erreur lors de la mise à jour du fournisseur:', error));
     } else {
       // Ajouter un nouveau fournisseur
-      const newFournisseurWithId = {
-        ...newFournisseur,
-        id: fournisseurs.length + 1
-      };
-      setFournisseurs([...fournisseurs, newFournisseurWithId]);
+      addFournisseur(newFournisseur)
+        .then((addedFournisseur) => {
+          setFournisseurs([...fournisseurs, addedFournisseur]);
+        })
+        .catch((error) => console.error('Erreur lors de l\'ajout du fournisseur:', error));
     }
-    setShowForm(false); // Fermer le formulaire après l'ajout/modification
+
+    setShowForm(false); // Fermer le formulaire
     setNewFournisseur({
-      nom: '',
+      idfournisseur: null,
+      nom_fournisseur: '',
       contact: '',
-      matiere_premiere: '',
-      date_derniere_livraison: '',
+      updatedAt: '',
       evaluation: 0,
-      commentaires: ''
+      commentaire: ''
     });
   };
 
-  // Fonction pour supprimer un fournisseur
-  const handleDelete = (id) => {
-    setFournisseurs(fournisseurs.filter((f) => f.id !== id));
+  const handleDelete = (idfournisseur) => {
+    deleteFournisseur(idfournisseur)
+      .then(() => {
+        setFournisseurs(fournisseurs.filter((f) => f.idfournisseur !== idfournisseur));
+      })
+      .catch((error) => console.error('Erreur lors de la suppression du fournisseur:', error));
   };
 
-  // Fonction pour remplir le formulaire avec les données d'un fournisseur à modifier
   const handleEdit = (fournisseur) => {
     setNewFournisseur(fournisseur);
     setShowForm(true);
@@ -99,20 +75,18 @@ function Fournisseurs() {
     <div className="fournisseurs">
       <h2>Liste des Fournisseurs</h2>
 
-      {/* Bouton pour afficher le formulaire d'ajout */}
       <button onClick={() => setShowForm(!showForm)}>
         {showForm ? 'Annuler' : 'Ajouter un Fournisseur'}
       </button>
 
-      {/* Formulaire d'ajout ou de modification de fournisseur */}
       {showForm && (
         <form onSubmit={handleSubmit}>
           <div>
             <label>Nom:</label>
             <input
               type="text"
-              name="nom"
-              value={newFournisseur.nom}
+              name="nom_fournisseur"
+              value={newFournisseur.nom_fournisseur}
               onChange={handleInputChange}
               required
             />
@@ -128,21 +102,11 @@ function Fournisseurs() {
             />
           </div>
           <div>
-            <label>Matière Première:</label>
-            <input
-              type="text"
-              name="matiere_premiere"
-              value={newFournisseur.matiere_premiere}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
             <label>Date Dernière Livraison:</label>
             <input
               type="date"
               name="date_derniere_livraison"
-              value={newFournisseur.date_derniere_livraison}
+              value={newFournisseur.updatedAt}
               onChange={handleInputChange}
               required
             />
@@ -160,44 +124,41 @@ function Fournisseurs() {
             />
           </div>
           <div>
-            <label>Commentaires:</label>
+            <label>Commentaire:</label>
             <textarea
-              name="commentaires"
-              value={newFournisseur.commentaires}
+              name="commentaire"
+              value={newFournisseur.commentaire}
               onChange={handleInputChange}
             ></textarea>
           </div>
-          <button type="submit">{newFournisseur.id ? 'Modifier' : 'Ajouter'}</button>
+          <button type="submit">{newFournisseur.idfournisseur ? 'Modifier' : 'Ajouter'}</button>
         </form>
       )}
 
-      {/* Tableau des fournisseurs */}
       <table>
         <thead>
           <tr>
             <th>Nom</th>
             <th>Contact</th>
-            <th>Matière Première</th>
             <th>Date Dernière Livraison</th>
             <th>Évaluation</th>
-            <th>Commentaires</th>
+            <th>Commentaire</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {fournisseurs.map((fournisseur) => (
-            <tr key={fournisseur.id}>
-              <td>{fournisseur.nom}</td>
+            <tr key={fournisseur.idfournisseur}>
+              <td>{fournisseur.nom_fournisseur}</td>
               <td>{fournisseur.contact}</td>
-              <td>{fournisseur.matiere_premiere}</td>
-              <td>{new Date(fournisseur.date_derniere_livraison).toLocaleDateString()}</td>
+              <td>{new Date(fournisseur.updatedAt).toLocaleDateString()}</td>
               <td>{fournisseur.evaluation}</td>
-              <td>{fournisseur.commentaires}</td>
+              <td>{fournisseur.commentaire}</td>
               <td>
                 <button className="modifier" onClick={() => handleEdit(fournisseur)}>
                   Modifier
                 </button>
-                <button className="supprimer" onClick={() => handleDelete(fournisseur.id)}>
+                <button className="supprimer" onClick={() => handleDelete(fournisseur.idfournisseur)}>
                   Supprimer
                 </button>
               </td>
