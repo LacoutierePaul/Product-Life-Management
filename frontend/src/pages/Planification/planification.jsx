@@ -12,10 +12,9 @@ function Planification() {
   const [productions, setProductions] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [newProduction, setNewProduction] = useState({
-    id: null,
     produit_fini: '',
     quantite_planifiee: '',
-    date_production: '',
+    updatedAt: '',
     status: 'En attente',
   });
 
@@ -46,10 +45,10 @@ function Planification() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (newProduction.id) {
+      if (newProduction.idproductionplanifiee) {
         await updateProductionPlanifiee(newProduction);
         setProductions((prev) =>
-          prev.map((prod) => (prod.id === newProduction.id ? newProduction : prod))
+          prev.map((prod) => (prod.idproductionplanifiee === newProduction.idproductionplanifiee ? newProduction : prod))
         );
       } else {
         const addedProduction = await addProductionPlanifiee(newProduction);
@@ -57,10 +56,9 @@ function Planification() {
       }
       setShowForm(false);
       setNewProduction({
-        id: null,
         produit_fini: '',
         quantite_planifiee: '',
-        date_production: '',
+        updatedAt : '',
         status: 'En attente',
       });
     } catch (error) {
@@ -69,10 +67,10 @@ function Planification() {
   };
 
   // Supprime une production via l'API
-  const handleDelete = async (id) => {
+  const handleDelete = async (idproductionplanifiee) => {
     try {
-      await deleteProductionPlanifiee(id);
-      setProductions((prev) => prev.filter((prod) => prod.id !== id));
+      await deleteProductionPlanifiee(idproductionplanifiee);
+      setProductions((prev) => prev.filter((prod) => prod.idproductionplanifiee !== idproductionplanifiee));
     } catch (error) {
       console.error('Erreur lors de la suppression :', error);
     }
@@ -121,7 +119,7 @@ function Planification() {
             <input
               type="date"
               name="date_production"
-              value={newProduction.date_production}
+              value={newProduction.updatedAt}
               onChange={handleInputChange}
               required
             />
@@ -155,16 +153,16 @@ function Planification() {
         </thead>
         <tbody>
           {productions.map((production) => (
-            <tr key={production.id}>
+            <tr key={production.idproductionplanifiee}>
               <td>{production.produit_fini}</td>
               <td>{production.quantite_planifiee}</td>
-              <td>{new Date(production.date_production).toLocaleDateString()}</td>
+              <td>{new Date(production.updatedAt).toLocaleDateString()}</td>
               <td>{production.status}</td>
               <td>
                 <button className="modifier" onClick={() => handleEdit(production)}>
                   Modifier
                 </button>
-                <button className="supprimer" onClick={() => handleDelete(production.id)}>
+                <button className="supprimer" onClick={() => handleDelete(production.idproductionplanifiee)}>
                   Supprimer
                 </button>
               </td>
