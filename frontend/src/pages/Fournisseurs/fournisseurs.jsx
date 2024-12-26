@@ -61,10 +61,13 @@ function Fournisseurs() {
   const handleDelete = (idfournisseur) => {
     deleteFournisseur(idfournisseur)
       .then(() => {
-        setFournisseurs(fournisseurs.filter((f) => f.idfournisseur !== idfournisseur));
+        setFournisseurs(fournisseurs.filter(f => f.idfournisseur !== idfournisseur));
       })
       .catch((error) => console.error('Erreur lors de la suppression du fournisseur:', error));
   };
+
+  
+  
 
   const handleEdit = (fournisseur) => {
     setNewFournisseur(fournisseur);
