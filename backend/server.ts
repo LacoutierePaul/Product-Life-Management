@@ -19,7 +19,7 @@ app.use("/recettes", recettesRoutes);
 app.use("/fournisseurs", fournisseurRoutes);
 app.use("/controlequalite", controlequaliteRoutes);
 app.use("/mouvementsstocks", mouvementsstocksRoutes);
-app.use("/productionplanifiee", productionplanifieeRoutes);
+app.use("/production_planifiee", productionplanifieeRoutes);
 
 // Test API de base
 app.get("/", (req: Request, res: Response) => {
