@@ -1,91 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import './qualite.css';
+import { getControleQualites, updateControleQualite, deleteControleQualite, addControleQualite } from '../../api/controle_qualite';
 
 function Qualite() {
-
-  const controleQualiteFictif = [
-    {
-      id: 1,
-      id_production: 5,
-      date_controle: "2024-01-13",
-      resultat: "Réussi",
-      commentaire: "Texture parfaite."
-    },
-    {
-      id: 2,
-      id_production: 7,
-      date_controle: "2024-01-17",
-      resultat: "Réussi",
-      commentaire: "Produit conforme."
-    },
-    {
-      id: 3,
-      id_production: 1,
-      date_controle: "2024-01-05",
-      resultat: "Échec",
-      commentaire: "Acidité anormale."
-    },
-    {
-      id: 4,
-      id_production: 6,
-      date_controle: "2024-01-15",
-      resultat: "Réussi",
-      commentaire: "Bonne maturation."
-    },
-    {
-      id: 5,
-      id_production: 10,
-      date_controle: "2024-01-21",
-      resultat: "Réussi",
-      commentaire: "Saveur équilibrée."
-    },
-    {
-      id: 6,
-      id_production: 3,
-      date_controle: "2024-01-09",
-      resultat: "Réussi",
-      commentaire: "Bon conditionnement."
-    },
-    {
-      id: 7,
-      id_production: 8,
-      date_controle: "2024-01-18",
-      resultat: "Échec",
-      commentaire: "Couleur non homogène."
-    },
-    {
-      id: 8,
-      id_production: 14,
-      date_controle: "2024-01-26",
-      resultat: "Réussi",
-      commentaire: "Stable en conservation."
-    },
-    {
-      id: 9,
-      id_production: 15,
-      date_controle: "2024-01-28",
-      resultat: "Réussi",
-      commentaire: "Texture légère."
-    },
-    {
-      id: 10,
-      id_production: 12,
-      date_controle: "2024-01-24",
-      resultat: "Échec",
-      commentaire: "Odeur trop forte."
-    }
-  ];
-
-  const [controleQualite, setControleQualite] = useState(controleQualiteFictif);
+  const [controleQualite, setControleQualite] = useState([]);
   const [newControle, setNewControle] = useState({
-    id_production: '',
-    date_controle: '',
+    idproductionplanifiee: '',
+    updatedAt: '',
     resultat: '',
-    commentaire: ''
+    commentaire_controle: ''
   });
 
-  const [showForm, setShowForm] = useState(false); // Nouvel état pour afficher/masquer le formulaire
-  const [editingId, setEditingId] = useState(null); // ID du contrôle qualité en cours d'édition
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+
+  const fetchControleQualite = async () => {
+    try {
+      const data = await getControleQualite();
+      setControleQualite(data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des contrôles qualité:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchControleQualite();
+  }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -95,90 +35,90 @@ function Qualite() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (editingId !== null) {
-      // Modifier le contrôle qualité existant
-      setControleQualite((prevState) =>
-        prevState.map((controle) =>
-          controle.id === editingId ? { ...controle, ...newControle } : controle
-        )
-      );
+      try {
+        await updateControleQualite(editingId, newControle);
+        setControleQualite((prevState) =>
+          prevState.map((controle) =>
+            controle.idcontrole === editingId ? { ...controle, ...newControle } : controle
+          )
+        );
+      } catch (error) {
+        console.error('Erreur lors de la mise à jour du contrôle qualité:', error);
+      }
     } else {
-      // Ajouter un nouveau contrôle qualité
-      const newControleWithId = {
-        ...newControle,
-        id: controleQualite.length + 1, // Générer un ID unique
-      };
-      setControleQualite((prevState) => [...prevState, newControleWithId]);
+      try {
+        const createdControle = await addControleQualite(newControle);
+        setControleQualite((prevState) => [...prevState, createdControle]);
+      } catch (error) {
+        console.error("Erreur lors de l'ajout du contrôle qualité:", error);
+      }
     }
 
-    // Réinitialiser le formulaire
     setNewControle({
-      id_production: '',
-      date_controle: '',
+      idproductionplanifiee: '',
+      updatedAt: '',
       resultat: '',
-      commentaire: ''
+      commentaire_controle: ''
     });
-
-    // Fermer le formulaire après soumission
     setShowForm(false);
-    setEditingId(null); // Réinitialiser l'ID d'édition
+    setEditingId(null);
   };
 
-  const handleDelete = (id) => {
-    // Supprimer l'élément avec l'ID spécifié
-    setControleQualite((prevState) =>
-      prevState.filter((controle) => controle.id !== id)
-    );
+  const handleDelete = async (id) => {
+    try {
+      await deleteControleQualite(id);
+      setControleQualite((prevState) =>
+        prevState.filter((controle) => controle.idcontrole !== id)
+      );
+    } catch (error) {
+      console.error('Erreur lors de la suppression du contrôle qualité:', error);
+    }
   };
 
   const handleEdit = (controle) => {
-    // Charger les données du contrôle à modifier dans le formulaire
-    setNewControle(controle);
-    setEditingId(controle.id); // Définir l'ID de l'élément en cours d'édition
-    setShowForm(true); // Afficher le formulaire
+    setNewControle({
+      idproductionplanifiee: controle.idproductionplanifiee,
+      updatedAt: controle.updatedAt,
+      resultat: controle.resultat,
+      commentaire_controle: controle.commentaire_controle
+    });
+    setEditingId(controle.idcontrole);
+    setShowForm(true);
   };
-
-  useEffect(() => {
-    // Exemple de fetch pour récupérer les contrôles qualité
-    fetch('/api/controle_qualite')
-      .then((response) => response.json())
-      .then((data) => setControleQualite(data));
-  }, []);
 
   return (
     <div className="qualite">
       <h2>Contrôle Qualité</h2>
-      
-      {/* Bouton pour afficher/masquer le formulaire */}
+
       <button onClick={() => setShowForm(!showForm)}>
         {showForm ? 'Annuler' : 'Ajouter un contrôle qualité'}
       </button>
 
-      {/* Formulaire d'ajout ou de modification de contrôle qualité */}
       {showForm && (
         <form onSubmit={handleSubmit} className="ajout-controle-form">
           <div>
-            <label htmlFor="id_production">ID de Production:</label>
+            <label htmlFor="idproductionplanifiee">ID de Production:</label>
             <input
               type="number"
-              id="id_production"
-              name="id_production"
-              value={newControle.id_production}
+              id="idproductionplanifiee"
+              name="idproductionplanifiee"
+              value={newControle.idproductionplanifiee}
               onChange={handleInputChange}
               required
             />
           </div>
 
           <div>
-            <label htmlFor="date_controle">Date du Contrôle:</label>
+            <label htmlFor="updatedAt">Date du Contrôle:</label>
             <input
               type="date"
-              id="date_controle"
-              name="date_controle"
-              value={newControle.date_controle}
+              id="updatedAt"
+              name="updatedAt"
+              value={newControle.updatedAt}
               onChange={handleInputChange}
               required
             />
@@ -200,11 +140,11 @@ function Qualite() {
           </div>
 
           <div>
-            <label htmlFor="commentaire">Commentaire:</label>
+            <label htmlFor="commentaire_controle">Commentaire:</label>
             <textarea
-              id="commentaire"
-              name="commentaire"
-              value={newControle.commentaire}
+              id="commentaire_controle"
+              name="commentaire_controle"
+              value={newControle.commentaire_controle}
               onChange={handleInputChange}
               required
             />
@@ -216,7 +156,6 @@ function Qualite() {
         </form>
       )}
 
-      {/* Tableau des contrôles qualité */}
       <table>
         <thead>
           <tr>
@@ -224,25 +163,19 @@ function Qualite() {
             <th>Date du Contrôle</th>
             <th>Résultat</th>
             <th>Commentaire</th>
-            <th>Action</th> {/* Nouvelle colonne pour les actions */}
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {controleQualite.map((controle) => (
-            <tr key={controle.id}>
-              <td>{controle.id_production}</td>
-              <td>{new Date(controle.date_controle).toLocaleDateString()}</td>
+            <tr key={controle.idcontrole}>
+              <td>{controle.idproductionplanifiee}</td>
+              <td>{new Date(controle.updatedAt).toLocaleDateString()}</td>
               <td>{controle.resultat}</td>
-              <td>{controle.commentaire}</td>
+              <td>{controle.commentaire_controle}</td>
               <td>
-                {/* Bouton pour modifier la ligne */}
-                <button onClick={() => handleEdit(controle)}>
-                  Modifier
-                </button>
-                {/* Bouton pour supprimer la ligne */}
-                <button onClick={() => handleDelete(controle.id)}>
-                  Supprimer
-                </button>
+                <button onClick={() => handleEdit(controle)}>Modifier</button>
+                <button onClick={() => handleDelete(controle.idcontrole)}>Supprimer</button>
               </td>
             </tr>
           ))}
