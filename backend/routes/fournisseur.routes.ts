@@ -56,4 +56,21 @@ router.delete("/:idfournisseur", async (req: Request, res: Response) => {
     }
 });
 
+
+// Obtenir un fournisseur par ID
+router.get("/:idfournisseur", async (req: Request, res: Response) => {
+    try {
+        const { idfournisseur } = req.params;
+        const fournisseur = await Fournisseur.findByPk(idfournisseur);
+
+        if (fournisseur) {
+            res.json(fournisseur);
+        } else {
+            res.status(404).json({ error: "Fournisseur not found" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Unable to fetch fournisseur" });
+    }
+});
+
 export default router;

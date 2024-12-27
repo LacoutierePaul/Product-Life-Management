@@ -4,7 +4,6 @@ import sequelize from "../config/database";
 
 interface ControleQualiteInterface {
     idcontrole: number;
-    date_controle: Date;
     resultat: string;
     commentaire_controle: string;
     idproductionplanifiee: number;
@@ -12,7 +11,6 @@ interface ControleQualiteInterface {
 
 export class ControleQualite extends Model <ControleQualiteInterface> {
     public idcontrole!: number;
-    public date_controle!: Date;
     public resultat!: string;
     public commentaire_controle!: string;
     public idproductionplanifiee!: number;
@@ -25,10 +23,6 @@ ControleQualite.init(
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
-        },
-        date_controle: {
-            type: DataTypes.DATE,
-            allowNull: false,
         },
         resultat: {
             type: DataTypes.STRING(50),

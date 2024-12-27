@@ -1,6 +1,11 @@
 import express, { Request, Response, json } from "express";
 import sequelize from "./config/database";
 import stockRoutes from "./routes/stocks.routes";
+import recettesRoutes from "./routes/recettes.routes";
+import fournisseurRoutes from "./routes/fournisseur.routes";
+import controlequaliteRoutes from "./routes/controlequalite.routes";
+import mouvementsstocksRoutes from "./routes/mouvementsstocks.routes";
+import productionplanifieeRoutes from "./routes/productionplanifiee.routes";
 import cors from "cors";
 
 const app = express();
@@ -10,6 +15,11 @@ app.use(json());
 app.use(cors());
 
 app.use("/stocks", stockRoutes);
+app.use("/recettes", recettesRoutes);
+app.use("/fournisseurs", fournisseurRoutes);
+app.use("/controlequalite", controlequaliteRoutes);
+app.use("/mouvementsstocks", mouvementsstocksRoutes);
+app.use("/production_planifiee", productionplanifieeRoutes);
 
 // Test API de base
 app.get("/", (req: Request, res: Response) => {
