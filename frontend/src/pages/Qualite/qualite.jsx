@@ -16,7 +16,7 @@ function Qualite() {
 
   const fetchControleQualite = async () => {
     try {
-      const data = await getControleQualite();
+      const data = await getControleQualites();
       setControleQualite(data);
     } catch (error) {
       console.error('Erreur lors de la récupération des contrôles qualité:', error);
