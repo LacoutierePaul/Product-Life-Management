@@ -40,7 +40,7 @@ CREATE TABLE mouvements_stocks (
      "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_mouvements_stocks PRIMARY KEY (idmouvement),
-    CONSTRAINT FK_mouvements_stocks_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock)
+    CONSTRAINT FK_mouvements_stocks_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock) ON DELETE CASCADE
 );
 
 CREATE TABLE production_planifiee (
@@ -51,7 +51,7 @@ CREATE TABLE production_planifiee (
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     idrecette SERIAL,
     CONSTRAINT PK_production_planifiee PRIMARY KEY (idproductionplanifiee),
-    CONSTRAINT FK_production_planifiee_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette)
+    CONSTRAINT FK_production_planifiee_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette) ON DELETE CASCADE
 );
 
 
@@ -63,7 +63,7 @@ CREATE TABLE controle_qualite (
       "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_controle_qualite PRIMARY KEY (idcontrole),
-    CONSTRAINT FK_controle_qualite_idproductionplanifiee FOREIGN KEY (idproductionplanifiee) REFERENCES production_planifiee (idproductionplanifiee)
+    CONSTRAINT FK_controle_qualite_idproductionplanifiee FOREIGN KEY (idproductionplanifiee) REFERENCES production_planifiee (idproductionplanifiee) ON DELETE CASCADE
 );
 
 
@@ -73,8 +73,8 @@ CREATE TABLE fournisseurs_to_stocks (
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_fournit PRIMARY KEY (idfournisseur, idstock),
-    CONSTRAINT FK_fournit_idfournisseur FOREIGN KEY (idfournisseur) REFERENCES fournisseurs (idfournisseur),
-    CONSTRAINT FK_fournit_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock)
+    CONSTRAINT FK_fournit_idfournisseur FOREIGN KEY (idfournisseur) REFERENCES fournisseurs (idfournisseur) ON DELETE CASCADE,
+    CONSTRAINT FK_fournit_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock) ON DELETE CASCADE
 );
 
 CREATE TABLE recettes_to_stocks (
@@ -83,8 +83,8 @@ CREATE TABLE recettes_to_stocks (
      "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_utilise PRIMARY KEY (idstock, idrecette),
-    CONSTRAINT FK_utilise_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock),
-    CONSTRAINT FK_utilise_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette)
+    CONSTRAINT FK_utilise_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock) ON DELETE CASCADE,
+    CONSTRAINT FK_utilise_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette) ON DELETE CASCADE
 );
 
 COPY recettes FROM '/data/recettes.csv' DELIMITER ',' CSV HEADER;
@@ -98,9 +98,16 @@ COPY recettes_to_stocks FROM '/data/recettes_to_stocks.csv' DELIMITER ',' CSV HE
 
 -- Création des séquences
 
-CREATE SEQUENCE seq_stocks START WITH 20 INCREMENT BY 1;
-CREATE SEQUENCE seq_recettes START WITH 20 INCREMENT BY 1;
-CREATE SEQUENCE seq_fournisseurs START WITH 10 INCREMENT BY 1;
-CREATE SEQUENCE seq_mouvements_stocks START WITH 40 INCREMENT BY 1;
-CREATE SEQUENCE seq_controle_qualite START WITH 24 INCREMENT BY 1;
-CREATE SEQUENCE seq_production_planifiee START WITH 40 INCREMENT BY 1;
+CREATE SEQUENCE seq_idstock START WITH 21 INCREMENT BY 1;
+ALTER TABLE stocks ALTER COLUMN idstock SET DEFAULT nextval('seq_idstock');
+
+CREATE SEQUENCE seq_idrecette START WITH 21 INCREMENT BY 1;
+ALTER TABLE recettes ALTER COLUMN idrecette SET DEFAULT nextval('seq_idrecette');
+CREATE SEQUENCE seq_idfournisseur START WITH 11 INCREMENT BY 1;
+ALTER TABLE fournisseurs ALTER COLUMN idfournisseur SET DEFAULT nextval('seq_idfournisseur');
+CREATE SEQUENCE seq_idmouvement START WITH 41 INCREMENT BY 1;
+ALTER TABLE mouvements_stocks ALTER COLUMN idmouvement SET DEFAULT nextval('seq_idmouvement');
+CREATE SEQUENCE seq_idcontrolae START WITH 31 INCREMENT BY 1;
+ALTER TABLE controle_qualite ALTER COLUMN idcontrole SET DEFAULT nextval('seq_idcontrolae');
+CREATE SEQUENCE seq_idproductionplanifiee START WITH 41 INCREMENT BY 1;
+ALTER TABLE production_planifiee ALTER COLUMN idproductionplanifiee SET DEFAULT nextval('seq_idproductionplanifiee');

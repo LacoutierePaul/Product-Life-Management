@@ -29,7 +29,7 @@ MouvementStock.init(
             allowNull: false,
             references: {
                 model: "stocks",
-                key: "id",
+                key: "idstock",
             },
         },
         type_mouvement: {

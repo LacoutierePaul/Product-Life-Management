@@ -19,7 +19,7 @@ RecetteToStocks.init(
             primaryKey: true,
             references: {
                 model: "stocks",
-                key: "id",
+                key: "idstock",
             },
             onDelete: "CASCADE",
         },
@@ -29,7 +29,7 @@ RecetteToStocks.init(
             primaryKey: true,
             references: {
                 model: "recettes",
-                key: "id",
+                key: "idrecette",
             },
             onDelete: "CASCADE",
         },

@@ -1,30 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './planification.css';
+import { 
+  getProductionPlanifiee, 
+  updateProductionPlanifiee, 
+  deleteProductionPlanifiee, 
+  addProductionPlanifiee 
+} from '../../api/production_planifiee';
 
 function Planification() {
-  // Données fictives de planification
-  const planificationData = [
-    { id: 1, produit_fini: 'Yaourt Nature', quantite_planifiee: 200, date_production: '2024-03-01', status: 'Terminé' },
-    { id: 2, produit_fini: 'Beurre Clarifié', quantite_planifiee: 100, date_production: '2024-03-02', status: 'En cours' },
-    { id: 3, produit_fini: 'Fromage Blanc', quantite_planifiee: 150, date_production: '2024-03-03', status: 'En attente' },
-    { id: 4, produit_fini: 'Crème Chantilly', quantite_planifiee: 180, date_production: '2024-03-04', status: 'Terminé' },
-    { id: 5, produit_fini: 'Lait Cru Entier', quantite_planifiee: 300, date_production: '2024-03-05', status: 'En attente' },
-    { id: 6, produit_fini: 'Fromage Fermier', quantite_planifiee: 120, date_production: '2024-03-06', status: 'En cours' },
-    { id: 7, produit_fini: 'Beurre Fermier', quantite_planifiee: 200, date_production: '2024-03-07', status: 'Terminé' },
-  ];
-
-  // Utilisation de useState pour gérer l'état des données et du formulaire
-  const [productions, setProductions] = useState(planificationData);
-  const [showForm, setShowForm] = useState(false); // Etat pour afficher ou masquer le formulaire
+  // État pour gérer les productions et le formulaire
+  const [productions, setProductions] = useState([]);
+  const [showForm, setShowForm] = useState(false);
   const [newProduction, setNewProduction] = useState({
-    id: null,
     produit_fini: '',
     quantite_planifiee: '',
-    date_production: '',
+    updatedAt: '',
     status: 'En attente',
   });
 
-  // Fonction pour gérer les changements dans le formulaire
+  // Chargement des données depuis l'API au montage du composant
+  useEffect(() => {
+    const fetchProductions = async () => {
+      try {
+        const data = await getProductionPlanifiee();
+        setProductions(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+      }
+    };
+
+    fetchProductions();
+  }, []);
+
+  // Gère les changements dans le formulaire
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProduction({
@@ -33,39 +41,42 @@ function Planification() {
     });
   };
 
-  // Fonction pour ajouter une nouvelle planification
-  const handleSubmit = (e) => {
+  // Ajoute ou modifie une production via l'API
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (newProduction.id) {
-      // Modifier une production existante
-      setProductions(productions.map((prod) =>
-        prod.id === newProduction.id ? newProduction : prod
-      ));
-    } else {
-      // Ajouter une nouvelle production
-      const newId = productions.length + 1;
-      const updatedProductions = [
-        ...productions,
-        { id: newId, ...newProduction },
-      ];
-      setProductions(updatedProductions);
+    try {
+      if (newProduction.idproductionplanifiee) {
+        await updateProductionPlanifiee(newProduction);
+        setProductions((prev) =>
+          prev.map((prod) => (prod.idproductionplanifiee === newProduction.idproductionplanifiee ? newProduction : prod))
+        );
+      } else {
+        const addedProduction = await addProductionPlanifiee(newProduction);
+        setProductions((prev) => [...prev, addedProduction]);
+      }
+      setShowForm(false);
+      setNewProduction({
+        produit_fini: '',
+        quantite_planifiee: '',
+        updatedAt : '',
+        status: 'En attente',
+      });
+    } catch (error) {
+      console.error('Erreur lors de la soumission :', error);
     }
-    setShowForm(false); // Fermer le formulaire après soumission
-    setNewProduction({
-      id: null,
-      produit_fini: '',
-      quantite_planifiee: '',
-      date_production: '',
-      status: 'En attente',
-    });
   };
 
-  // Fonction pour supprimer une planification
-  const handleDelete = (id) => {
-    setProductions(productions.filter((prod) => prod.id !== id));
+  // Supprime une production via l'API
+  const handleDelete = async (idproductionplanifiee) => {
+    try {
+      await deleteProductionPlanifiee(idproductionplanifiee);
+      setProductions((prev) => prev.filter((prod) => prod.idproductionplanifiee !== idproductionplanifiee));
+    } catch (error) {
+      console.error('Erreur lors de la suppression :', error);
+    }
   };
 
-  // Fonction pour remplir le formulaire avec les données d'une production à modifier
+  // Prépare le formulaire pour la modification
   const handleEdit = (production) => {
     setNewProduction(production);
     setShowForm(true);
@@ -108,7 +119,7 @@ function Planification() {
             <input
               type="date"
               name="date_production"
-              value={newProduction.date_production}
+              value={newProduction.updatedAt}
               onChange={handleInputChange}
               required
             />
@@ -142,16 +153,16 @@ function Planification() {
         </thead>
         <tbody>
           {productions.map((production) => (
-            <tr key={production.id}>
+            <tr key={production.idproductionplanifiee}>
               <td>{production.produit_fini}</td>
               <td>{production.quantite_planifiee}</td>
-              <td>{new Date(production.date_production).toLocaleDateString()}</td>
+              <td>{new Date(production.updatedAt).toLocaleDateString()}</td>
               <td>{production.status}</td>
               <td>
                 <button className="modifier" onClick={() => handleEdit(production)}>
                   Modifier
                 </button>
-                <button className="supprimer" onClick={() => handleDelete(production.id)}>
+                <button className="supprimer" onClick={() => handleDelete(production.idproductionplanifiee)}>
                   Supprimer
                 </button>
               </td>

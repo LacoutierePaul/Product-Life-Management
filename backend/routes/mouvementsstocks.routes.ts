@@ -24,7 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 // Mettre à jour un mouvement Stock
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:idmouvement", async (req: Request, res: Response) => {
     try {
         const { idmouvement } = req.params;
         const [updated] = await MouvementStock.update(req.body, { where: { idmouvement } });
@@ -41,7 +41,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 });
 
 // Supprimer un MouvementStock
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:idmouvement", async (req: Request, res: Response) => {
     try {
         const { idmouvement } = req.params;
         const deleted = await MouvementStock.destroy({ where: { idmouvement } });

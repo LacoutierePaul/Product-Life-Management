@@ -19,7 +19,7 @@ FournisseursToStocks.init(
             primaryKey: true,
             references: {
                 model: "stocks",
-                key: "id",
+                key: "idstock",
             },
             onDelete: "CASCADE",
         },
@@ -29,7 +29,7 @@ FournisseursToStocks.init(
             primaryKey: true,
             references: {
                 model: "fournisseurs",
-                key: "id",
+                key: "idfournisseur",
             },
             onDelete: "CASCADE",
         },

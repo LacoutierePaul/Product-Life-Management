@@ -24,7 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 // Mettre à jour un fournisseur
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:idfournisseur", async (req: Request, res: Response) => {
     try {
         const { idfournisseur } = req.params;
         const [updated] = await Fournisseur.update(req.body, { where: { idfournisseur } });
@@ -41,7 +41,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 });
 
 // Supprimer un fournisseur
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:idfournisseur", async (req: Request, res: Response) => {
     try {
         const { idfournisseur } = req.params;
         const deleted = await Fournisseur.destroy({ where: { idfournisseur } });
@@ -53,6 +53,23 @@ router.delete("/:id", async (req: Request, res: Response) => {
         }
     } catch (err) {
         res.status(500).json({ error: "Unable to delete fournisseur" });
+    }
+});
+
+
+// Obtenir un fournisseur par ID
+router.get("/:idfournisseur", async (req: Request, res: Response) => {
+    try {
+        const { idfournisseur } = req.params;
+        const fournisseur = await Fournisseur.findByPk(idfournisseur);
+
+        if (fournisseur) {
+            res.json(fournisseur);
+        } else {
+            res.status(404).json({ error: "Fournisseur not found" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Unable to fetch fournisseur" });
     }
 });
 

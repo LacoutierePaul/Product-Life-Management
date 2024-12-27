@@ -24,7 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 // Mettre à jour un controle qualite
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:idcontrole", async (req: Request, res: Response) => {
     try {
         const { idcontrole } = req.params;
         const [updated] = await ControleQualite.update(req.body, { where: { idcontrole } });
@@ -41,7 +41,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 });
 
 // Supprimer un controle qualite
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:idcontrole", async (req: Request, res: Response) => {
     try {
         const { idcontrole } = req.params;
         const deleted = await ControleQualite.destroy({ where: { idcontrole } });
