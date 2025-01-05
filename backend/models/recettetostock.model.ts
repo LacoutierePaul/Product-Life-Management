@@ -16,7 +16,6 @@ RecetteToStocks.init(
         idstock: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true,
             references: {
                 model: "stocks",
                 key: "idstock",
@@ -26,7 +25,6 @@ RecetteToStocks.init(
         idrecette: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true,
             references: {
                 model: "recettes",
                 key: "idrecette",
