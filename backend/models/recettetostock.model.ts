@@ -35,7 +35,7 @@ RecetteToStocks.init(
     {
         sequelize,
         modelName: "RecetteToStocks",
-        tableName: "recette_to_stocks",
+        tableName: "recettes_to_stocks",
         schema: "public",
         timestamps: true,
     }
