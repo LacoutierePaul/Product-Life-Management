@@ -87,9 +87,9 @@ function Planification() {
       <h2>Planification de la Production</h2>
 
       {/* Bouton pour afficher ou masquer le formulaire d'ajout */}
-      <button onClick={() => setShowForm(!showForm)}>
+      {/*<button onClick={() => setShowForm(!showForm)}>
         {showForm ? 'Annuler' : 'Ajouter une Planification'}
-      </button>
+      </button>*/}
 
       {/* Formulaire d'ajout ou de modification de planification */}
       {showForm && (
