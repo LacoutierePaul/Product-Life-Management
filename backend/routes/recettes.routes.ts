@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { Recette } from "../models/recettes.model";
 import { Stock } from "../models/stocks.model"
+import { RecetteToStocks } from "../models/recettetostock.model";
 
 const router = express.Router();
 
@@ -64,7 +65,7 @@ router.get("/withStocks", async (req: Request, res: Response) => {
             include: [
                 {
                     model: Stock,
-                    through: { attributes: [] }, // Exclure les id dans RecetteToStock
+                    through: { attributes: ["quantite"] }, // Exclure les id dans RecetteToStock
                 },
             ],
         });
