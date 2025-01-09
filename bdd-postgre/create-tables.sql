@@ -83,8 +83,25 @@ CREATE TABLE recettes_to_stocks (
      "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_utilise PRIMARY KEY (idstock, idrecette),
+    quantite INT,
+
     CONSTRAINT FK_utilise_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock) ON DELETE CASCADE,
     CONSTRAINT FK_utilise_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette) ON DELETE CASCADE
+);
+
+CREATE TABLE commande_ingredients (
+    idcommande SERIAL NOT NULL,
+    idfournisseur SERIAL NOT NULL,
+    idstock SERIAL NOT NULL,
+    quantite_commande INT NOT NULL,
+    date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_livraison_estimee TIMESTAMP,
+    statut_commande VARCHAR(20) DEFAULT 'En attente',
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_commande PRIMARY KEY (idcommande),
+    CONSTRAINT FK_commande_idfournisseur FOREIGN KEY (idfournisseur) REFERENCES fournisseurs (idfournisseur) ON DELETE CASCADE,
+    CONSTRAINT FK_commande_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock) ON DELETE CASCADE
 );
 
 COPY recettes FROM '/data/recettes.csv' DELIMITER ',' CSV HEADER;
@@ -95,6 +112,7 @@ COPY production_planifiee FROM '/data/production_planifiee.csv' DELIMITER ',' CS
 COPY controle_qualite FROM '/data/controle_qualite.csv' DELIMITER ',' CSV HEADER;
 COPY fournisseurs_to_stocks FROM '/data/fournisseurs_to_stocks.csv' DELIMITER ',' CSV HEADER;
 COPY recettes_to_stocks FROM '/data/recettes_to_stocks.csv' DELIMITER ',' CSV HEADER;
+COPY commande_ingredients FROM '/data/commande_ingredients.csv' DELIMITER ',' CSV HEADER;   
 
 -- Création des séquences
 
@@ -111,3 +129,6 @@ CREATE SEQUENCE seq_idcontrolae START WITH 31 INCREMENT BY 1;
 ALTER TABLE controle_qualite ALTER COLUMN idcontrole SET DEFAULT nextval('seq_idcontrolae');
 CREATE SEQUENCE seq_idproductionplanifiee START WITH 41 INCREMENT BY 1;
 ALTER TABLE production_planifiee ALTER COLUMN idproductionplanifiee SET DEFAULT nextval('seq_idproductionplanifiee');
+
+CREATE SEQUENCE seq_idcommande START WITH 11 INCREMENT BY 1;
+ALTER TABLE commande_ingredients ALTER COLUMN idcommande SET DEFAULT nextval('seq_idcommande'); 

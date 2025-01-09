@@ -1,4 +1,5 @@
 import express, { Request, Response, json } from "express";
+import cors from "cors";
 import sequelize from "./config/database";
 import stockRoutes from "./routes/stocks.routes";
 import recettesRoutes from "./routes/recettes.routes";
@@ -6,7 +7,8 @@ import fournisseurRoutes from "./routes/fournisseur.routes";
 import controlequaliteRoutes from "./routes/controlequalite.routes";
 import mouvementsstocksRoutes from "./routes/mouvementsstocks.routes";
 import productionplanifieeRoutes from "./routes/productionplanifiee.routes";
-import cors from "cors";
+import defineRelations from "./models/relations.model";
+import recettestostocksRoutes from "./routes/recettestostocks.routes";
 
 const app = express();
 const PORT = 3000;
@@ -20,11 +22,15 @@ app.use("/fournisseurs", fournisseurRoutes);
 app.use("/controlequalite", controlequaliteRoutes);
 app.use("/mouvementsstocks", mouvementsstocksRoutes);
 app.use("/production_planifiee", productionplanifieeRoutes);
+app.use("/recettestostocks", recettestostocksRoutes)
 
 // Test API de base
 app.get("/", (req: Request, res: Response) => {
     res.send("Server is running!");
 });
+
+// Définir les relations entre les tables
+defineRelations()
 
 // Synchroniser avec la base de données et démarrer le serveur
 sequelize
