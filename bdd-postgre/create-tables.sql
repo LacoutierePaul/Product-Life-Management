@@ -83,6 +83,8 @@ CREATE TABLE recettes_to_stocks (
      "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT PK_utilise PRIMARY KEY (idstock, idrecette),
+    quantite INT,
+
     CONSTRAINT FK_utilise_idstock FOREIGN KEY (idstock) REFERENCES stocks (idstock) ON DELETE CASCADE,
     CONSTRAINT FK_utilise_idrecette FOREIGN KEY (idrecette) REFERENCES recettes (idrecette) ON DELETE CASCADE
 );

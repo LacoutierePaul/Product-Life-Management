@@ -4,11 +4,13 @@ import sequelize from "../config/database";
 interface RecetteToStocksAttributes {
     idstock: number;
     idrecette: number;
+    quantite: number;
 }
 
 export class RecetteToStocks extends Model<RecetteToStocksAttributes> {
     public idstock!: number;
     public idrecette!: number;
+    public quantite!: number;
 }
 
 RecetteToStocks.init(
@@ -32,6 +34,10 @@ RecetteToStocks.init(
                 key: "idrecette",
             },
             onDelete: "CASCADE",
+        },
+        quantite: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
     },
     {
