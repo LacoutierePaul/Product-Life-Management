@@ -18,7 +18,6 @@ RecetteToStocks.init(
         idstock: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true,
             references: {
                 model: "stocks",
                 key: "idstock",
@@ -28,7 +27,6 @@ RecetteToStocks.init(
         idrecette: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true,
             references: {
                 model: "recettes",
                 key: "idrecette",
@@ -43,7 +41,7 @@ RecetteToStocks.init(
     {
         sequelize,
         modelName: "RecetteToStocks",
-        tableName: "recette_to_stocks",
+        tableName: "recettes_to_stocks",
         schema: "public",
         timestamps: true,
     }
