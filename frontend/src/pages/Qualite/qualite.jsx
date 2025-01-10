@@ -92,7 +92,7 @@ function Qualite() {
 
   return (
     <div className="qualite">
-      <h2>Contrôle Qualité</h2>
+      <h2>Contrôle Qualitée</h2>
 
       <button onClick={() => setShowForm(!showForm)}>
         {showForm ? 'Annuler' : 'Ajouter un contrôle qualité'}

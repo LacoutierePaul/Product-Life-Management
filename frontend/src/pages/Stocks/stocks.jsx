@@ -3,20 +3,18 @@ import './stocks.css';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { getStocks } from '../../api/stocks';
-// Enregistrer les composants nécessaires dans Chart.js
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-// Initialise les stocks avec la valeur de l'api getStocks
 function Stocks() {
   const [stocks, setStocks] = useState([]);
+  const [showOrderForm, setShowOrderForm] = useState(false);
+  const [orderData, setOrderData] = useState({
+    quantity: '',
+    supplier: '',
+  });
+
+  const suppliers = ['Fournisseur A', 'Fournisseur B', 'Fournisseur C'];
 
   useEffect(() => {
     getStocks()
@@ -29,51 +27,49 @@ function Stocks() {
       });
   }, []);
 
+  const handleOrderInputChange = (e) => {
+    const { name, value } = e.target;
+    setOrderData((prevState) => ({ ...prevState, [name]: value }));
+  };
 
+  const handleSubmitOrder = (e) => {
+    e.preventDefault();
+    console.log('Nouvelle commande:', orderData);
+    alert('Commande envoyée avec succès !');
+    setShowOrderForm(false);
+  };
 
-  // Préparer les données pour le graphique (diagramme à barres)
   const chartData = {
-    labels: stocks.map((stock) => stock.nom_ingredient), // Liste des noms des produits
+    labels: stocks.map((stock) => stock.nom_ingredient),
     datasets: [
       {
         label: 'Quantité de Stock',
-        data: stocks.map((stock) => stock.quantite), // Liste des quantités
-        backgroundColor: 'rgba(75, 192, 192, 0.6)', // Couleur de fond des barres
-        borderColor: 'rgba(75, 192, 192, 1)', // Couleur de bordure des barres
+        data: stocks.map((stock) => stock.quantite),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
       },
     ],
   };
 
-  // Options du graphique
   const chartOptions = {
     responsive: true,
     plugins: {
-      legend: {
-        position: 'top', // Position de la légende
-      },
-      tooltip: {
-        enabled: true, // Activer les info-bulles
-      },
+      legend: { position: 'top' },
+      tooltip: { enabled: true },
     },
     scales: {
-      x: {
-        beginAtZero: true, // Commencer l'axe X à zéro
-      },
-      y: {
-        beginAtZero: true, // Commencer l'axe Y à zéro
-      },
+      x: { beginAtZero: true },
+      y: { beginAtZero: true },
     },
   };
 
-  // Vérification des stocks en dessous du seuil minimal
   const stocksEnSousSeuil = stocks.filter((stock) => stock.quantite < stock.seuil_minimal);
 
   return (
     <div className="stocks">
       <h2>Liste des Stocks</h2>
 
-      {/* Alerte si un stock est en dessous du seuil minimal */}
       {stocksEnSousSeuil.length > 0 && (
         <div className="alert">
           <h3>Attention : Certains stocks sont en dessous du seuil minimal !</h3>
@@ -87,7 +83,38 @@ function Stocks() {
         </div>
       )}
 
-      {/* Tableau des stocks */}
+      <button onClick={() => setShowOrderForm(!showOrderForm)}>
+        {showOrderForm ? 'Annuler la commande' : 'Passer une nouvelle commande'}
+      </button>
+
+      {showOrderForm && (
+        <form onSubmit={handleSubmitOrder} className="order-form">
+          <label>Quantité :
+            <input
+              type="number"
+              name="quantity"
+              value={orderData.quantity}
+              onChange={handleOrderInputChange}
+              required
+            />
+          </label>
+          <label>Fournisseur :
+            <select
+              name="supplier"
+              value={orderData.supplier}
+              onChange={handleOrderInputChange}
+              required
+            >
+              <option value="">Sélectionner un fournisseur</option>
+              {suppliers.map((supplier, index) => (
+                <option key={index} value={supplier}>{supplier}</option>
+              ))}
+            </select>
+          </label>
+          <button type="submit">Envoyer la commande</button>
+        </form>
+      )}
+
       <table>
         <thead>
           <tr>
@@ -109,7 +136,6 @@ function Stocks() {
         </tbody>
       </table>
 
-      {/* Afficher le graphique à barres */}
       <div className="chart-container">
         <Bar data={chartData} options={chartOptions} />
       </div>
