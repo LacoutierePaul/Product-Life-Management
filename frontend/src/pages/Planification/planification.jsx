@@ -1,177 +1,84 @@
 import React, { useState, useEffect } from 'react';
 import './planification.css';
-import { 
-  getProductionPlanifiee, 
-  updateProductionPlanifiee, 
-  deleteProductionPlanifiee, 
-  addProductionPlanifiee 
-} from '../../api/production_planifiee';
 
 function Planification() {
-  // État pour gérer les productions et le formulaire
-  const [productions, setProductions] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [newProduction, setNewProduction] = useState({
-    produit_fini: '',
-    quantite_planifiee: '',
-    updatedAt: '',
-    status: 'En attente',
-  });
+    const [selectedOption, setSelectedOption] = useState('commande_stocks');
+    const [stockOrders, setStockOrders] = useState([]);
+    const [recipeOrders, setRecipeOrders] = useState([]);
 
-  // Chargement des données depuis l'API au montage du composant
-  useEffect(() => {
-    const fetchProductions = async () => {
-      try {
-        const data = await getProductionPlanifiee();
-        setProductions(data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des données :', error);
-      }
+    useEffect(() => {
+        setStockOrders([
+            { nom: 'Lait', quantite: 100, unite: 'L', date: '2024-01-10' },
+            { nom: 'Fromage', quantite: 50, unite: 'kg', date: '2024-01-09' }
+        ]);
+
+        setRecipeOrders([
+            { nomRecette: 'Yaourt maison', description: 'Yaourt nature fait maison', ingredients: 'Lait, Ferment', quantite: 2, date: '2024-01-08' },
+            { nomRecette: 'Crème dessert', description: 'Crème dessert au chocolat', ingredients: 'Lait, Chocolat, Sucre', quantite: 3, date: '2024-01-07' }
+        ]);
+    }, []);
+
+    const handleSelectChange = (e) => {
+        setSelectedOption(e.target.value);
     };
 
-    fetchProductions();
-  }, []);
+    return (
+        <div className="planification">
+            <h2>Historique des Commandes</h2>
 
-  // Gère les changements dans le formulaire
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewProduction({
-      ...newProduction,
-      [name]: value,
-    });
-  };
-
-  // Ajoute ou modifie une production via l'API
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (newProduction.idproductionplanifiee) {
-        await updateProductionPlanifiee(newProduction);
-        setProductions((prev) =>
-          prev.map((prod) => (prod.idproductionplanifiee === newProduction.idproductionplanifiee ? newProduction : prod))
-        );
-      } else {
-        const addedProduction = await addProductionPlanifiee(newProduction);
-        setProductions((prev) => [...prev, addedProduction]);
-      }
-      setShowForm(false);
-      setNewProduction({
-        produit_fini: '',
-        quantite_planifiee: '',
-        updatedAt : '',
-        status: 'En attente',
-      });
-    } catch (error) {
-      console.error('Erreur lors de la soumission :', error);
-    }
-  };
-
-  // Supprime une production via l'API
-  const handleDelete = async (idproductionplanifiee) => {
-    try {
-      await deleteProductionPlanifiee(idproductionplanifiee);
-      setProductions((prev) => prev.filter((prod) => prod.idproductionplanifiee !== idproductionplanifiee));
-    } catch (error) {
-      console.error('Erreur lors de la suppression :', error);
-    }
-  };
-
-  // Prépare le formulaire pour la modification
-  const handleEdit = (production) => {
-    setNewProduction(production);
-    setShowForm(true);
-  };
-
-  return (
-    <div className="planification">
-      <h2>Planification de la Production</h2>
-
-      {/* Bouton pour afficher ou masquer le formulaire d'ajout */}
-      {/*<button onClick={() => setShowForm(!showForm)}>
-        {showForm ? 'Annuler' : 'Ajouter une Planification'}
-      </button>*/}
-
-      {/* Formulaire d'ajout ou de modification de planification */}
-      {showForm && (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Produit Fini:</label>
-            <input
-              type="text"
-              name="produit_fini"
-              value={newProduction.produit_fini}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Quantité Planifiée:</label>
-            <input
-              type="number"
-              name="quantite_planifiee"
-              value={newProduction.quantite_planifiee}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Date de Production:</label>
-            <input
-              type="date"
-              name="date_production"
-              value={newProduction.updatedAt}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Status:</label>
-            <select
-              name="status"
-              value={newProduction.status}
-              onChange={handleInputChange}
-            >
-              <option value="Terminé">Terminé</option>
-              <option value="En cours">En cours</option>
-              <option value="En attente">En attente</option>
+            <label>Choisir le type d'historique :</label>
+            <select value={selectedOption} onChange={handleSelectChange}>
+                <option value="commande_stocks">Commande de Stocks</option>
+                <option value="commande_recettes">Commande des Recettes</option>
             </select>
-          </div>
-          <button type="submit">{newProduction.id ? 'Modifier' : 'Ajouter'}</button>
-        </form>
-      )}
 
-      {/* Tableau de la planification */}
-      <table>
-        <thead>
-          <tr>
-            <th>Produit Fini</th>
-            <th>Quantité Planifiée</th>
-            <th>Date de Production</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {productions.map((production) => (
-            <tr key={production.idproductionplanifiee}>
-              <td>{production.produit_fini}</td>
-              <td>{production.quantite_planifiee}</td>
-              <td>{new Date(production.updatedAt).toLocaleDateString()}</td>
-              <td>{production.status}</td>
-              <td>
-                <button className="modifier" onClick={() => handleEdit(production)}>
-                  Modifier
-                </button>
-                <button className="supprimer" onClick={() => handleDelete(production.idproductionplanifiee)}>
-                  Supprimer
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+            {selectedOption === 'commande_stocks' ? (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Quantité</th>
+                            <th>Unité</th>
+                            <th>Date de Commande</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {stockOrders.map((order, index) => (
+                            <tr key={index}>
+                                <td>{order.nom}</td>
+                                <td>{order.quantite}</td>
+                                <td>{order.unite}</td>
+                                <td>{order.date}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            ) : (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom de la Recette</th>
+                            <th>Description</th>
+                            <th>Ingrédients</th>
+                            <th>Quantité</th>
+                            <th>Date de Préparation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {recipeOrders.map((recipe, index) => (
+                            <tr key={index}>
+                                <td>{recipe.nomRecette}</td>
+                                <td>{recipe.description}</td>
+                                <td>{recipe.ingredients}</td>
+                                <td>{recipe.quantite}</td>
+                                <td>{recipe.date}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
+        </div>
+    );
 }
 
 export default Planification;
