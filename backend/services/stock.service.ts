@@ -14,6 +14,8 @@ interface RecetteWithStocks {
         idstock: number;
         nom_ingredient: string;
         quantite: number;
+        seuil_minimal: number;
+        unite: number;
         RecetteToStocks: {
             quantite: number;
         };

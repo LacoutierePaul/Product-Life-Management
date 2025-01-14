@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:3000";
 
-export const getRecipeOrders = async () => {
-    const response = await fetch(`${BASE_URL}/production_planifiee`);
+export const getStockOrders = async () => {
+    const response = await fetch(`${BASE_URL}/commandesstocks`);
     if (!response.ok) {
         throw new Error(`Erreur HTTP ! statut : ${response.status}`);
     }
@@ -11,8 +11,8 @@ export const getRecipeOrders = async () => {
     return response.json();
 };
 
-export const addProductionPlanifiee = async (data) => {
-    const response = await fetch(`${BASE_URL}/production_planifiee`, {
+export const addCommandeStocks = async (data) => {
+    const response = await fetch(`${BASE_URL}/commandesstocks`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -25,8 +25,8 @@ export const addProductionPlanifiee = async (data) => {
     return response.json();
 };
 
-export const updateProductionPlanifiee = async (idproduction_planifiee, data) => {
-    const response = await fetch(`${BASE_URL}/production_planifiee/${idproduction_planifiee}`, {
+export const updateCommandeStocks = async (idcommandestocks, data) => {
+    const response = await fetch(`${BASE_URL}/commandesstocks/${idcommandestocks}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -39,15 +39,14 @@ export const updateProductionPlanifiee = async (idproduction_planifiee, data) =>
     return response.json();
 };
 
-export const deleteProductionPlanifiee = async (idproduction_planifiee) => {
-    const response = await fetch(`${BASE_URL}/production_planifiee/${idproduction_planifiee}`, {
+export const deleteCommandeStocks = async (idcommandestocks) => {
+    const response = await fetch(`${BASE_URL}/commandesstocks/${idcommandestocks}`, {
         method: "DELETE",
     });
     if (!response.ok) {
         throw new Error(`Erreur HTTP ! statut : ${response.status}`);
     }
     if (response.status === 204 || response.status === 200 && response.headers.get("Content-Length") === "0") {
-        // Retournez simplement un succès si la réponse est vide
         return;
     }
     return await response.json();

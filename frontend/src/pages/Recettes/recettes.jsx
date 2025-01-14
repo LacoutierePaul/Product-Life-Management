@@ -1,160 +1,190 @@
-import React, { useState, useEffect } from 'react';
-import './recettes.css';
-import { GetRecettes } from '../../api/recettes'
+import React, { useState, useEffect } from "react";
+import "./recettes.css";
+import { GetRecettesWithStocks } from "../../api/recettestostocks.js";
+import { addProductionPlanifiee } from "../../api/production_planifiee.js";
+import { checkStockForOrder } from "../../api/stocks.js";
+
 const Recettes = () => {
-  // Données fictives
-  const [recettes, setRecettes] = useState([
+    const [recettes, setRecettes] = useState([]); // Contient la liste des recettes
+    const [expandedRecipeId, setExpandedRecipeId] = useState(null); // Stocke l'ID de la recette actuellement développé pour les ingrédients
+    const [expandedHistoryId, setExpandedHistoryId] = useState(null); // Stocke l'ID de la recette actuellement développé pour l'historique
+    const [quantiteCommande, setQuantiteCommande] = useState({}); // Stocke la quantité choisie pour chaque recette
+    const [isCommandeInitiated, setIsCommandeInitiated] = useState(null); // Suivi si l'utilisateur a lancé la commande
 
-  ]);
+    const history = [
+        // Historique de recettes (reste inchangé)
+    ];
 
+    // Charger les recettes au montage du composant
+    useEffect(() => {
+        GetRecettesWithStocks()
+            .then((response) => {
+                if (Array.isArray(response)) {
+                    setRecettes(response); // Vérifie que la réponse est un tableau avant de l'utiliser
+                } else {
+                    console.error("La réponse reçue n'est pas un tableau :", response);
+                }
+            })
+            .catch((error) =>
+                console.error("Erreur lors du chargement des recettes:", error)
+            );
+    }, []);
 
-  useEffect(() => {
-    GetRecettes()
-      .then((response) => setRecettes(response))
-      .catch((error) => console.error('Erreur lors du chargement des fournisseurs:', error));
-  }, []);
+    // Fonction pour basculer l'affichage des ingrédients
+    const toggleExpand = (id) => {
+        setExpandedRecipeId(expandedRecipeId === id ? null : id);
+    };
 
-  console.log(Recettes)
-  const [showForm, setShowForm] = useState(false);
-  const [newRecette, setNewRecette] = useState({
-    nom: '',
-    description: '',
-    ingredients: [{ matiere: '', quantite: '', unite: '' }],
-  });
+    // Fonction pour basculer l'affichage de l'historique
+    const toggleExpandHistory = (id) => {
+        setExpandedHistoryId(expandedHistoryId === id ? null : id);
+    };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewRecette({
-      ...newRecette,
-      [name]: value,
-    });
-  };
+    const handleQuantiteChange = (id, quantite) => {
+        setQuantiteCommande({
+            ...quantiteCommande,
+            [id]: quantite,
+        });
+    };
+    
 
-  const handleIngredientChange = (e, index) => {
-    const { name, value } = e.target;
-    const updatedIngredients = [...newRecette.ingredients];
-    updatedIngredients[index][name] = value;
-    setNewRecette({ ...newRecette, ingredients: updatedIngredients });
-  };
+    // Fonction pour mettre à jour la quantité de commande
+    const handlePasserCommande = async (id) => {
+        const quantite = quantiteCommande[id];
+        if (quantite && quantite > 0) {
+            try {
+                // Vérifier les stocks avant de passer la commande
+                const stockCheckResult = await checkStockForOrder({
+                    idrecette: id,
+                    quantity: quantite,
+                });
+    
+                if (!stockCheckResult.success) {
+                    // Afficher une alerte si les stocks sont insuffisants
+                    const insufficientStocks = stockCheckResult.insufficientStocks
+                        .map((item) => `${item.ingredient}: requis ${item.required}, disponible ${item.available}`)
+                        .join("\n");
+                    alert(`Stock insuffisant pour certains ingrédients :\n${insufficientStocks}`);
+                    return; // Arrêter si les stocks sont insuffisants
+                }
+    
+                // Si les stocks sont suffisants, passer la commande
+                await addProductionPlanifiee({
+                    idrecette: id,
+                    status: "Planifiée",
+                    quantite_planifiee: quantite,
+                });
+    
+                alert("Commande passée avec succès !");
+                setIsCommandeInitiated(null); // Réinitialiser après la commande
+            } catch (error) {
+                console.error("Erreur lors de la vérification des stocks ou de la commande :", error);
+                alert("Une erreur est survenue. Veuillez réessayer.");
+            }
+        } else {
+            alert("Veuillez choisir une quantité valide.");
+        }
+    };
+    
 
-  const handleAddIngredient = () => {
-    setNewRecette({
-      ...newRecette,
-      ingredients: [...newRecette.ingredients, { matiere: '', quantite: '', unite: '' }],
-    });
-  };
+    return (
+        <div className="recettes">
+            <h2>Liste des Recettes</h2>
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setRecettes([...recettes, { ...newRecette, id: Date.now() }]);
-    setShowForm(false);
-    setNewRecette({ nom: '', description: '', ingredients: [{ matiere: '', quantite: '', unite: '' }] });
-  };
+            <div className="recette-list">
+                {recettes.map((recette) => (
+                    <div key={recette.idrecette} className="recette-item">
+                        <div className="recette-header">
+                            <h3>{recette.nom_recette}</h3>
+                            <p>{recette.description}</p>
+                            <button onClick={() => toggleExpand(recette.idrecette)}>
+                                {expandedRecipeId === recette.idrecette
+                                    ? "Masquer les ingrédients"
+                                    : "Voir les ingrédients"}
+                            </button>
+                            <button onClick={() => toggleExpandHistory(recette.idrecette)}>
+                                {expandedHistoryId === recette.idrecette
+                                    ? "Masquer l'historique"
+                                    : "Voir l'historique"}
+                            </button>
+                        </div>
 
-  const handleDelete = (id) => {
-    setRecettes(recettes.filter((recette) => recette.id !== id));
-  };
+                        {/* Détails des ingrédients */}
+                        {expandedRecipeId === recette.idrecette && (
+                            <div className="recette-details">
+                                <h4>Ingrédients :</h4>
+                                {Array.isArray(recette.Stocks) && recette.Stocks.length > 0 ? (
+                                    <ul>
+                                        {recette.Stocks.map((stock) => (
+                                            <li key={stock.idstock}>
+                                                {stock.nom_ingredient || "Nom inconnu"} -{" "}
+                                                {stock.RecetteToStocks?.quantite || 0} {stock.unite || "unité inconnue"}{" "}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>Aucun ingrédient trouvé pour cette recette.</p>
+                                )}
+                            </div>
+                        )}
 
-  return (
-    <div className="recettes">
-      <h2>Liste des Recettes</h2>
+                        {/* Historique */}
+                        {expandedHistoryId === recette.idrecette && (
+                            <div className="recette-history">
+                                <h4>Historique :</h4>
+                                {history.some((h) => h.idrecette === recette.idrecette) ? (
+                                    history
+                                        .filter((h) => h.idrecette === recette.idrecette)
+                                        .map((h) => (
+                                            <div key={h.idrecette}>
+                                                {h.historique.map((entry, index) => (
+                                                    <div key={index}>
+                                                        <p>Date: {entry.date}</p>
+                                                        <ul>
+                                                            {entry.ingredients.map((ingredient, idx) => (
+                                                                <li key={idx}>
+                                                                    {ingredient.nom} - {ingredient.quantite}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ))
+                                ) : (
+                                    <p>Pas d'historique disponible pour cette recette.</p>
+                                )}
+                            </div>
+                        )}
 
-      <button onClick={() => setShowForm(!showForm)}>{showForm ? 'Annuler' : 'Ajouter une Recette'}</button>
-
-      {showForm && (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Nom:</label>
-            <input
-              type="text"
-              name="nom"
-              value={newRecette.nom}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Description:</label>
-            <input
-              type="text"
-              name="description"
-              value={newRecette.description}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <h3>Ingrédients:</h3>
-            {newRecette.ingredients.map((ingredient, index) => (
-              <div key={index}>
-                <input
-                  type="text"
-                  name="matiere"
-                  value={ingredient.matiere}
-                  onChange={(e) => handleIngredientChange(e, index)}
-                  placeholder="Matière"
-                  required
-                />
-                <input
-                  type="number"
-                  name="quantite"
-                  value={ingredient.quantite}
-                  onChange={(e) => handleIngredientChange(e, index)}
-                  placeholder="Quantité"
-                  required
-                />
-                <input
-                  type="text"
-                  name="unite"
-                  value={ingredient.unite}
-                  onChange={(e) => handleIngredientChange(e, index)}
-                  placeholder="Unité"
-                  required
-                />
-              </div>
-            ))}
-            <button type="button" onClick={handleAddIngredient}>
-              Ajouter un ingrédient
-            </button>
-          </div>
-          <button type="submit">{newRecette.id ? 'Modifier' : 'Ajouter'}</button>
-        </form>
-      )}
-
-      <table>
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Description</th>
-            <th>Ingrédients</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {recettes.map((recette) => (
-            <tr key={recette.id}>
-              <td>{recette.nom}</td>
-              <td>{recette.description}</td>
-              <td>
-                <ul>
-                  {(recette.ingredients || []).map((ingredient, index) => (
-                    <li key={index}>
-                      {ingredient.matiere} - {ingredient.quantite} {ingredient.unite}
-                    </li>
-                  ))}
-                </ul>
-              </td>
-              <td>
-                <button className="modifier" onClick={() => handleDelete(recette.id)}>
-                  Supprimer
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+                        {/* Commande de production */}
+                        <div className="commande">
+                            {isCommandeInitiated === recette.idrecette ? (
+                                <>
+                                    <label>Quantité :</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={quantiteCommande[recette.idrecette] || 0}
+                                        onChange={(e) =>
+                                            handleQuantiteChange(recette.idrecette, parseInt(e.target.value, 10))
+                                        }
+                                    />
+                                    <button onClick={() => handlePasserCommande(recette.idrecette)}>
+                                        Valider la commande
+                                    </button>
+                                </>
+                            ) : (
+                                <button onClick={() => setIsCommandeInitiated(recette.idrecette)}>
+                                    Passer la commande
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 };
 
 export default Recettes;
