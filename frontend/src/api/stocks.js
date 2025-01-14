@@ -65,3 +65,17 @@ export const removeQuantity = async (idstock, quantity) => {
     }
     return response.json();
 };
+
+export const checkStockForOrder = async (data) => {
+    const response = await fetch(`${BASE_URL}/stocks/check-stock`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+        throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+    }
+    return response.json();
+};
