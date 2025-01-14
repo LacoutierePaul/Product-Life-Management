@@ -1,4 +1,4 @@
-idcommande,idfournisseur,idstock,quantite_commande,date_commande,date_livraison_estimee,statut_commande,createdAt,updatedAt
+idcommande,idfournisseur,idstock,quantite_commande,date_commande,date_livraison,statut_commande,createdAt,updatedAt
 1,1,1,100,2025-01-01 10:00:00,2025-01-07 10:00:00,En attente,2025-01-01 10:00:00,2025-01-01 10:00:00
 2,1,2,200,2025-01-02 11:00:00,2025-01-08 11:00:00,En attente,2025-01-02 11:00:00,2025-01-02 11:00:00
 3,2,9,50,2025-01-03 12:00:00,2025-01-09 12:00:00,En attente,2025-01-03 12:00:00,2025-01-03 12:00:00
