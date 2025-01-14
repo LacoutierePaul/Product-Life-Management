@@ -1,48 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./recettes.css";
 import { GetRecettesWithStocks } from "../../api/recettestostocks.js";
+import { addProductionPlanifiee } from "../../api/production_planifiee.js";
+import { checkStockForOrder } from "../../api/stocks.js";
 
 const Recettes = () => {
     const [recettes, setRecettes] = useState([]); // Contient la liste des recettes
     const [expandedRecipeId, setExpandedRecipeId] = useState(null); // Stocke l'ID de la recette actuellement développé pour les ingrédients
     const [expandedHistoryId, setExpandedHistoryId] = useState(null); // Stocke l'ID de la recette actuellement développé pour l'historique
+    const [quantiteCommande, setQuantiteCommande] = useState({}); // Stocke la quantité choisie pour chaque recette
+    const [isCommandeInitiated, setIsCommandeInitiated] = useState(null); // Suivi si l'utilisateur a lancé la commande
 
     const history = [
-        {
-            idrecette: 1,
-            nom_recette: "Yaourt Nature Maison",
-            historique: [
-                {
-                    date: "2023-10-15",
-                    ingredients: [
-                        { nom: "Lait Cru", quantite: "6L" },
-                        { nom: "Ferments Lactiques", quantite: "1kg" },
-                    ],
-                },
-            ],
-        },
-        {
-            idrecette: 2,
-            nom_recette: "Danette Chocolat",
-            historique: [
-                {
-                    date: "2023-01-02",
-                    ingredients: [
-                        { nom: "Ferments Lactiques", quantite: "1L" },
-                        { nom: "Chocolat au lait", quantite: "3kg" },
-                        { nom: "Sucre", quantite: "1,5kg" },
-                    ],
-                },
-                {
-                    date: "2023-01-03",
-                    ingredients: [
-                        { nom: "Ferments Lactiques", quantite: "1L" },
-                        { nom: "Chocolat noir", quantite: "3kg" },
-                        { nom: "Sucre", quantite: "2kg" },
-                    ],
-                },
-            ],
-        },
+        // Historique de recettes (reste inchangé)
     ];
 
     // Charger les recettes au montage du composant
@@ -69,6 +39,53 @@ const Recettes = () => {
     const toggleExpandHistory = (id) => {
         setExpandedHistoryId(expandedHistoryId === id ? null : id);
     };
+
+    const handleQuantiteChange = (id, quantite) => {
+        setQuantiteCommande({
+            ...quantiteCommande,
+            [id]: quantite,
+        });
+    };
+    
+
+    // Fonction pour mettre à jour la quantité de commande
+    const handlePasserCommande = async (id) => {
+        const quantite = quantiteCommande[id];
+        if (quantite && quantite > 0) {
+            try {
+                // Vérifier les stocks avant de passer la commande
+                const stockCheckResult = await checkStockForOrder({
+                    idrecette: id,
+                    quantity: quantite,
+                });
+    
+                if (!stockCheckResult.success) {
+                    // Afficher une alerte si les stocks sont insuffisants
+                    const insufficientStocks = stockCheckResult.insufficientStocks
+                        .map((item) => `${item.ingredient}: requis ${item.required}, disponible ${item.available}`)
+                        .join("\n");
+                    alert(`Stock insuffisant pour certains ingrédients :\n${insufficientStocks}`);
+                    return; // Arrêter si les stocks sont insuffisants
+                }
+    
+                // Si les stocks sont suffisants, passer la commande
+                await addProductionPlanifiee({
+                    idrecette: id,
+                    status: "Planifiée",
+                    quantite_planifiee: quantite,
+                });
+    
+                alert("Commande passée avec succès !");
+                setIsCommandeInitiated(null); // Réinitialiser après la commande
+            } catch (error) {
+                console.error("Erreur lors de la vérification des stocks ou de la commande :", error);
+                alert("Une erreur est survenue. Veuillez réessayer.");
+            }
+        } else {
+            alert("Veuillez choisir une quantité valide.");
+        }
+    };
+    
 
     return (
         <div className="recettes">
@@ -139,6 +156,30 @@ const Recettes = () => {
                                 )}
                             </div>
                         )}
+
+                        {/* Commande de production */}
+                        <div className="commande">
+                            {isCommandeInitiated === recette.idrecette ? (
+                                <>
+                                    <label>Quantité :</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={quantiteCommande[recette.idrecette] || 0}
+                                        onChange={(e) =>
+                                            handleQuantiteChange(recette.idrecette, parseInt(e.target.value, 10))
+                                        }
+                                    />
+                                    <button onClick={() => handlePasserCommande(recette.idrecette)}>
+                                        Valider la commande
+                                    </button>
+                                </>
+                            ) : (
+                                <button onClick={() => setIsCommandeInitiated(recette.idrecette)}>
+                                    Passer la commande
+                                </button>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>

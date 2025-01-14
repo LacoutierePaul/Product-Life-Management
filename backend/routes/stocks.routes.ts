@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { Stock } from "../models/stocks.model";
+const { checkStockForOrder } = require('../services/stock.service');
 
 const router = express.Router();
 
@@ -107,5 +108,14 @@ router.get("/remove/:id/:quantity", async (req: Request, res: Response) => {
     }
 });
 
-
+router.post('/check-stock', async (req : Request, res : Response) => {
+    try {
+        const { idrecette, quantity } = req.body; // Récupère les données du frontend
+        const result = await checkStockForOrder({ idrecette, quantity });
+        res.status(200).json(result); // Renvoie le résultat
+    } catch (error) {
+        console.error('Erreur dans /check-stock:', error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la vérification des stocks.' });
+    }
+});
 export default router;
