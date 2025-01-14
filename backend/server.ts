@@ -10,6 +10,7 @@ import productionplanifieeRoutes from "./routes/productionplanifiee.routes";
 import defineRelations from "./models/relations.model";
 import recettestostocksRoutes from "./routes/recettestostocks.routes";
 import commande_ingredientsRoutes from "./routes/commande_ingredients.routes";
+import fournisseurstostocksRoutes from "./routes/fournisseurstostocks.routes";
 
 const app = express();
 const PORT = 3000;
@@ -25,6 +26,7 @@ app.use("/mouvementsstocks", mouvementsstocksRoutes);
 app.use("/production_planifiee", productionplanifieeRoutes);
 app.use("/recettestostocks", recettestostocksRoutes)
 app.use("/commandesstocks", commande_ingredientsRoutes)
+app.use("/fournisseurstostocks", fournisseurstostocksRoutes)
 
 // Test API de base
 app.get("/", (req: Request, res: Response) => {
