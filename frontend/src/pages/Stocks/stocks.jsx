@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './stocks.css';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { getStocks } from '../../api/stocks';
+import { getStocks, addQuantity } from '../../api/stocks';
 import { GetFournisseursToStockById } from "../../api/fournisseurstostocks.js";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -34,7 +34,6 @@ function Stocks() {
     GetFournisseursToStockById(stockId)
         .then((data) => {
           setSuppliers(data.Fournisseurs || []); // Met à jour la liste des fournisseurs pour ce stock
-          console.log("Get Fournisseurs To Stocks :", data)
         })
         .catch((error) => {
           console.error('Erreur lors de la récupération des fournisseurs :', error);
@@ -51,7 +50,6 @@ function Stocks() {
     } else {
       // Sinon, met à jour l'ID du stock et charge les fournisseurs
       setSelectedStockId(stockId);
-      console.log("StockId", stockId)
       loadSuppliersForStock(stockId);
     }
   };
@@ -67,6 +65,23 @@ function Stocks() {
     e.preventDefault();
     const stock = stocks.find((s) => s.idstock === selectedStockId);
     console.log('Nouvelle commande:', { ...orderData, stock });
+    // Add quantity in stocks
+    addQuantity(stock.idstock, orderData.quantity)
+        .then(() => {
+          // Mettre à jour la quantité localement
+          setStocks((prevStocks) =>
+              prevStocks.map((s) =>
+                  s.idstock === stock.idstock
+                      ? { ...s, quantite: s.quantite + parseInt(orderData.quantity) }
+                      : s
+              )
+          );
+          alert('Commande envoyée avec succès !');
+        })
+        .catch((error) => {
+          console.error('Erreur lors de l ajout de quantité de stocks :', error);
+          alert('Erreur lors de la commande. Veuillez réessayer.');
+        });
     alert('Commande envoyée avec succès !');
     setSelectedStockId(null);
     setOrderData({ quantity: '', supplier: '' });
