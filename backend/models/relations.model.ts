@@ -6,6 +6,7 @@ import { RecetteToStocks } from "./recettetostock.model";
 import { MouvementStock } from "./mouvementstocks.model";
 import { Fournisseur } from "./fournisseur.model";
 import { FournisseursToStocks } from "./fournisseurstostocks.model";
+import {CommandeIngredients} from "./commandeingredients.model";
 
 export default function defineRelations() {
 
@@ -24,6 +25,14 @@ export default function defineRelations() {
     });
     ProductionPlanifiee.hasMany(ControleQualite, {
         foreignKey: "idproductionplanifiee",
+    });
+
+    CommandeIngredients.belongsTo(Stock, {
+        foreignKey: "idstock",
+        onDelete: "CASCADE",
+    });
+    Stock.hasMany(CommandeIngredients, {
+        foreignKey: "idstock",
     });
 
 // **2. RecetteToStocks**

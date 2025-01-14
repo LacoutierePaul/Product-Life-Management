@@ -1,15 +1,26 @@
 import express, { Request, Response } from "express";
 import { CommandeIngredients } from "../models/commandeingredients.model";
+import {ProductionPlanifiee} from "../models/productionplanifiee.model";
+import {Stock} from "../models/stocks.model";
 
 const router = express.Router();
 
 // Obtenir toutes les commandes d'ingrédients
 router.get("/", async (req: Request, res: Response) => {
     try {
-        const commandeIngredients = await CommandeIngredients.findAll();
-        res.json(commandeIngredients);
-    } catch (err) {
-        res.status(500).json({ error: "Unable to fetch commande Ingredients" });
+        const commandesIngredient = await CommandeIngredients.findAll({
+            attributes: ["idcommande", "idstock", "idfournisseur", "quantite_commande", "statut_commande", "createdAt"],
+            include: [
+                {
+                    model: Stock,
+                    attributes: ["nom_ingredient", "unite", "quantite", "seuil_minimal"],
+                },
+            ],
+        });
+        res.json(commandesIngredient);
+    } catch (error) {
+        console.error("Erreur dans la route /commandesstocks :", error);
+        res.status(500).json({ error: "Unable to fetch commandesIngredient" });
     }
 });
 
