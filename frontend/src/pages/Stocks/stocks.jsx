@@ -3,7 +3,7 @@ import './stocks.css';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { getStocks } from '../../api/stocks';
-import { GetFournisseursToStocks } from "../../api/fournisseurstostocks.js";
+import { GetFournisseursToStockById } from "../../api/fournisseurstostocks.js";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -30,12 +30,15 @@ function Stocks() {
 
   // Charger les fournisseurs pour un stock spécifique
   const loadSuppliersForStock = (stockId) => {
-    GetFournisseursToStocks(stockId)
+    console.log("StockId dans la route:", stockId)
+    GetFournisseursToStockById(stockId)
         .then((data) => {
-          setSuppliers(data); // Met à jour la liste des fournisseurs pour ce stock
+          setSuppliers(data.Fournisseurs || []); // Met à jour la liste des fournisseurs pour ce stock
+          console.log("Get Fournisseurs To Stocks :", data)
         })
         .catch((error) => {
           console.error('Erreur lors de la récupération des fournisseurs :', error);
+          setSuppliers([]); // Vide la liste en cas d'erreur
         });
   };
 
@@ -44,9 +47,11 @@ function Stocks() {
     if (selectedStockId === stockId) {
       // Si le même stock est sélectionné, désactive le formulaire
       setSelectedStockId(null);
+      setSuppliers([]); // Vide les fournisseurs
     } else {
       // Sinon, met à jour l'ID du stock et charge les fournisseurs
       setSelectedStockId(stockId);
+      console.log("StockId", stockId)
       loadSuppliersForStock(stockId);
     }
   };

@@ -1,36 +1,38 @@
 import express, { Request, Response } from "express";
 import { Fournisseur } from "../models/fournisseur.model";
 import { Stock } from "../models/stocks.model"
-import { FournisseursToStocks } from "../models/fournisseurstostocks.model";
+import {Recette} from "../models/recettes.model";
 
 const router = express.Router();
 
-// Route pour obtenir toutes les recettes avec leurs ingrédients
+// Route pour obtenir tous les stocks avec leur fournisseurs possibles
 router.get("/", async (req: Request, res: Response) => {
     try {
-        const fournisseurs = await Fournisseur.findAll({
+        const stocks = await Stock.findAll({
             include: [
                 {
-                    model: Stock,
+                    model: Fournisseur,
                     through: { attributes: [] },
                 },
             ],
         });
-        res.json(fournisseurs);
+        res.json(stocks);
     } catch (error) {
         console.error("Erreur dans la route :", error);
-        res.status(500).json({ error: "Unable to fetch recipes" });
+        res.status(500).json({ error: "Unable to fetch stocks" });
     }
 });
 
-// Route pour obtenir un unique fournisseur avec ses stocks proposés
+// Route pour obtenir un unique stocks avec tous ses fournisseurs proposés
 router.get("/:id", async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const fournisseursWithStocks = await Fournisseur.findByPk(id, {
+        const stocksWithFournisseur = await Stock.findByPk(id, {
+            attributes: ["idstock", "nom_ingredient", "quantite", "seuil_minimal", "unite"],
             include: [
                 {
-                    model: Stock,
+                    model: Fournisseur,
+                    attributes: ["idfournisseur", "nom_fournisseur", "contact", "evaluation", "commentaire"],
                     through: {
                         attributes: [],
                     },
@@ -38,14 +40,14 @@ router.get("/:id", async (req: Request, res: Response) => {
             ],
         });
 
-        if (fournisseursWithStocks) {
-            res.json(fournisseursWithStocks);
+        if (stocksWithFournisseur) {
+            res.json(stocksWithFournisseur);
         } else {
-            res.status(404).json({ error: "Recette not found" });
+            res.status(404).json({ error: "Stocks not found" });
         }
     } catch (error) {
-        console.error("Erreur dans la route /withStocks :", error);
-        res.status(500).json({ error: "Unable to fetch recipes" });
+        console.error("Erreur dans la route /fournisseurstostocks :", error);
+        res.status(500).json({ error: "Unable to fetch stocks" });
     }
 });
 
