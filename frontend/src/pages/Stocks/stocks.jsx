@@ -4,6 +4,7 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { getStocks, addQuantity } from '../../api/stocks';
 import { GetFournisseursToStockById } from "../../api/fournisseurstostocks.js";
+import { addCommandeStocks } from "../../api/commandes_stocks.js";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -64,6 +65,17 @@ function Stocks() {
   const handleSubmitOrder = (e) => {
     e.preventDefault();
     const stock = stocks.find((s) => s.idstock === selectedStockId);
+
+    const datahistorique = {
+      idstock: stock.idstock,
+      idfournisseur: parseInt(orderData.supplier, 10),
+      quantite_commande: parseInt(orderData.quantity, 10),
+      date_livraison: new Date().toISOString(), // Par défaut, maintenant
+      date_commande: new Date().toISOString(), // Maintenant
+      statut_commande: "En attente", // Statut initial
+    };
+    console.log("Body pour l'historique :", datahistorique);
+
     console.log('Nouvelle commande:', { ...orderData, stock });
     // Add quantity in stocks
     addQuantity(stock.idstock, orderData.quantity)
@@ -76,12 +88,20 @@ function Stocks() {
                       : s
               )
           );
-          alert('Commande envoyée avec succès !');
         })
         .catch((error) => {
           console.error('Erreur lors de l ajout de quantité de stocks :', error);
           alert('Erreur lors de la commande. Veuillez réessayer.');
         });
+
+    // Ajout de la commande à l'historique
+    addCommandeStocks(datahistorique)
+        .then()
+        .catch((error) => {
+          console.error('Erreur lors de l ajout de quantité de stocks :', error);
+          alert('Erreur lors de l ajout a l historique. Veuillez réessayer.');
+        });
+
     alert('Commande envoyée avec succès !');
     setSelectedStockId(null);
     setOrderData({ quantity: '', supplier: '' });

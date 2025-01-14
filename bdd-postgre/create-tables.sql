@@ -95,7 +95,7 @@ CREATE TABLE commande_ingredients (
     idstock SERIAL NOT NULL,
     quantite_commande INT NOT NULL,
     date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    date_livraison_estimee TIMESTAMP,
+    date_livraison TIMESTAMP,
     statut_commande VARCHAR(20) DEFAULT 'En attente',
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
