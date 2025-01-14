@@ -122,6 +122,7 @@ function Stocks() {
             <th>Quantité</th>
             <th>Seuil Minimal</th>
             <th>Unité</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -131,6 +132,10 @@ function Stocks() {
               <td>{stock.quantite}</td>
               <td>{stock.seuil_minimal}</td>
               <td>{stock.unite}</td>
+              <td>
+                <button onClick={() => alert('Modifier : ' + stock.nom_ingredient)}>Modifier</button>
+                <button onClick={() => alert('Supprimer : ' + stock.nom_ingredient)}>Supprimer</button>
+              </td>
             </tr>
           ))}
         </tbody>
