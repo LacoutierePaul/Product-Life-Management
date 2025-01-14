@@ -1,15 +1,26 @@
 import express, { Request, Response } from "express";
 import { ProductionPlanifiee } from "../models/productionplanifiee.model";
+import {Recette} from "../models/recettes.model";
+import {Stock} from "../models/stocks.model";
 
 const router = express.Router();
 
 // Obtenir toutes les productions planifiée
 router.get("/", async (req: Request, res: Response) => {
     try {
-        const productionPlanifiees = await ProductionPlanifiee.findAll();
-        res.json(productionPlanifiees);
-    } catch (err) {
-        res.status(500).json({ error: "Unable to fetch productionPlanifiees" });
+        const commandesRecette = await ProductionPlanifiee.findAll({
+            attributes: ["idproductionplanifiee", "quantite_planifiee", "status", "createdAt"],
+            include: [
+                {
+                    model: Recette,
+                    attributes: ["idrecette", "nom_recette", "description"],
+                },
+            ],
+        });
+        res.json(commandesRecette);
+    } catch (error) {
+        console.error("Erreur dans la route /production_planifiee :", error);
+        res.status(500).json({ error: "Unable to fetch commandesrecettes" });
     }
 });
 

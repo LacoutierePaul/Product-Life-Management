@@ -8,7 +8,7 @@ interface CommandeIngredientsInterface {
     quantite_commande: number;
     date_livraison: Date;
     date_commande: Date;
-    status_commande: string;
+    statut_commande: string;
 }
 
 export class CommandeIngredients extends Model <CommandeIngredientsInterface> {
@@ -18,7 +18,7 @@ export class CommandeIngredients extends Model <CommandeIngredientsInterface> {
     public quantite_commande!: number;
     public date_livraison!: Date;
     public date_commande!: Date;
-    public status_commande!: string;
+    public statut_commande!: string;
 }
 
 
@@ -58,7 +58,7 @@ CommandeIngredients.init(
             type: DataTypes.DATE,
             allowNull: false,
         },
-        status_commande: {
+        statut_commande: {
             type: DataTypes.STRING(50),
             allowNull: false,
         },

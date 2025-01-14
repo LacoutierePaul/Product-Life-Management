@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:3000";
 
-export const getCommandeStocks = async () => {
+export const getStockOrders = async () => {
     const response = await fetch(`${BASE_URL}/commandesstocks`);
     if (!response.ok) {
         throw new Error(`Erreur HTTP ! statut : ${response.status}`);
