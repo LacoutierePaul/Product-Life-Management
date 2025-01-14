@@ -102,3 +102,57 @@
     grid-template-columns: 1fr;
   }
 }
+
+.recette-history {
+  padding: 15px;
+  background-color: #fff3e0; /* Couleur douce pour différencier l'historique */
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 8px 8px; /* S'harmonise avec le reste de la carte */
+}
+
+.recette-history h4 {
+  margin-top: 0;
+  color: #ff9800; /* Couleur chaude pour l'historique */
+}
+
+.recette-history div {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #ffe0b2;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recette-history p {
+  margin: 0 0 10px;
+  color: #333;
+  font-size: 14px;
+}
+
+.recette-history ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recette-history li {
+  padding: 6px 12px;
+  margin-bottom: 6px;
+  background: #ffcc80;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+.recette-history li:nth-child(even) {
+  background: #ffb74d;
+}
+
+.recette-header button:last-of-type {
+  margin-left: 10px;
+  background-color: #ff9800;
+}
+
+.recette-header button:last-of-type:hover {
+  background-color: #fb8c00;
+}
+
