@@ -7,7 +7,11 @@ const router = express.Router();
 // Obtenir tous les stocks
 router.get("/", async (req: Request, res: Response) => {
     try {
-        const stocks = await Stock.findAll();
+        const stocks = await Stock.findAll({
+            order: [
+                ['nom_ingredient', 'ASC'],
+            ],
+        });
         res.json(stocks);
     } catch (err) {
         res.status(500).json({ error: "Unable to fetch stocks" });

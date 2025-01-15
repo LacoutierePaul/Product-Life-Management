@@ -6,7 +6,11 @@ const router = express.Router();
 // Obtenir toutes les controles qualites
 router.get("/", async (req: Request, res: Response) => {
     try {
-        const controleQualites = await ControleQualite.findAll();
+        const controleQualites = await ControleQualite.findAll({
+            order: [
+                ['updatedAt', 'DESC'],
+            ],
+        });
         res.json(controleQualites);
     } catch (err) {
         res.status(500).json({ error: "Unable to fetch controleQualites" });
