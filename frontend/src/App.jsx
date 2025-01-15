@@ -5,6 +5,7 @@ import Qualite from './pages/Qualite/qualite';
 import Stocks from './pages/Stocks/stocks';
 import Header from './components/header/header';
 import Recettes from './pages/Recettes/recettes';
+import LoginPage from './pages/LoginPage/loginPage.jsx'; // Import de la page de login
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Header />
       <div style={{ padding: '20px' }}>
         <Routes>
+        <Route path="/" element={<LoginPage />} />
           <Route path="/fournisseurs" element={<Fournisseurs />} />
           <Route path="/planification" element={<Planification />} />
           <Route path="/qualite" element={<Qualite />} />
