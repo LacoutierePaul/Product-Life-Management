@@ -12,6 +12,7 @@ CREATE TABLE users (
     delete_role BOOLEAN,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_users PRIMARY KEY (iduser)
 );
 
 CREATE TABLE stocks (

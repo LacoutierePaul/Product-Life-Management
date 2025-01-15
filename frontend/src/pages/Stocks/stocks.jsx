@@ -7,6 +7,9 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { getStocks, addQuantity, deleteStock, updateStock } from '../../api/stocks';
 import { GetFournisseursToStockById } from "../../api/fournisseurstostocks.js";
 import { addCommandeStocks } from "../../api/commandes_stocks.js";
+import { GetUsers } from "../../api/user.js";
+
+import { useUser } from "../../context/user.context.jsx";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,annotationPlugin);
 
@@ -18,12 +21,32 @@ function Stocks() {
   const [orderData, setOrderData] = useState({ quantity: '', supplier: '' });
   const [editData, setEditData] = useState({ nom_ingredient: '', quantite: '', seuil_minimal: '', unite: '' });
 
+  const { user } = useUser(); // Récupérer les rôles utilisateurs depuis le contexte
+
   // Charger les stocks
   useEffect(() => {
     getStocks()
       .then((data) => setStocks(data))
       .catch((error) => console.error('Erreur lors de la récupération des stocks :', error));
   }, []);
+
+  const hasPermission = (user, action) => {
+    if (!user) return false;
+    const { admin_role, readonly_role, edit_role, delete_role } = user;
+
+    switch (action) {
+      case 'edit':
+        return admin_role || edit_role || delete_role;
+      case 'delete':
+        return admin_role || delete_role;
+      case 'order':
+        return admin_role || edit_role || delete_role;
+      case 'readonly':
+        return readonly_role;
+      default:
+        return false;
+    }
+  };
 
   // Charger les fournisseurs pour un stock spécifique
   const loadSuppliersForStock = (stockId) => {
@@ -119,9 +142,6 @@ function Stocks() {
     }
   };
 
-
-
-
   const chartData = {
     labels: stocks.map((stock) => stock.nom_ingredient),
     datasets: [
@@ -199,14 +219,16 @@ function Stocks() {
                 <td>{stock.seuil_minimal}</td>
                 <td>{stock.unite}</td>
                 <td>
-                  <button className="btn-modifier"onClick={() => handleEditStock(stock)}>Modifier</button>
-                  <button className="btn-supprimer" onClick={() => handleDeleteStock(stock.idstock)}>Supprimer</button>
-                  <button onClick={() => handleStockSelection(stock.idstock)}>
-                    {selectedStockId === stock.idstock ? 'Annuler' : 'Passer une commande'}
-                  </button>
+                  {hasPermission('edit') && <button onClick={() => handleEditStock(stock)}>Modifier</button>}
+                  {hasPermission('delete') && <button onClick={() => handleDeleteStock(stock.idstock)}>Supprimer</button>}
+                  {hasPermission('order') && (
+                      <button onClick={() => handleStockSelection(stock.idstock)}>
+                        {selectedStockId === stock.idstock ? 'Annuler' : 'Passer une commande'}
+                      </button>
+                  )}
                 </td>
               </tr>
-              {editingStockId === stock.idstock && (
+              {editingStockId === stock.idstock && hasPermission('edit') && (
                 <tr>
                   <td colSpan="5">
                     <form onSubmit={handleSubmitEdit}>
@@ -255,7 +277,7 @@ function Stocks() {
                   </td>
                 </tr>
               )}
-              {selectedStockId === stock.idstock && (
+              {selectedStockId === stock.idstock && hasPermission('order') && (
                 <tr>
                   <td colSpan="5">
                     <form onSubmit={handleSubmitOrder}>
