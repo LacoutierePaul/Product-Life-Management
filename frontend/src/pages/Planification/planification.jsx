@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './planification.css';
-import { getRecipeOrders } from "../../api/production_planifiee.js";
-import { getStockOrders } from "../../api/commandes_stocks.js";
+import { getRecipeOrders, updateProductionPlanifiee } from "../../api/production_planifiee.js";
+import { getStockOrders,updateCommandeStocks } from "../../api/commandes_stocks.js";
 
 function Planification() {
     const [selectedOption, setSelectedOption] = useState('commande_stocks');
@@ -19,6 +19,32 @@ function Planification() {
 
     const handleSelectChange = (e) => {
         setSelectedOption(e.target.value);
+    };
+
+    const handleStatusChange = (id, newStatus, type) => {
+        if (type === 'recette') {
+            // Update status for recipe orders
+            updateProductionPlanifiee(id, {status:newStatus})
+                .then(() => {
+                    setRecipeOrders((prevOrders) =>
+                        prevOrders.map((order) =>
+                            order.idproductionplanifiee === id ? { ...order, status: newStatus } : order
+                        )
+                    );l
+                })
+                .catch((error) => console.error('Erreur lors de la mise à jour du statut:', error));
+        } else if (type === 'stock') {
+            // Update status for stock orders
+            updateCommandeStocks(id, {statut_commande :newStatus})
+                .then(() => {
+                    setStockOrders((prevOrders) =>
+                        prevOrders.map((order) =>
+                            order.idcommande === id ? { ...order, statut_commande: newStatus } : order
+                        )
+                    );
+                })
+                .catch((error) => console.error('Erreur lors de la mise à jour du statut:', error));
+        }
     };
 
     return (
@@ -50,7 +76,16 @@ function Planification() {
                                 <td>{order.idfournisseur}</td>
                                 <td>{order.quantite_commande}</td>
                                 <td>{order.Stock.unite}</td>
-                                <td>{order.statut_commande}</td>
+                                <td>
+                                    <select
+                                        value={order.statut_commande}
+                                        onChange={(e) => handleStatusChange(order.idcommande, e.target.value, 'stock')}
+                                    >
+                                        <option value="en attente">En attente</option>
+                                        <option value="en cours">En cours</option>
+                                        <option value="Terminé">Terminé</option>
+                                    </select>
+                                </td>
                                 <td>{order.createdAt}</td>
                             </tr>
                         ))}
@@ -73,7 +108,16 @@ function Planification() {
                                 <td>{recipe.Recette.nom_recette}</td>
                                 <td>{recipe.Recette.description}</td>
                                 <td>{recipe.quantite_planifiee}</td>
-                                <td>{recipe.status}</td>
+                                <td>
+                                    <select
+                                        value={recipe.status}
+                                        onChange={(e) => handleStatusChange(recipe.idproductionplanifiee, e.target.value, 'recette')}
+                                    >
+                                        <option value="en attente">En attente</option>
+                                        <option value="en cours">En cours</option>
+                                        <option value="Terminé">Terminé</option>
+                                    </select>
+                                </td>
                                 <td>{recipe.createdAt}</td>
                             </tr>
                         ))}

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./recettes.css";
 import { GetRecettesWithStocks } from "../../api/recettestostocks.js";
 import { addProductionPlanifiee } from "../../api/production_planifiee.js";
-import { checkStockForOrder, updateStockForOrder} from "../../api/stocks.js";
+import { checkStockForOrder, updateStockForOrder } from "../../api/stocks.js";
+import { DeleteRecette } from "../../api/recettes.js";
 
 const Recettes = () => {
     const [recettes, setRecettes] = useState([]); // Contient la liste des recettes
@@ -12,7 +13,41 @@ const Recettes = () => {
     const [isCommandeInitiated, setIsCommandeInitiated] = useState(null); // Suivi si l'utilisateur a lancé la commande
 
     const history = [
-        // Historique de recettes (reste inchangé)
+        {
+            idrecette: 1,
+            nom_recette: "Yaourt Nature Maison",
+            historique: [
+                {
+                    date: "2023-10-15",
+                    ingredients: [
+                        { nom: "Lait Cru", quantite: "6L" },
+                        { nom: "Ferments Lactiques", quantite: "1kg" },
+                    ],
+                },
+            ],
+        },
+        {
+            idrecette: 2,
+            nom_recette: "Danette Chocolat",
+            historique: [
+                {
+                    date: "2023-01-02",
+                    ingredients: [
+                        { nom: "Ferments Lactiques", quantite: "1L" },
+                        { nom: "Chocolat au lait", quantite: "3kg" },
+                        { nom: "Sucre", quantite: "1,5kg" },
+                    ],
+                },
+                {
+                    date: "2023-01-03",
+                    ingredients: [
+                        { nom: "Ferments Lactiques", quantite: "1L" },
+                        { nom: "Chocolat noir", quantite: "3kg" },
+                        { nom: "Sucre", quantite: "2kg" },
+                    ],
+                },
+            ],
+        },
     ];
 
     // Charger les recettes au montage du composant
@@ -46,7 +81,17 @@ const Recettes = () => {
             [id]: quantite,
         });
     };
-    
+
+    const handleDeleteRecette = async (id) => {
+        try {
+            await DeleteRecette(id);
+            setRecettes((prevRecettes) => prevRecettes.filter((recette) => recette.idrecette !== id));
+        } catch (error) {
+            console.error("Erreur lors de la suppression de la recette :", error);
+        }
+    };
+
+
 
     // Fonction pour mettre à jour la quantité de commande
     const handlePasserCommande = async (id) => {
@@ -58,7 +103,7 @@ const Recettes = () => {
                     idrecette: id,
                     quantity: quantite,
                 });
-    
+
                 if (!stockCheckResult.success) {
                     // Afficher une alerte si les stocks sont insuffisants
                     const insufficientStocks = stockCheckResult.insufficientStocks
@@ -67,7 +112,7 @@ const Recettes = () => {
                     alert(`Stock insuffisant pour certains ingrédients :\n${insufficientStocks}`);
                     return; // Arrêter si les stocks sont insuffisants
                 }
-    
+
                 // Si les stocks sont suffisants, passer la commande
                 await addProductionPlanifiee({
                     idrecette: id,
@@ -78,8 +123,8 @@ const Recettes = () => {
                     idrecette: id,
                     quantity: quantite,
                 });
-                
-    
+
+
                 alert("Commande passée avec succès !");
                 setIsCommandeInitiated(null); // Réinitialiser après la commande
             } catch (error) {
@@ -90,7 +135,7 @@ const Recettes = () => {
             alert("Veuillez choisir une quantité valide.");
         }
     };
-    
+
 
     return (
         <div className="recettes">
@@ -107,10 +152,17 @@ const Recettes = () => {
                                     ? "Masquer les ingrédients"
                                     : "Voir les ingrédients"}
                             </button>
-                            <button onClick={() => toggleExpandHistory(recette.idrecette)}>
+                            <button className="history-button" onClick={() => toggleExpandHistory(recette.idrecette)}>
                                 {expandedHistoryId === recette.idrecette
                                     ? "Masquer l'historique"
                                     : "Voir l'historique"}
+                            </button>
+                            {/* Delete button */}
+                            <button
+                                className="btn-supprimer"
+                                onClick={() => handleDeleteRecette(recette.idrecette)}
+                            >
+                                Supprimer
                             </button>
                         </div>
 
@@ -186,6 +238,7 @@ const Recettes = () => {
                             )}
                         </div>
                     </div>
+
                 ))}
             </div>
         </div>
