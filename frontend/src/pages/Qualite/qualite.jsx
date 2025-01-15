@@ -68,6 +68,14 @@ function Qualite() {
     setEditingId(null);
   };
 
+  const handleDeleteWithConfirmation = async (id) => {
+    const confirmDelete = window.confirm('Êtes-vous sûr de vouloir supprimer ce contrôle qualité ?');
+    if (confirmDelete) {
+      handleDelete(id);
+    }
+  };
+  
+
   const handleDelete = async (id) => {
     try {
       await deleteControleQualite(id);
@@ -167,19 +175,29 @@ function Qualite() {
           </tr>
         </thead>
         <tbody>
-          {controleQualite.map((controle) => (
-            <tr key={controle.idcontrole}>
-              <td>{controle.idproductionplanifiee}</td>
-              <td>{new Date(controle.updatedAt).toLocaleDateString()}</td>
-              <td>{controle.resultat}</td>
-              <td>{controle.commentaire_controle}</td>
-              <td>
-                <button onClick={() => handleEdit(controle)}>Modifier</button>
-                <button onClick={() => handleDelete(controle.idcontrole)}>Supprimer</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+  {controleQualite.map((controle) => (
+    <tr key={controle.idcontrole}>
+      <td>{controle.idproductionplanifiee}</td>
+      <td>{new Date(controle.updatedAt).toLocaleDateString()}</td>
+      <td className={controle.resultat === 'Pass' ? 'resultat-pass' : 'resultat-fail'}>
+        {controle.resultat}
+      </td>
+      <td>{controle.commentaire_controle}</td>
+      <td>
+        <button className="btn-modifier" onClick={() => handleEdit(controle)}>
+          Modifier
+        </button>
+        <button 
+          className="btn-supprimer"
+          onClick={() => handleDeleteWithConfirmation(controle.idcontrole)}
+        >
+          Supprimer
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
       </table>
     </div>
   );

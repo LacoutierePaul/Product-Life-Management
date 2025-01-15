@@ -115,3 +115,39 @@ th {
 
 }
 
+.resultat-pass {
+  background-color: #4CAF50; /* Vert pour Réussi */
+  color: white;
+}
+
+.resultat-fail {
+  background-color: #f44336; /* Rouge pour Échec */
+  color: white;
+}
+
+/* Style du bouton Modifier */
+.btn-modifier {
+  background-color: #FFEB3B; /* Jaune */
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.btn-modifier:hover {
+  background-color: #fdd835; /* Jaune un peu plus foncé */
+}
+
+/* Style du bouton Supprimer */
+.btn-supprimer {
+  background-color: #f44336; /* Rouge */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.btn-supprimer:hover {
+  background-color: #e53935; /* Rouge plus foncé au survol */
+}
+
