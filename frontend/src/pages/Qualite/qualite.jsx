@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import './qualite.css';
 import { getControleQualites, updateControleQualite, deleteControleQualite, addControleQualite } from '../../api/controle_qualite';
+
+// Enregistrement des composants nécessaires pour Chart.js
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function Qualite() {
   const [controleQualite, setControleQualite] = useState([]);
@@ -74,7 +79,6 @@ function Qualite() {
       handleDelete(id);
     }
   };
-  
 
   const handleDelete = async (id) => {
     try {
@@ -97,10 +101,72 @@ function Qualite() {
     setEditingId(controle.idcontrole);
     setShowForm(true);
   };
+  const getGraphData = () => {
+    const dateLabels = [];
+    const passData = [];
+    const failData = [];
+  
+    let passCount = 0;
+    let failCount = 0;
+  
+    // Regrouper les résultats par date
+    controleQualite.forEach((controle) => {
+      const date = new Date(controle.updatedAt).toLocaleDateString(); // Format de date
+      const index = dateLabels.indexOf(date);
+  
+      // Si la date n'est pas encore dans le tableau des labels, on l'ajoute
+      if (index === -1) {
+        dateLabels.push(date);
+        passData.push(passCount); // Ajouter le cumul actuel de Pass
+        failData.push(failCount); // Ajouter le cumul actuel de Fail
+      }
+  
+      // Trouver l'indice de la date dans le tableau
+      const dateIndex = dateLabels.indexOf(date);
+  
+      // Ajouter à la somme cumulative "Pass" ou "Fail" pour cette date
+      if (controle.resultat === 'Pass') {
+        passCount++;
+      } else if (controle.resultat === 'Fail') {
+        failCount++;
+      }
+  
+      // Mettre à jour les données cumulées à chaque itération
+      passData[dateIndex] = passCount;
+      failData[dateIndex] = failCount;
+    });
+  
+    // Vérifier que les données sont bien structurées
+    console.log("Labels: ", dateLabels);
+    console.log("Pass Data: ", passData);
+    console.log("Fail Data: ", failData);
+  
+    return {
+      labels: dateLabels,
+      datasets: [
+        {
+          label: 'Pass',
+          data: passData,
+          borderColor: 'green',
+          fill: false,
+          tension: 0.1,
+        },
+        {
+          label: 'Fail',
+          data: failData,
+          borderColor: 'red',
+          fill: false,
+          tension: 0.1,
+        },
+      ],
+    };
+  };
+  
+  
 
   return (
     <div className="qualite">
-      <h2>Contrôle Qualitée</h2>
+      <h2>Contrôle Qualité</h2>
 
       <button onClick={() => setShowForm(!showForm)}>
         {showForm ? 'Annuler' : 'Ajouter un contrôle qualité'}
@@ -142,8 +208,8 @@ function Qualite() {
               required
             >
               <option value="">Sélectionner</option>
-              <option value="Réussi">Réussi</option>
-              <option value="Échec">Échec</option>
+              <option value="Pass">Pass</option>
+              <option value="Fail">Fail</option>
             </select>
           </div>
 
@@ -164,6 +230,7 @@ function Qualite() {
         </form>
       )}
 
+
       <table>
         <thead>
           <tr>
@@ -175,30 +242,32 @@ function Qualite() {
           </tr>
         </thead>
         <tbody>
-  {controleQualite.map((controle) => (
-    <tr key={controle.idcontrole}>
-      <td>{controle.idproductionplanifiee}</td>
-      <td>{new Date(controle.updatedAt).toLocaleDateString()}</td>
-      <td className={controle.resultat === 'Pass' ? 'resultat-pass' : 'resultat-fail'}>
-        {controle.resultat}
-      </td>
-      <td>{controle.commentaire_controle}</td>
-      <td>
-        <button className="btn-modifier" onClick={() => handleEdit(controle)}>
-          Modifier
-        </button>
-        <button 
-          className="btn-supprimer"
-          onClick={() => handleDeleteWithConfirmation(controle.idcontrole)}
-        >
-          Supprimer
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+          {controleQualite.map((controle) => (
+            <tr key={controle.idcontrole}>
+              <td>{controle.idproductionplanifiee}</td>
+              <td>{new Date(controle.updatedAt).toLocaleDateString()}</td>
+              <td className={controle.resultat === 'Pass' ? 'resultat-pass' : 'resultat-fail'}>
+                {controle.resultat}
+              </td>
+              <td>{controle.commentaire_controle}</td>
+              <td>
+                <button className="btn-modifier" onClick={() => handleEdit(controle)}>
+                  Modifier
+                </button>
+                <button
+                  className="btn-supprimer"
+                  onClick={() => handleDeleteWithConfirmation(controle.idcontrole)}
+                >
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
+      <div style={{ position: 'relative', width: '70%', height: '400px' }}>
+        <Line data={getGraphData()} options={{ responsive: true, maintainAspectRatio: true }} />
+      </div>
     </div>
   );
 }
