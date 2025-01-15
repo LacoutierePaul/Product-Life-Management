@@ -8,7 +8,7 @@ import { getStocks, addQuantity, deleteStock, updateStock } from '../../api/stoc
 import { GetFournisseursToStockById } from "../../api/fournisseurstostocks.js";
 import { addCommandeStocks } from "../../api/commandes_stocks.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,annotationPlugin);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, annotationPlugin);
 
 function Stocks() {
   const [stocks, setStocks] = useState([]);
@@ -159,30 +159,30 @@ function Stocks() {
       },
     },
   };
-  
 
-  
+
+
   const stocksEnSousSeuil = stocks.filter((stock) => stock.quantite < stock.seuil_minimal);
 
   return (
-      <div className="stocks">
-         <div className="chart-container">
+    <div className="stocks">
+      <div className="chart-container">
         <Bar data={chartData} options={chartOptions} />
       </div>
-        <h2>Liste des Stocks</h2>
+      <h2>Liste des Stocks</h2>
 
-        {stocksEnSousSeuil.length > 0 && (
-            <div className="alert">
-              <h3>Attention : Certains stocks sont en dessous du seuil minimal !</h3>
-              <ul>
-                {stocksEnSousSeuil.map((stock) => (
-                    <li key={stock.idstock}>
-                      <strong>{stock.nom_ingredient}</strong> : Quantité actuelle ({stock.quantite} {stock.unite}) en dessous du seuil minimal ({stock.seuil_minimal} {stock.unite}).
-                    </li>
-                ))}
-              </ul>
-            </div>
-        )}
+      {stocksEnSousSeuil.length > 0 && (
+        <div className="alert">
+          <h3>Attention : Certains stocks sont en dessous du seuil minimal !</h3>
+          <ul>
+            {stocksEnSousSeuil.map((stock) => (
+              <li key={stock.idstock}>
+                <strong>{stock.nom_ingredient}</strong> : Quantité actuelle ({stock.quantite} {stock.unite}) en dessous du seuil minimal ({stock.seuil_minimal} {stock.unite}).
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <table>
         <thead>
           <tr>
@@ -202,8 +202,16 @@ function Stocks() {
                 <td>{stock.seuil_minimal}</td>
                 <td>{stock.unite}</td>
                 <td>
-                  <button className="btn-modifier"onClick={() => handleEditStock(stock)}>Modifier</button>
-                  <button className="btn-supprimer" onClick={() => handleDeleteStock(stock.idstock)}>Supprimer</button>
+                  <button
+                    className="btn-modifier"
+                    onClick={() =>
+                      editingStockId === stock.idstock
+                        ? setEditingStockId(null) // Annuler l'édition
+                        : handleEditStock(stock) // Démarrer l'édition
+                    }
+                  >
+                    {editingStockId === stock.idstock ? 'Annuler' : 'Modifier'}
+                  </button>                  <button className="btn-supprimer" onClick={() => handleDeleteStock(stock.idstock)}>Supprimer</button>
                   <button onClick={() => handleStockSelection(stock.idstock)}>
                     {selectedStockId === stock.idstock ? 'Annuler' : 'Passer une commande'}
                   </button>
