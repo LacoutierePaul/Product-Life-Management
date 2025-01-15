@@ -7,10 +7,10 @@ interface UserInterface {
     password_user: string;
     prenom_user: string;
     nom_user: string;
-    admin: boolean;
-    readonly: boolean;
-    edit: boolean;
-    delete: boolean;
+    admin_role: boolean;
+    readonly_role: boolean;
+    edit_role: boolean;
+    delete_role: boolean;
 }
 
 export class User extends Model <UserInterface> {
@@ -19,10 +19,10 @@ export class User extends Model <UserInterface> {
     public password_user!: string;
     public prenom_user!: string;
     public nom_user!: string;
-    public admin!: boolean
-    public readonly!: boolean;
-    public edit!: boolean;
-    public delete!: boolean;
+    public admin_role!: boolean
+    public readonly_role!: boolean;
+    public edit_role!: boolean;
+    public delete_role!: boolean;
 }
 
 User.init(
@@ -49,22 +49,22 @@ User.init(
             type: DataTypes.STRING(100),
             allowNull: false,
         },
-        admin: {
+        admin_role: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
         },
-        readonly: {
+        readonly_role: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
         },
-        edit: {
+        edit_role: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
         },
-        delete: {
+        delete_role: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false

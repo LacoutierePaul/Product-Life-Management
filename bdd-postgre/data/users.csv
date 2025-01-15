@@ -1,0 +1,11 @@
+iduser,email_user,password_user,prenom_user,nom_user,admin_role,readonly_role,edit_role,delete_role
+1,johndoe@example.com,hashedpassword1,John,Doe,True,False,True,True
+2,janedoe@example.com,hashedpassword2,Jane,Doe,False,True,False,False
+3,admin@example.com,hashedpassword3,Admin,User,True,True,True,True
+4,readonly@example.com,hashedpassword4,Readonly,User,False,True,False,False
+5,editor@example.com,hashedpassword5,Editor,User,False,False,True,False
+6,deleter@example.com,hashedpassword6,Deleter,User,False,False,False,True
+7,basicuser@example.com,hashedpassword7,Basic,User,False,False,False,False
+8,poweruser@example.com,hashedpassword8,Power,User,False,True,True,True
+9,guest@example.com,hashedpassword9,Guest,User,False,True,False,False
+10,developer@example.com,hashedpassword10,Dev,User,False,False,True,True
