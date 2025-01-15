@@ -7,6 +7,8 @@ function Planification() {
     const [selectedOption, setSelectedOption] = useState('commande_stocks');
     const [stockOrders, setStockOrders] = useState([]);
     const [recipeOrders, setRecipeOrders] = useState([]);
+      const [searchTerm, setSearchTerm] = useState(''); // State for search term
+    
 
     useEffect(() => {
         getRecipeOrders()
@@ -47,15 +49,44 @@ function Planification() {
         }
     };
 
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const filteredStockOrders = stockOrders.filter((order) => {
+        return (
+            order.Stock.nom_ingredient.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.idfournisseur.toString().includes(searchTerm) ||
+            order.statut_commande.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }
+    );
+    const filteredRecipeOrders = recipeOrders.filter((order) => {
+        return (
+            order.Recette.nom_recette.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.Recette.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.status.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    });
+
     return (
         <div className="planification">
             <h2>Historique des Commandes</h2>
 
             <label>Choisir le type d'historique :</label>
-            <select value={selectedOption} onChange={handleSelectChange}>
+            <select className="Dropdown" value={selectedOption} onChange={handleSelectChange}>
                 <option value="commande_stocks">Commande de Stocks</option>
                 <option value="commande_recettes">Commande des Recettes</option>
             </select>
+
+            <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Rechercher une commande..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
 
             {selectedOption === 'commande_stocks' ? (
                 <table>
@@ -70,7 +101,7 @@ function Planification() {
                         </tr>
                     </thead>
                     <tbody>
-                        {stockOrders.map((order, index) => (
+                        {filteredStockOrders.map((order, index) => (
                             <tr key={index}>
                                 <td>{order.Stock.nom_ingredient}</td>
                                 <td>{order.idfournisseur}</td>
@@ -103,7 +134,7 @@ function Planification() {
                         </tr>
                     </thead>
                     <tbody>
-                        {recipeOrders.map((recipe, index) => (
+                        {filteredRecipeOrders.map((recipe, index) => (
                             <tr key={index}>
                                 <td>{recipe.Recette.nom_recette}</td>
                                 <td>{recipe.Recette.description}</td>

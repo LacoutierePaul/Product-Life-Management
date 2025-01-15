@@ -12,11 +12,13 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 
 function Stocks() {
   const [stocks, setStocks] = useState([]);
-  const [selectedStockId, setSelectedStockId] = useState(null); // ID du stock sélectionné pour commande
-  const [editingStockId, setEditingStockId] = useState(null); // ID du stock en cours de modification
+  const [searchTerm, setSearchTerm] = useState(''); // State for search term
+  const [selectedStockId, setSelectedStockId] = useState(null);
+  const [editingStockId, setEditingStockId] = useState(null);
   const [suppliers, setSuppliers] = useState([]);
   const [orderData, setOrderData] = useState({ quantity: '', supplier: '' });
   const [editData, setEditData] = useState({ nom_ingredient: '', quantite: '', seuil_minimal: '', unite: '' });
+
 
   // Charger les stocks
   useEffect(() => {
@@ -24,6 +26,16 @@ function Stocks() {
       .then((data) => setStocks(data))
       .catch((error) => console.error('Erreur lors de la récupération des stocks :', error));
   }, []);
+
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+
+  const filteredStocks = stocks.filter((stock) =>
+    stock.nom_ingredient.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Charger les fournisseurs pour un stock spécifique
   const loadSuppliersForStock = (stockId) => {
@@ -183,6 +195,15 @@ function Stocks() {
           </ul>
         </div>
       )}
+
+<div className="search-bar">
+        <input
+          type="text"
+          placeholder="Rechercher un stock par nom"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
       <table>
         <thead>
           <tr>
@@ -194,7 +215,7 @@ function Stocks() {
           </tr>
         </thead>
         <tbody>
-          {stocks.map((stock) => (
+          {filteredStocks.map((stock) => (
             <React.Fragment key={stock.idstock}>
               <tr className={stock.quantite < stock.seuil_minimal ? 'low-stock' : ''}>
                 <td>{stock.nom_ingredient}</td>

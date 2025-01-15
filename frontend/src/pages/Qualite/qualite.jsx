@@ -17,6 +17,7 @@ function Qualite() {
   });
 
   const [showForm, setShowForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(''); // State for search term
   const [editingId, setEditingId] = useState(null);
 
   const fetchControleQualite = async () => {
@@ -39,6 +40,20 @@ function Qualite() {
       [name]: value
     }));
   };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+
+  const filteredControleQualite = controleQualite.filter((controle) => {
+    return (
+      controle.idproductionplanifiee.toString().includes(searchTerm) ||
+      controle.resultat.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      controle.commentaire_controle.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -105,42 +120,42 @@ function Qualite() {
     const dateLabels = [];
     const passData = [];
     const failData = [];
-  
+
     let passCount = 0;
     let failCount = 0;
-  
+
     // Regrouper les résultats par date
     controleQualite.forEach((controle) => {
       const date = new Date(controle.updatedAt).toLocaleDateString(); // Format de date
       const index = dateLabels.indexOf(date);
-  
+
       // Si la date n'est pas encore dans le tableau des labels, on l'ajoute
       if (index === -1) {
         dateLabels.push(date);
         passData.push(passCount); // Ajouter le cumul actuel de Pass
         failData.push(failCount); // Ajouter le cumul actuel de Fail
       }
-  
+
       // Trouver l'indice de la date dans le tableau
       const dateIndex = dateLabels.indexOf(date);
-  
+
       // Ajouter à la somme cumulative "Pass" ou "Fail" pour cette date
       if (controle.resultat === 'Pass') {
         passCount++;
       } else if (controle.resultat === 'Fail') {
         failCount++;
       }
-  
+
       // Mettre à jour les données cumulées à chaque itération
       passData[dateIndex] = passCount;
       failData[dateIndex] = failCount;
     });
-  
+
     // Vérifier que les données sont bien structurées
     console.log("Labels: ", dateLabels);
     console.log("Pass Data: ", passData);
     console.log("Fail Data: ", failData);
-  
+
     return {
       labels: dateLabels,
       datasets: [
@@ -161,8 +176,8 @@ function Qualite() {
       ],
     };
   };
-  
-  
+
+
 
   return (
     <div className="qualite">
@@ -229,8 +244,14 @@ function Qualite() {
           </button>
         </form>
       )}
-
-
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Rechercher un controle qualité..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
       <table>
         <thead>
           <tr>
@@ -242,7 +263,7 @@ function Qualite() {
           </tr>
         </thead>
         <tbody>
-          {controleQualite.map((controle) => (
+          {filteredControleQualite.map((controle) => (
             <tr key={controle.idcontrole}>
               <td>{controle.idproductionplanifiee}</td>
               <td>{new Date(controle.updatedAt).toLocaleDateString()}</td>
