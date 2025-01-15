@@ -164,10 +164,10 @@ function Fournisseurs() {
               <td>{fournisseur.evaluation}</td>
               <td>{fournisseur.commentaire}</td>
               <td>
-                <button className="modifier" onClick={() => handleEdit(fournisseur)}>
+                <button className="btn-modifier" onClick={() => handleEdit(fournisseur)}>
                   Modifier
                 </button>
-                <button className="supprimer" onClick={() => handleDelete(fournisseur.idfournisseur)}>
+                <button className="btn-supprimer" onClick={() => handleDelete(fournisseur.idfournisseur)}>
                   Supprimer
                 </button>
               </td>
