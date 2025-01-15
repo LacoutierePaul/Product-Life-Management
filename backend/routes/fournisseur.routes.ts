@@ -6,7 +6,11 @@ const router = express.Router();
 // Obtenir tous les fournisseurs
 router.get("/", async (req: Request, res: Response) => {
     try {
-        const fournisseurs = await Fournisseur.findAll();
+        const fournisseurs = await Fournisseur.findAll({
+            order: [
+                ['nom_fournisseur', 'ASC'],
+            ],
+        });
         res.json(fournisseurs);
     } catch (err) {
         res.status(500).json({ error: "Unable to fetch fournisseurs" });

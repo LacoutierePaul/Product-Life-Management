@@ -15,6 +15,9 @@ router.get("/", async (req: Request, res: Response) => {
                     attributes: ["nom_ingredient", "unite", "quantite", "seuil_minimal"],
                 },
             ],
+            order: [
+                ['createdAt', 'DESC'],
+            ],
         });
         res.json(commandesIngredient);
     } catch (error) {

@@ -6,7 +6,11 @@ const router = express.Router();
 // Obtenir toutes les recettes
 router.get("/", async (req: Request, res: Response) => {
     try {
-        const recettes = await Recette.findAll();
+        const recettes = await Recette.findAll({
+            order: [
+                ['nom_recette', 'ASC'],
+            ],
+        });
         res.json(recettes);
     } catch (err) {
         res.status(500).json({ error: "Unable to fetch recipies" });
