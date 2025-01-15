@@ -166,6 +166,9 @@ function Stocks() {
 
   return (
       <div className="stocks">
+         <div className="chart-container">
+        <Bar data={chartData} options={chartOptions} />
+      </div>
         <h2>Liste des Stocks</h2>
 
         {stocksEnSousSeuil.length > 0 && (
@@ -294,9 +297,6 @@ function Stocks() {
           ))}
         </tbody>
       </table>
-      <div className="chart-container">
-        <Bar data={chartData} options={chartOptions} />
-      </div>
     </div>
   );
 }
