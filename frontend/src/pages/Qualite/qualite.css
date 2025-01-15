@@ -138,8 +138,8 @@ th {
   background-color: #FFEB3B; /* Jaune */
   color: black;
   border: none;
-  padding: 8px 16px;
   cursor: pointer;
+  margin-right: 5px;
 }
 
 .btn-modifier:hover {
@@ -151,8 +151,8 @@ th {
   background-color: #f44336; /* Rouge */
   color: white;
   border: none;
-  padding: 8px 16px;
   cursor: pointer;
+  margin-right: 5px;
 }
 
 .btn-supprimer:hover {
