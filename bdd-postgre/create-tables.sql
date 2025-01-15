@@ -1,5 +1,19 @@
 -- Création des tables
 
+CREATE TABLE users (
+    iduser SERIAL NOT NULL,
+    email_user VARCHAR(100),
+    password_user VARCHAR(100),
+    prenom_user VARCHAR(100),
+    nom_user VARCHAR(100),
+    admin_role BOOLEAN,
+    readonly_role BOOLEAN,
+    edit_role BOOLEAN,
+    delete_role BOOLEAN,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+);
+
 CREATE TABLE stocks (
     idstock SERIAL NOT NULL,
     nom_ingredient VARCHAR(50),
