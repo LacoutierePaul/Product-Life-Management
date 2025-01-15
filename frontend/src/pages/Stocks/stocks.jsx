@@ -8,7 +8,6 @@ import { getStocks, addQuantity, deleteStock, updateStock } from '../../api/stoc
 import { GetFournisseursToStockById } from "../../api/fournisseurstostocks.js";
 import { addCommandeStocks } from "../../api/commandes_stocks.js";
 import { GetUsers } from "../../api/user.js";
-
 import { useUser } from "../../context/user.context.jsx";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, annotationPlugin);
