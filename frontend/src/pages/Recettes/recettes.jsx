@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./recettes.css";
 import { GetRecettesWithStocks } from "../../api/recettestostocks.js";
 import { addProductionPlanifiee } from "../../api/production_planifiee.js";
-import { checkStockForOrder } from "../../api/stocks.js";
+import { checkStockForOrder, updateStockForOrder} from "../../api/stocks.js";
 
 const Recettes = () => {
     const [recettes, setRecettes] = useState([]); // Contient la liste des recettes
@@ -74,6 +74,11 @@ const Recettes = () => {
                     status: "Planifiée",
                     quantite_planifiee: quantite,
                 });
+                await updateStockForOrder({
+                    idrecette: id,
+                    quantity: quantite,
+                });
+                
     
                 alert("Commande passée avec succès !");
                 setIsCommandeInitiated(null); // Réinitialiser après la commande

@@ -1,13 +1,17 @@
 import express, { Request, Response } from "express";
 import { Stock } from "../models/stocks.model";
-const { checkStockForOrder } = require('../services/stock.service');
+const { checkStockForOrder,updateStockForOrder } = require('../services/stock.service');
 
 const router = express.Router();
 
 // Obtenir tous les stocks
 router.get("/", async (req: Request, res: Response) => {
     try {
-        const stocks = await Stock.findAll();
+        const stocks = await Stock.findAll({
+            order: [
+                ['nom_ingredient', 'ASC'],
+            ],
+        });
         res.json(stocks);
     } catch (err) {
         res.status(500).json({ error: "Unable to fetch stocks" });
@@ -118,4 +122,16 @@ router.post('/check-stock', async (req : Request, res : Response) => {
         res.status(500).json({ error: 'Une erreur est survenue lors de la vérification des stocks.' });
     }
 });
+
+router.post('/update-stock', async (req : Request, res : Response) => {
+    try {
+        const { idrecette, quantity } = req.body; // Récupère les données du frontend
+        const result = await updateStockForOrder({ idrecette, quantity });
+        res.status(200).json(result); // Renvoie le résultat
+    } catch (error) {
+        console.error('Erreur dans /update-stock:', error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la mise à jour des stocks.' });
+    }
+}
+);
 export default router;

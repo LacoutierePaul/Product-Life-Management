@@ -1,7 +1,15 @@
 .qualite {
-    padding: 20px;
-    background-color: #f9f9f9;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.graph-container {
+  width: 100%;
+  height: 400px;  /* Ajuste la hauteur du graphique comme nécessaire */
+  margin-bottom: 30px; /* Ajoute un espacement sous le graphique pour éviter qu'il se superpose avec le tableau */
+}
   
   h2 {
     text-align: center;
@@ -113,5 +121,41 @@ th, td {
 th {
   background-color: #f2f2f2;
 
+}
+
+.resultat-pass {
+  background-color: #4CAF50; /* Vert pour Réussi */
+  color: white;
+}
+
+.resultat-fail {
+  background-color: #f44336; /* Rouge pour Échec */
+  color: white;
+}
+
+/* Style du bouton Modifier */
+.btn-modifier {
+  background-color: #FFEB3B; /* Jaune */
+  color: black;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-modifier:hover {
+  background-color: #fdd835; /* Jaune un peu plus foncé */
+}
+
+/* Style du bouton Supprimer */
+.btn-supprimer {
+  background-color: #f44336; /* Rouge */
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-supprimer:hover {
+  background-color: #e53935; /* Rouge plus foncé au survol */
 }
 

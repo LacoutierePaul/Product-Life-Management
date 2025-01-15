@@ -79,3 +79,51 @@ export async function checkStockForOrder(order: Commande) {
         throw error;
     }
 }
+
+
+export async function updateStockForOrder(order: Commande) {
+    try {
+        // Récupérer la recette avec les stocks associés et la quantité requise de RecetteToStocks
+        const recetteWithStocks = await Recette.findByPk(order.idrecette, {
+            attributes: ["idrecette", "nom_recette", "description"],
+            include: [
+                {
+                    model: Stock,
+                    attributes: ["idstock", "nom_ingredient", "quantite"],
+                    through: {
+                        attributes: ["quantite"],
+                    },
+                },
+            ],
+        });
+
+        if (!recetteWithStocks) {
+            throw new Error(`La recette avec l'id ${order.idrecette} n'existe pas.`);
+        }
+
+        // Convertir le résultat en JSON pour une manipulation simplifiée
+        const recetteJSON = recetteWithStocks.toJSON() as RecetteWithStocks;
+
+        // Parcourir les stocks associés
+        for (const stock of recetteJSON.Stocks) {
+            const requiredQuantity = stock.RecetteToStocks.quantite * order.quantity; // Quantité nécessaire pour la commande
+
+            // Mettre à jour la quantité en stock
+            await Stock.update(
+                {
+                    quantite: stock.quantite - requiredQuantity,
+                },
+                {
+                    where: {
+                        idstock: stock.idstock,
+                    },
+                }
+            );
+        }
+
+        return { success: true };
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour des stocks :", error);
+        throw error;
+    }
+}

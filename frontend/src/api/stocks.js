@@ -79,3 +79,18 @@ export const checkStockForOrder = async (data) => {
     }
     return response.json();
 };
+
+export const updateStockForOrder = async (data) => {
+    const response = await fetch(`${BASE_URL}/stocks/update-stock`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+        throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+    }
+    return response.json();
+}
+
