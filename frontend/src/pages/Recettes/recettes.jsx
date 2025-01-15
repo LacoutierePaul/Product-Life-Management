@@ -11,6 +11,8 @@ const Recettes = () => {
     const [expandedHistoryId, setExpandedHistoryId] = useState(null); // Stocke l'ID de la recette actuellement développé pour l'historique
     const [quantiteCommande, setQuantiteCommande] = useState({}); // Stocke la quantité choisie pour chaque recette
     const [isCommandeInitiated, setIsCommandeInitiated] = useState(null); // Suivi si l'utilisateur a lancé la commande
+    const [searchTerm, setSearchTerm] = useState(''); // State for search term
+
 
     const history = [
         {
@@ -64,6 +66,15 @@ const Recettes = () => {
                 console.error("Erreur lors du chargement des recettes:", error)
             );
     }, []);
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const filteredRecettes = recettes.filter((recette) =>
+        recette.nom_recette.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
 
     // Fonction pour basculer l'affichage des ingrédients
     const toggleExpand = (id) => {
@@ -140,9 +151,17 @@ const Recettes = () => {
     return (
         <div className="recettes">
             <h2>Liste des Recettes</h2>
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        placeholder="Rechercher une recette par nom"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                    />
+                </div>
+                <div className="recette-list">
 
-            <div className="recette-list">
-                {recettes.map((recette) => (
+                {filteredRecettes.map((recette) => (
                     <div key={recette.idrecette} className="recette-item">
                         <div className="recette-header">
                             <h3>{recette.nom_recette}</h3>

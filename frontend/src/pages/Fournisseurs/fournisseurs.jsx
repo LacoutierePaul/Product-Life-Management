@@ -5,6 +5,8 @@ import { getFournisseurs, updateFournisseur, deleteFournisseur, addFournisseur }
 function Fournisseurs() {
   const [fournisseurs, setFournisseurs] = useState([]);
   const [showForm, setShowForm] = useState(false);
+        const [searchTerm, setSearchTerm] = useState(''); // State for search term
+  
   const [newFournisseur, setNewFournisseur] = useState({
     nom_fournisseur: '',
     contact: '',
@@ -80,6 +82,28 @@ function Fournisseurs() {
     setShowForm(true);
   };
 
+
+  const handleDeleteWithConfirmation = (idfournisseur) => {
+    const confirmDelete = window.confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');
+    if (confirmDelete) {
+      handleDelete(idfournisseur);
+    }
+  }
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  }
+
+  const filteredFournisseurs = fournisseurs.filter((fournisseur) => {
+    return (
+      fournisseur.nom_fournisseur.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      fournisseur.contact.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      fournisseur.commentaire.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+  );
+  
+
   return (
     <div className="fournisseurs">
       <h2>Liste des Fournisseurs</h2>
@@ -87,7 +111,7 @@ function Fournisseurs() {
       <button onClick={() => setShowForm(!showForm)}>
         {showForm ? 'Annuler' : 'Ajouter un Fournisseur'}
       </button>
-
+      
       {showForm && (
         <form onSubmit={handleSubmit}>
           <div>
@@ -143,7 +167,14 @@ function Fournisseurs() {
           <button type="submit">{newFournisseur.idfournisseur ? 'Modifier' : 'Ajouter'}</button>
         </form>
       )}
-
+     <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Rechercher un fournisseur..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
       <table>
         <thead>
           <tr>
@@ -156,7 +187,7 @@ function Fournisseurs() {
           </tr>
         </thead>
         <tbody>
-          {fournisseurs.map((fournisseur) => (
+          {filteredFournisseurs.map((fournisseur) => (
             <tr key={fournisseur.idfournisseur}>
               <td>{fournisseur.nom_fournisseur}</td>
               <td>{fournisseur.contact}</td>
@@ -167,7 +198,7 @@ function Fournisseurs() {
                 <button className="btn-modifier" onClick={() => handleEdit(fournisseur)}>
                   Modifier
                 </button>
-                <button className="btn-supprimer" onClick={() => handleDelete(fournisseur.idfournisseur)}>
+                <button className="btn-supprimer" onClick={() => handleDeleteWithConfirmation(fournisseur.idfournisseur)}>
                   Supprimer
                 </button>
               </td>
