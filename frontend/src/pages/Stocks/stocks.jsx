@@ -20,6 +20,7 @@ function Stocks() {
   const [suppliers, setSuppliers] = useState([]);
   const [orderData, setOrderData] = useState({ quantity: '', supplier: '' });
   const [editData, setEditData] = useState({ nom_ingredient: '', quantite: '', seuil_minimal: '', unite: '' });
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const { user } = useUser(); // Récupérer les rôles utilisateurs depuis le contexte
 
@@ -50,9 +51,22 @@ function Stocks() {
       case 'order':
         return admin_role || edit_role || delete_role;
       case 'readonly':
-        return readonly_role;
+        return readonly_role || admin_role || edit_role || delete_role;
       default:
         return false;
+    }
+  };
+
+  const showError = (action) => {
+    setErrorMessage(`Vous n'avez pas les permissions nécessaires pour ${action}.`);
+    setTimeout(() => setErrorMessage(null), 3000);
+  };
+
+  const handleAction = (action, callback) => {
+    if (hasPermission(action)) {
+      callback();
+    } else {
+      showError(action);
     }
   };
 
@@ -239,22 +253,35 @@ function Stocks() {
                 <td>{stock.seuil_minimal}</td>
                 <td>{stock.unite}</td>
                 <td>
-                  {hasPermission('edit') && <button
+                  <button
                       className="btn-modifier"
                       onClick={() =>
-                          editingStockId === stock.idstock
-                              ? setEditingStockId(null) // Annuler l'édition
-                              : handleEditStock(stock) // Démarrer l'édition
+                          handleAction('edit', () => {
+                            editingStockId === stock.idstock
+                                ? setEditingStockId(null) // Annuler l'édition
+                                : handleEditStock(stock); // Démarrer l'édition
+                          })
                       }
                   >
                     {editingStockId === stock.idstock ? 'Annuler' : 'Modifier'}
-                  </button>}
-                  {hasPermission('delete') && <button className="btn-supprimer" onClick={() => handleDeleteStock(stock.idstock)}>Supprimer</button>}
-                  {hasPermission('order') && (
-                      <button onClick={() => handleStockSelection(stock.idstock)}>
-                        {selectedStockId === stock.idstock ? 'Annuler' : 'Passer une commande'}
-                      </button>
-                  )}
+                  </button>
+
+                  <button
+                      className="btn-supprimer"
+                      onClick={() =>
+                          handleAction('delete', () => handleDeleteStock(stock.idstock))
+                      }
+                  >
+                    Supprimer
+                  </button>
+
+                  <button
+                      onClick={() =>
+                          handleAction('order', () => handleStockSelection(stock.idstock))
+                      }
+                  >
+                    {selectedStockId === stock.idstock ? 'Annuler' : 'Passer une commande'}
+                  </button>
                 </td>
               </tr>
               {editingStockId === stock.idstock && hasPermission('edit') && (
