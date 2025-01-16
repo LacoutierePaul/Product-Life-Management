@@ -127,7 +127,8 @@ COPY production_planifiee FROM '/data/production_planifiee.csv' DELIMITER ',' CS
 COPY controle_qualite FROM '/data/controle_qualite.csv' DELIMITER ',' CSV HEADER;
 COPY fournisseurs_to_stocks FROM '/data/fournisseurs_to_stocks.csv' DELIMITER ',' CSV HEADER;
 COPY recettes_to_stocks FROM '/data/recettes_to_stocks.csv' DELIMITER ',' CSV HEADER;
-COPY commande_ingredients FROM '/data/commande_ingredients.csv' DELIMITER ',' CSV HEADER;   
+COPY commande_ingredients FROM '/data/commande_ingredients.csv' DELIMITER ',' CSV HEADER;
+COPY users FROM '/data/users.csv' DELIMITER ',' CSV HEADER;
 
 -- Création des séquences
 
@@ -146,4 +147,6 @@ CREATE SEQUENCE seq_idproductionplanifiee START WITH 41 INCREMENT BY 1;
 ALTER TABLE production_planifiee ALTER COLUMN idproductionplanifiee SET DEFAULT nextval('seq_idproductionplanifiee');
 
 CREATE SEQUENCE seq_idcommande START WITH 11 INCREMENT BY 1;
-ALTER TABLE commande_ingredients ALTER COLUMN idcommande SET DEFAULT nextval('seq_idcommande'); 
+ALTER TABLE commande_ingredients ALTER COLUMN idcommande SET DEFAULT nextval('seq_idcommande');
+CREATE SEQUENCE seq_iduser START WITH 11 INCREMENT BY 1;
+ALTER TABLE users ALTER COLUMN iduser SET DEFAULT nextval('seq_iduser');

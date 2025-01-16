@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './loginPage.css';
+import { Login } from "../../api/user.js";
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -9,7 +10,11 @@ const LoginPage = () => {
         event.preventDefault();
         console.log('Email:', email);
         console.log('Password:', password);
+
         // Add your authentication logic here
+        Login(email, password)
+            .then()
+            .catch((error) => console.error('Erreur lors du login :', error));
     };
 
     return (
