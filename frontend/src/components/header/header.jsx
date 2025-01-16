@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './header.css'; // Import du fichier CSS pour le Header
-import { Logout } from "../../api/user.js";
+import { useUser } from '../../context/user.context.jsx';
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState('');
+  const { user, logout } = useUser();
   const navigate = useNavigate();
 
   const handleSearchChange = (event) => {
@@ -12,7 +13,7 @@ function Header() {
   };
 
   const handleLogout = () => {
-    Logout()
+    logout()
         .then(() => {
           console.log('Utilisateur déconnecté');
           navigate('/'); // Redirige vers la page de connexion
@@ -33,15 +34,8 @@ function Header() {
             <Link to="/recettes">Recettes</Link>
           </nav>
 
-          {/* Recherche et Déconnexion */}
+          {/* Déconnexion */}
           <div className="header-actions">
-            <input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                placeholder="Rechercher..."
-                className="search-input"
-            />
             <button className="logout-button" onClick={handleLogout}>
               Déconnexion
             </button>

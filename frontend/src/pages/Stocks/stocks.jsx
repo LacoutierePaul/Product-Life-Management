@@ -20,12 +20,12 @@ function Stocks() {
   const [suppliers, setSuppliers] = useState([]);
   const [orderData, setOrderData] = useState({ quantity: '', supplier: '' });
   const [editData, setEditData] = useState({ nom_ingredient: '', quantite: '', seuil_minimal: '', unite: '' });
-  const [errorMessage, setErrorMessage] = useState(null);
 
   const { user } = useUser(); // Récupérer les rôles utilisateurs depuis le contexte
 
   // Charger les stocks
   useEffect(() => {
+    console.log("Utilisateur actuel", user)
     getStocks()
       .then((data) => setStocks(data))
       .catch((error) => console.error('Erreur lors de la récupération des stocks :', error));
@@ -39,7 +39,7 @@ function Stocks() {
     stock.nom_ingredient.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const hasPermission = (user, action) => {
+  const hasPermission = (action) => {
     if (!user) return false;
     const { admin_role, readonly_role, edit_role, delete_role } = user;
 
@@ -57,16 +57,11 @@ function Stocks() {
     }
   };
 
-  const showError = (action) => {
-    setErrorMessage(`Vous n'avez pas les permissions nécessaires pour ${action}.`);
-    setTimeout(() => setErrorMessage(null), 3000);
-  };
-
   const handleAction = (action, callback) => {
     if (hasPermission(action)) {
       callback();
     } else {
-      showError(action);
+      alert("Vous n'avez pas les permissions requises.");
     }
   };
 

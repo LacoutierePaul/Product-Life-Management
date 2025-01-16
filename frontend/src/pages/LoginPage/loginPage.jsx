@@ -1,26 +1,23 @@
 import React, { useState } from 'react';
-import './loginPage.css';
-import { Login } from "../../api/user.js";
+import { useUser } from '../../context/user.context.jsx';
 import { useNavigate } from 'react-router-dom';
+import './loginPage.css';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const { login } = useUser(); // Utilise le login du UserProvider
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const user = await Login(email, password);
-            console.log('Utilisateur connecté:', user);
-
-            // Redirige l'utilisateur si le login est réussi
-            navigate('/fournisseurs');
+            await login(email, password); // Appelle le login du contexte
+            navigate('/fournisseurs'); // Redirige après un login réussi
         } catch (error) {
-            // Affiche un message d'erreur basé sur l'exception
-            setErrorMessage(error.message);
+            setErrorMessage(error.message); // Affiche une erreur si le login échoue
         }
     };
 
