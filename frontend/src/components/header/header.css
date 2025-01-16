@@ -1,55 +1,70 @@
 /* Global header styles */
 header {
-    background-color: #333;
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  header h1 {
-    margin-bottom: 10px;
-  }
-  
-  /* Container for navigation and search */
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-  }
-  
-  /* Navigation Menu */
-  nav {
-    display: flex;
-    gap: 20px;
-  }
-  
-  nav a {
-    color: white;
-    text-decoration: none;
-    background-color: #555;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
-  
-  nav a:hover {
-    background-color: #888;
-  }
-  
-  /* Search Input */
-  .search-input {
-    padding: 8px 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 200px;
-    transition: border-color 0.3s;
-  }
-  
-  .search-input:focus {
-    border-color: #555;
-  }
-  
+  background-color: #333;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header h1 {
+  margin-bottom: 10px;
+}
+
+/* Container for navigation and actions */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Navigation Menu */
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  background-color: #555;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+nav a:hover {
+  background-color: #888;
+}
+
+/* Search Input */
+.search-input {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  border-color: #555;
+}
+
+/* Logout Button */
+.logout-button {
+  margin-left: 15px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
+}
