@@ -1,5 +1,6 @@
 import express, { Request, Response, json } from "express";
 import cors from "cors";
+import session from 'express-session'
 import sequelize from "./config/database";
 import stockRoutes from "./routes/stocks.routes";
 import recettesRoutes from "./routes/recettes.routes";
@@ -12,12 +13,22 @@ import recettestostocksRoutes from "./routes/recettestostocks.routes";
 import commande_ingredientsRoutes from "./routes/commande_ingredients.routes";
 import fournisseurstostocksRoutes from "./routes/fournisseurstostocks.routes";
 import userRoutes from "./routes/user.routes";
+import loginRoutes from "./routes/login.routes";
 
 const app = express();
 const PORT = 3000;
 
 app.use(json());
 app.use(cors());
+// Configuration des sessions
+app.use(
+    session({
+        secret: "ma_clé_secrète", // Clé obligatoire
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false }, // Désactive la sécurité avancée pour les environnements non HTTPS
+    })
+);
 
 app.use("/stocks", stockRoutes);
 app.use("/recettes", recettesRoutes);
@@ -29,6 +40,7 @@ app.use("/recettestostocks", recettestostocksRoutes)
 app.use("/commandesstocks", commande_ingredientsRoutes)
 app.use("/fournisseurstostocks", fournisseurstostocksRoutes)
 app.use("/user", userRoutes)
+app.use("/login", loginRoutes)
 
 // Test API de base
 app.get("/", (req: Request, res: Response) => {
