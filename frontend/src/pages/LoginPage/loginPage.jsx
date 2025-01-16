@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import './loginPage.css';
 import { Login } from "../../api/user.js";
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Email:', email);
-        console.log('Password:', password);
 
-        // Add your authentication logic here
-        Login(email, password)
-            .then()
-            .catch((error) => console.error('Erreur lors du login :', error));
+        try {
+            const user = await Login(email, password);
+            console.log('Utilisateur connecté:', user);
+
+            // Redirige l'utilisateur si le login est réussi
+            navigate('/fournisseurs');
+        } catch (error) {
+            // Affiche un message d'erreur basé sur l'exception
+            setErrorMessage(error.message);
+        }
     };
 
     return (
@@ -23,7 +30,7 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Email:</label>
-                    <input 
+                    <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -32,14 +39,17 @@ const LoginPage = () => {
                 </div>
                 <div className="form-group">
                     <label>Password:</label>
-                    <input 
+                    <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                 </div>
-                <button className= "buttonlogin" type="submit">Login</button>
+
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+                <button className="buttonlogin" type="submit">Login</button>
             </form>
         </div>
     );
