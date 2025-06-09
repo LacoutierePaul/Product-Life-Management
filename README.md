@@ -99,9 +99,9 @@ Open [https://localhost:80](https://localhost:80)
 ---
 
 ## 👥 Authors
-- [Manon Gardin]
-- [Matias Ottensen]
-- [Paul Lacoutiere]
+- Manon Gardin
+- Matias Ottensen
+- Paul Lacoutiere
 
 
 
